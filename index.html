@@ -58,6 +58,22 @@
       <h2 id="panel-title">Railway Vision</h2>
       <p id="panel-copy"></p>
       <div class="panel-tags" id="panel-tags"></div>
+      <div class="railway-map-card" id="railway-map-card" hidden>
+        <div class="railway-map-head">
+          <span>RAILWAY MAP LAYER</span>
+          <a href="https://satyamsaxena1.github.io/lucknow_running_railway/gps_files/map_gonda.html">OPEN FULL MAP &nearr;</a>
+        </div>
+        <div class="railway-map-frame">
+          <div id="railway-map" role="img" aria-label="Interactive railway GPS route map between Lucknow and Gonda"></div>
+          <div class="railway-map-loading" id="railway-map-loading">LOADING MAP DATA</div>
+        </div>
+        <div class="railway-map-controls" aria-label="Railway map controls">
+          <button type="button" data-map-layer="route" aria-pressed="true">ROUTE</button>
+          <button type="button" data-map-layer="points" aria-pressed="true">INSPECTION POINTS</button>
+          <button type="button" data-map-action="reset">RESET VIEW</button>
+        </div>
+        <p class="railway-map-caption">MapLibre layer with a no-key public basemap. Add <code>window.ARCGIS_API_KEY</code> later to switch the style hook to ArcGIS Location Platform basemaps.</p>
+      </div>
       <div class="panel-links" id="panel-links"></div>
       <p class="panel-note" id="panel-note"></p>
     </aside>

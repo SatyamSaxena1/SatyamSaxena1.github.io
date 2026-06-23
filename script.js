@@ -10,13 +10,17 @@ const dragHint = document.querySelector('#drag-hint');
 const zoneTitle = document.querySelector('#zone-title');
 const panel = document.querySelector('#panel');
 const panelClose = document.querySelector('#panel-close');
+const railwayMapCard = document.querySelector('#railway-map-card');
+const railwayMapLoading = document.querySelector('#railway-map-loading');
+const railwayMapControls = [...document.querySelectorAll('[data-map-layer], [data-map-action]')];
 
 const projects = {
   railway: {
     kicker: 'PROJECT 01 / FLAGSHIP', title: 'Railway Vision',
     copy: 'A real-time pantograph inspection system combining YOLO detection, ZED depth, GPS route context, calibrated measurements, alerts, maps, and generated reports.',
     tags: ['Computer vision', 'YOLO', 'ZED depth', 'GPS', 'FFmpeg'],
-    links: [['View code', 'https://github.com/SatyamSaxena1/lucknow_running_railway'], ['Report', 'https://satyamsaxena1.github.io/lucknow_running_railway/PROJECT_TECHNICAL_REPORT.pdf'], ['Map', 'https://satyamsaxena1.github.io/lucknow_running_railway/gps_files/map_gonda.html']],
+    links: [['View code', 'https://github.com/SatyamSaxena1/lucknow_running_railway'], ['Report', 'https://satyamsaxena1.github.io/lucknow_running_railway/PROJECT_TECHNICAL_REPORT.pdf']],
+    map: true,
     note: 'Built for the difficult middle between a promising model and a dependable field system.'
   },
   captions: {
@@ -58,6 +62,10 @@ let width = 0, height = 0, dpr = 1, radius = 0, cx = 0, cy = 0;
 let rotation = .4, targetRotation = .4, exploring = false, dragging = false, lastX = 0;
 const objects = [];
 const colors = ['#a9b99f', '#7ca079', '#d7ba91', '#c98b72', '#98aaa0', '#e0d5ad'];
+let maplibrePromise = null, railwayDataPromise = null, railwayMap = null, railwayBounds = null;
+let routeVisible = true, pointsVisible = true;
+const MAPLIBRE_JS = 'https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js';
+const MAPLIBRE_CSS = 'https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css';
 
 function random(seed) { const x = Math.sin(seed * 999.31) * 43758.5453; return x - Math.floor(x); }
 for (let i = 0; i < 72; i += 1) {
@@ -161,6 +169,159 @@ function explore() {
   setTimeout(() => { intro.hidden = true; }, 800); resize();
 }
 
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing) {
+      existing.addEventListener('load', resolve, { once: true });
+      existing.addEventListener('error', reject, { once: true });
+      if (window.maplibregl && src === MAPLIBRE_JS) resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = src; script.async = true;
+    script.addEventListener('load', resolve, { once: true });
+    script.addEventListener('error', reject, { once: true });
+    document.head.appendChild(script);
+  });
+}
+
+function loadStylesheet(href) {
+  if (document.querySelector(`link[href="${href}"]`)) return;
+  const link = document.createElement('link');
+  link.rel = 'stylesheet'; link.href = href;
+  document.head.appendChild(link);
+}
+
+function loadMapLibre() {
+  if (!maplibrePromise) {
+    loadStylesheet(MAPLIBRE_CSS);
+    maplibrePromise = loadScript(MAPLIBRE_JS).then(() => window.maplibregl);
+  }
+  return maplibrePromise;
+}
+
+function loadRailwayData() {
+  if (!railwayDataPromise) {
+    railwayDataPromise = loadScript('assets/railway-map-data.js').then(() => window.RAILWAY_ROUTE_COORDINATES || []);
+  }
+  return railwayDataPromise;
+}
+
+function railwayMapStyle() {
+  const arcgisKey = window.ARCGIS_API_KEY;
+  if (arcgisKey) {
+    return `https://basemaps-api.arcgis.com/arcgis/rest/services/styles/v2/styles/arcgis/navigation?token=${encodeURIComponent(arcgisKey)}`;
+  }
+  return {
+    version: 8,
+    glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
+    sources: {
+      osm: {
+        type: 'raster',
+        tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+        tileSize: 256,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }
+    },
+    layers: [{ id: 'osm', type: 'raster', source: 'osm' }]
+  };
+}
+
+function railwayFeatures(coords) {
+  return {
+    route: { type: 'Feature', properties: { name: 'Lucknow-Gonda inspection route' }, geometry: { type: 'LineString', coordinates: coords } },
+    points: {
+      type: 'FeatureCollection',
+      features: coords.map((coordinate, index) => ({
+        type: 'Feature',
+        properties: { point: index + 1, lon: coordinate[0], lat: coordinate[1] },
+        geometry: { type: 'Point', coordinates: coordinate }
+      }))
+    }
+  };
+}
+
+function resetRailwayMap() {
+  if (!railwayMap || !railwayBounds) return;
+  railwayMap.fitBounds(railwayBounds, { padding: 34, duration: 700, maxZoom: 12 });
+}
+
+function setLayerVisibility(ids, visible) {
+  if (!railwayMap) return;
+  ids.forEach((id) => {
+    if (railwayMap.getLayer(id)) railwayMap.setLayoutProperty(id, 'visibility', visible ? 'visible' : 'none');
+  });
+}
+
+function updateRailwayLayerControls() {
+  railwayMapControls.forEach((button) => {
+    if (button.dataset.mapLayer === 'route') button.setAttribute('aria-pressed', routeVisible ? 'true' : 'false');
+    if (button.dataset.mapLayer === 'points') button.setAttribute('aria-pressed', pointsVisible ? 'true' : 'false');
+  });
+}
+
+async function initRailwayMap() {
+  if (railwayMap) {
+    setTimeout(() => { railwayMap.resize(); resetRailwayMap(); }, 80);
+    return;
+  }
+  try {
+    const [maplibregl, coords] = await Promise.all([loadMapLibre(), loadRailwayData()]);
+    if (!coords.length) throw new Error('No railway route coordinates found');
+    const features = railwayFeatures(coords);
+    railwayMap = new maplibregl.Map({ container: 'railway-map', style: railwayMapStyle(), center: [81.79, 27.38], zoom: 9, attributionControl: true });
+    railwayMap.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
+    const setupRailwayLayers = () => {
+      if (!railwayMap || railwayMap.getSource('railway-route')) return;
+      railwayMap.addSource('railway-route', { type: 'geojson', data: features.route });
+      railwayMap.addSource('inspection-points', { type: 'geojson', data: features.points, cluster: true, clusterMaxZoom: 13, clusterRadius: 34 });
+      railwayMap.addLayer({ id: 'railway-route-casing', type: 'line', source: 'railway-route', paint: { 'line-color': '#3f4850', 'line-width': 8, 'line-opacity': .95 } });
+      railwayMap.addLayer({ id: 'railway-route-line', type: 'line', source: 'railway-route', paint: { 'line-color': '#f3db64', 'line-width': 4 } });
+      railwayMap.addLayer({ id: 'inspection-clusters', type: 'circle', source: 'inspection-points', filter: ['has', 'point_count'], paint: { 'circle-color': '#e8785f', 'circle-radius': ['step', ['get', 'point_count'], 15, 50, 20, 200, 25], 'circle-stroke-color': '#3f4850', 'circle-stroke-width': 2 } });
+      railwayMap.addLayer({ id: 'inspection-cluster-count', type: 'symbol', source: 'inspection-points', filter: ['has', 'point_count'], layout: { 'text-field': ['get', 'point_count_abbreviated'], 'text-size': 11, 'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'] }, paint: { 'text-color': '#3f4850' } });
+      railwayMap.addLayer({ id: 'inspection-point', type: 'circle', source: 'inspection-points', filter: ['!', ['has', 'point_count']], paint: { 'circle-color': '#f8f7f1', 'circle-radius': 5, 'circle-stroke-color': '#3f4850', 'circle-stroke-width': 2 } });
+      railwayBounds = coords.reduce((bounds, coordinate) => bounds.extend(coordinate), new maplibregl.LngLatBounds(coords[0], coords[0]));
+      resetRailwayMap();
+      railwayMapLoading.classList.add('hidden');
+    };
+    const setupWhenStyleReady = (tries = 40) => {
+      try {
+        setupRailwayLayers();
+      } catch (error) {
+        if (tries && /style/i.test(error.message)) {
+          setTimeout(() => setupWhenStyleReady(tries - 1), 250);
+          return;
+        }
+        railwayMapLoading.textContent = 'MAP LAYERS COULD NOT LOAD';
+        console.error('Railway map layers failed to initialize', error);
+      }
+    };
+    setTimeout(setupWhenStyleReady, 250);
+    railwayMap.on('style.load', setupWhenStyleReady);
+    railwayMap.on('load', setupRailwayLayers);
+    railwayMap.on('styledata', () => { if (railwayMap.isStyleLoaded()) setupWhenStyleReady(); });
+    railwayMap.on('click', 'inspection-clusters', (event) => {
+      const featuresAtPoint = railwayMap.queryRenderedFeatures(event.point, { layers: ['inspection-clusters'] });
+      const clusterId = featuresAtPoint[0].properties.cluster_id;
+      railwayMap.getSource('inspection-points').getClusterExpansionZoom(clusterId, (error, zoom) => {
+        if (!error) railwayMap.easeTo({ center: featuresAtPoint[0].geometry.coordinates, zoom });
+      });
+    });
+    railwayMap.on('click', 'inspection-point', (event) => {
+      const props = event.features[0].properties;
+      new maplibregl.Popup({ closeButton: false, offset: 10 }).setLngLat(event.features[0].geometry.coordinates).setHTML(`<strong>Inspection Point ${props.point}</strong><br>${Number(props.lat).toFixed(6)}, ${Number(props.lon).toFixed(6)}`).addTo(railwayMap);
+    });
+    ['inspection-clusters', 'inspection-point'].forEach((layer) => {
+      railwayMap.on('mouseenter', layer, () => { railwayMap.getCanvas().style.cursor = 'pointer'; });
+      railwayMap.on('mouseleave', layer, () => { railwayMap.getCanvas().style.cursor = ''; });
+    });
+  } catch (error) {
+    railwayMapLoading.textContent = 'MAP COULD NOT LOAD';
+    console.error('Railway map failed to initialize', error);
+  }
+}
+
 function openPanel(key) {
   const data = projects[key]; if (!data) return;
   document.querySelector('#panel-kicker').textContent = data.kicker;
@@ -169,12 +330,26 @@ function openPanel(key) {
   document.querySelector('#panel-tags').innerHTML = data.tags.map(tag => `<span>${tag}</span>`).join('');
   document.querySelector('#panel-links').innerHTML = data.links.map(([label, url]) => `<a href="${url}">${label} &nearr;</a>`).join('');
   document.querySelector('#panel-note').textContent = data.note;
+  railwayMapCard.hidden = !data.map;
   panel.classList.add('open'); panel.setAttribute('aria-hidden', 'false');
+  if (data.map) initRailwayMap();
 }
 
 enter.addEventListener('click', explore);
 document.querySelectorAll('[data-project]').forEach(el => el.addEventListener('click', () => openPanel(el.dataset.project)));
 document.querySelectorAll('[data-panel]').forEach(el => el.addEventListener('click', () => openPanel(el.dataset.panel)));
+railwayMapControls.forEach((button) => button.addEventListener('click', () => {
+  if (button.dataset.mapLayer === 'route') {
+    routeVisible = !routeVisible;
+    setLayerVisibility(['railway-route-casing', 'railway-route-line'], routeVisible);
+  }
+  if (button.dataset.mapLayer === 'points') {
+    pointsVisible = !pointsVisible;
+    setLayerVisibility(['inspection-clusters', 'inspection-cluster-count', 'inspection-point'], pointsVisible);
+  }
+  if (button.dataset.mapAction === 'reset') resetRailwayMap();
+  updateRailwayLayerControls();
+}));
 panelClose.addEventListener('click', () => { panel.classList.remove('open'); panel.setAttribute('aria-hidden', 'true'); });
 window.addEventListener('keydown', e => { if (e.key === 'Escape') panelClose.click(); if (e.key === 'Enter' && !exploring) explore(); });
 canvas.addEventListener('pointerdown', e => { if (!exploring) return; dragging = true; lastX = e.clientX; canvas.setPointerCapture(e.pointerId); });
