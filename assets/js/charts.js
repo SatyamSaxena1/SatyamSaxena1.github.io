@@ -1,6 +1,6 @@
 /* Live charts: dependency-free, theme-aware, animated on scroll.
    Usage:  <div class="vz" data-chart="hbar" data-id="boxes_per_class" data-series="train,validation" data-colors="class" data-stacked></div>
-   Types: vbar, hbar, line, donut, heat, sizes, pipeline, splits, gantt. Data comes from one JSON file (data-json on the script tag). */
+   Types: vbar, hbar, line, donut, heat, sizes, pipeline, roles, splits, gantt. Data comes from one JSON file (data-json on the script tag). */
 (function () {
   var NS = 'http://www.w3.org/2000/svg', D = null;
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -107,9 +107,63 @@
 
   /* ---------- diagrams ---------- */
   function node(parent, color, title, sub, i) { var n = H('div', 'vz-node', '<b>' + esc(title) + '</b><span>' + sub + '</span>', parent); n.style.setProperty('--c', color); n.style.setProperty('--i', i * .18 + 's'); return n; }
+  var BASE = '';
+  function img(p, alt) { return '<figure><img src="' + BASE + p + '" alt="' + esc(alt) + '" loading="lazy"><figcaption>' + esc(alt) + '</figcaption></figure>'; }
+  function track(box) {
+    var T = D.track, cur = 0, k = 0, timer = null;
+    box.innerHTML = '<div class="trk"><div class="trk-tabs"></div><div class="trk-stage"><img alt="A close-up of consecutive video frames"><svg viewBox="0 0 1 1" preserveAspectRatio="none"></svg><span class="trk-n"></span></div>' +
+      '<div class="trk-ctl"><button class="trk-play" aria-label="Play or pause">&#10074;&#10074;</button><input type="range" min="0" max="24" value="0" aria-label="Frame"><label class="trk-trail"><input type="checkbox" checked> trail</label></div>' +
+      '<p class="trk-cap"></p></div>';
+    var tabs = box.querySelector('.trk-tabs'), im = box.querySelector('.trk-stage img'), sv = box.querySelector('svg'), nn = box.querySelector('.trk-n'), rg = box.querySelector('input[type=range]'), pl = box.querySelector('.trk-play'), tr = box.querySelector('.trk-trail input'), cap = box.querySelector('.trk-cap');
+    T.forEach(function (s, i) { var b = H('button', i ? '' : 'on', esc(s.site), tabs); b.onclick = function () { cur = i; [].forEach.call(tabs.children, function (x, j) { x.classList.toggle('on', j === i); }); preload(); show(0); }; });
+    function src(f) { return BASE + 'track/' + T[cur].key + '/' + (f < 10 ? '0' : '') + f + '.jpg'; }
+    function preload() { for (var f = 0; f < 25; f++) { var q = new Image(); q.src = src(f); } }
+    function show(f) {
+      k = f; rg.value = f; im.src = src(f); nn.textContent = 'frame ' + (f + 1) + ' of 25';
+      var h = '';
+      if (tr.checked) for (var j = 0; j <= f; j++) T[cur].frames[j].forEach(function (b) { if (b[0] === 'contact_point') h += '<circle cx="' + b[1] + '" cy="' + b[2] + '" r="' + (.003 + .004 * j / 24) + '" fill="var(--c-cp)" opacity="' + (.25 + .5 * j / Math.max(1, f)) + '"/>'; });
+      T[cur].frames[f].forEach(function (b) { h += '<rect x="' + (b[1] - b[3] / 2) + '" y="' + (b[2] - b[4] / 2) + '" width="' + b[3] + '" height="' + b[4] + '" fill="none" stroke="' + CLASS[b[0]] + '" stroke-width="2.5" vector-effect="non-scaling-stroke" rx=".004"/>'; });
+      sv.innerHTML = h;
+      cap.innerHTML = esc(T[cur].site) + ': final boxes on 25 consecutive frames of one clip, <b style="color:var(--c-cp)">contact points</b> and the <b style="color:var(--c-pan)">pantograph</b>. Drag the slider to step through. In CVAT, boxes like these were set on a few keyframes and carried across the frames between by tracking.';
+    }
+    function play(on) { clearInterval(timer); timer = null; pl.innerHTML = on ? '&#10074;&#10074;' : '&#9654;'; if (on) timer = setInterval(function () { show((k + 1) % 25); }, 140); }
+    pl.onclick = function () { play(!timer); }; rg.oninput = function () { play(false); show(+rg.value); }; tr.onchange = function () { show(k); };
+    box.__stop = function () { play(false); }; box.__start = function () { preload(); show(0); play(!reduce); };
+  }
+  var STEPS = [
+    ['Film', 'cabin-camera<br>footage', 'var(--accent)'], ['Pre-annotate', 'a small pretrained<br>detector proposes boxes', 'var(--s2)'], ['Track', 'boxes carried between<br>frames from keyframes', 'var(--warm)'],
+    ['Review', 'every frame checked<br>and corrected in CVAT', 'var(--good)'], ['Export', 'YOLO boxes', 'var(--s2)'], ['Train', 'YOLO26x ·<br>RF-DETR', 'var(--pink)']];
+  var PANEL = [
+    function () { return '<p>Cabin-camera video from five routes, cut into short segments (301 of them), with frames pulled from each.</p><div class="ev4">' + img('gallery/images/f12_lucknow.jpg', 'Lucknow') + img('gallery/images/f14_mehsana.jpg', 'Mehsana') + img('gallery/images/f25_mumbai.jpg', 'Mumbai') + img('gallery/images/f36_palanpur.jpg', 'Palanpur') + '</div>'; },
+    function () { return '<p>A small pretrained detector proposes boxes inside CVAT. They are a starting point: the proposal below runs too tall and gets corrected.</p><div class="ev2">' + img('story/s08-auto-annotate-dialog.jpg', 'Choosing the auto-annotation model in CVAT') + img('story/s09-auto-box.jpg', 'An automatic proposal that is too tall') + '</div>'; },
+    function () { return '<p>Drawing a contact point on every frame by hand would take far too long, so boxes were set on keyframes and tracking carried them between. Below: two real runs of 25 consecutive frames.</p><div class="ev-track"></div>'; },
+    function () { return '<p>Two roles in CVAT: a <b>labeller</b>, and a <b>reviewer</b> who follows behind fixing mistakes. The reviewed box on the right is what goes into the dataset.</p><div class="ev2">' + img('story/s09-auto-box.jpg', 'Before: automatic proposal') + img('story/s10-manual-box.jpg', 'After: reviewed box') + '</div>'; },
+    function () { return '<p>Reviewed tasks are exported as plain YOLO text, one line per box: <code>class x_centre y_centre width height</code>, all as fractions of the frame. Boxes are axis-aligned, so a box top stays parallel to the frame bottom.</p><pre class="ev-code">0 0.583358 0.326869 0.006539 0.012406\n0 0.405194 0.341024 0.007124 0.012655</pre><p>133,245 boxes, four classes.</p>'; },
+    function () { return '<p>YOLO26x: mAP@50:95 <b>0.698</b>, 1280 px, about 8 days on one RTX 4070. RF-DETR Large: <b>0.679</b>, 1120 px, about 19 hours on one H100. Different validation sets, so not a ranking.</p><div class="ev2">' + img('story/s11-yolo-training.jpg', 'A YOLO training run') + '</div>'; }];
   function pipeline(el) {
-    var steps = [['Film', 'cabin-camera<br>footage', 'var(--accent)'], ['Pre-annotate', 'a small pretrained<br>detector proposes boxes', 'var(--s2)'], ['Track', 'boxes carried between<br>frames from keyframes', 'var(--warm)'], ['Review', 'every frame checked<br>and corrected in CVAT', 'var(--good)'], ['Export', 'YOLO boxes', 'var(--s2)'], ['Train', 'YOLO26x ·<br>RF-DETR', 'var(--pink)']];
-    var w = H('div', 'vz-flow', null, el); steps.forEach(function (s, i) { node(w, s[2], s[0], s[1], i); if (i < steps.length - 1) { var a = H('i', 'vz-arrow', null, w); a.style.setProperty('--i', i * .18 + .12 + 's'); } });
+    var w = H('div', 'vz-flow', null, el), pn = H('div', 'vz-panel', null, el), open = -1, nodes = [];
+    BASE = document.querySelector('script[src*="charts.js"]').getAttribute('data-json').replace(/data\/charts\.json.*/, '');
+    STEPS.forEach(function (s, i) {
+      var n = node(w, s[2], s[0], s[1], i); n.setAttribute('role', 'button'); n.tabIndex = 0; n.setAttribute('aria-expanded', 'false'); H('em', 'vz-more', 'See the evidence', n); nodes.push(n);
+      function tog() {
+        var tk = pn.querySelector('.ev-track'); if (tk && tk.__stop) tk.__stop();
+        if (open === i) { open = -1; pn.classList.remove('open'); pn.innerHTML = ''; } else {
+          open = i; pn.innerHTML = '<h4>' + esc(s[0]) + '</h4>' + PANEL[i](); pn.classList.add('open'); pn.style.setProperty('--c', s[2]);
+          var t2 = pn.querySelector('.ev-track'); if (t2) { track(t2); t2.__start(); }
+        }
+        nodes.forEach(function (x, j) { x.classList.toggle('on', j === open); x.setAttribute('aria-expanded', j === open); });
+      }
+      n.onclick = tog; n.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tog(); } };
+      if (i < STEPS.length - 1) { var a = H('i', 'vz-arrow', null, w); a.style.setProperty('--i', i * .18 + .12 + 's'); }
+    });
+  }
+  function roles(el) {
+    var w = H('div', 'vz-splits', null, el);
+    var c1 = H('div', 'col', null, w); node(c1, 'var(--accent)', 'CVAT on my PC', 'self-hosted in Docker,<br>31 tasks', 0);
+    H('i', 'vz-arrow', null, w);
+    var c2 = H('div', 'col', null, w); node(c2, 'var(--warm)', 'ngrok tunnel', 'the same server reachable<br>locally and from off-site', 1);
+    H('i', 'vz-arrow', null, w);
+    var c3 = H('div', 'col', null, w); node(c3, 'var(--good)', 'Labeller', 'draws and corrects the boxes', 2); node(c3, 'var(--pink)', 'Reviewer', 'follows behind, catches and<br>fixes mistakes', 3);
   }
   function splits(el) {
     var w = H('div', 'vz-splits', null, el);
@@ -125,7 +179,7 @@
     rows.forEach(function (r, i) { var row = H('div', 'grow', null, w); H('label', null, esc(r[0]), row); var tr = H('div', 'tr', null, row), b = H('div', 'gb', null, tr); b.style.left = (r[1] / 9 * 100) + '%'; b.style.width = ((r[2] - r[1]) / 9 * 100) + '%'; b.style.background = r[3]; b.style.setProperty('--i', i * .09 + 's'); bindTip(b, '<b>' + esc(r[0]) + '</b>'); });
   }
 
-  var B = { vbar: function (e) { bars(e, false); }, hbar: function (e) { bars(e, true); }, line: line, donut: donut, heat: function (e) { heat(e, 'positions'); }, sizes: function (e) { heat(e, 'sizes'); }, pipeline: pipeline, splits: splits, gantt: gantt };
+  var B = { vbar: function (e) { bars(e, false); }, hbar: function (e) { bars(e, true); }, line: line, donut: donut, heat: function (e) { heat(e, 'positions'); }, sizes: function (e) { heat(e, 'sizes'); }, pipeline: pipeline, roles: roles, splits: splits, gantt: gantt };
   function build(el) { var f = B[el.getAttribute('data-chart')]; if (!f || el.__built) return; el.__built = true; try { f(el); } catch (e) { el.textContent = 'This chart could not load.'; console.error(e); } }
   function start() {
     var els = [].slice.call(document.querySelectorAll('.vz[data-chart]')); els.forEach(build);

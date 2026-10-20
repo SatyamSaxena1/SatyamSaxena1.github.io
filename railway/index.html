@@ -11,7 +11,7 @@
   <link rel="canonical" href="https://satyamsaxena1.github.io/railway/">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238a6bff'/%3E%3Cstop offset='1' stop-color='%233d7bff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Ctext x='32' y='42' font-size='26' font-family='Arial' font-weight='800' fill='white' text-anchor='middle'%3ESS%3C/text%3E%3C/svg%3E">
   <script>try{var t=localStorage.getItem('theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))</script>
-  <link rel="stylesheet" href="../assets/css/theme.css?v=6">
+  <link rel="stylesheet" href="../assets/css/theme.css?v=7">
 </head>
 <body>
   <canvas id="bg" aria-hidden="true"></canvas>
@@ -184,13 +184,13 @@
     </section>
 
     <section class="sec wrap">
-      <div class="sec-head reveal"><h2>How the labels were <span class="grad">made</span></h2><p>Four steps, repeated task by task.</p></div>
-      <div class="vz" data-chart="pipeline"></div>
+      <div class="sec-head reveal"><h2>How the labels were <span class="grad">made</span></h2><p>Six steps, repeated task by task. Press any step to see the evidence.</p></div>
+      <div class="vz" data-chart="pipeline" id="flow"></div>
       <div class="two" style="margin-top:16px">
         <div class="card reveal">
-          <h3>Where the 119,972 shapes came from</h3>
-          <div class="vz" data-chart="hbar" data-id="shape_sources" data-dec="0"></div>
-          <p style="margin-top:14px">How each box entered CVAT, not how many I edited: CVAT doesn't log edits to imported boxes.</p>
+          <h3>How the labelling was run</h3>
+          <div class="vz" data-chart="roles"></div>
+          <p style="margin-top:14px">I hosted CVAT on my own machine and used ngrok so it could be reached locally and from off-site. Two roles worked each task: a labeller, and a reviewer who followed behind correcting mistakes. I switched between the two roles, as well as being the admin and the host.</p>
         </div>
         <div class="card reveal">
           <h3>Model proposes, I decide</h3>
@@ -244,7 +244,7 @@
         <li class="reveal"><b>1,266 more frames have a contact point but no pantograph box,</b> about 14% of Mumbai, 8% of Mehsana and Palanpur, 3% of Ahmedabad and Lucknow.</li>
         <li class="reveal"><b>Validation sets differ.</b> YOLO and RF-DETR were scored on different image sets, and the RF-DETR validation and test splits share video segments.</li>
         <li class="reveal"><b>Neighbouring frames are near-duplicates,</b> so the number of distinct scenes is far smaller than the frame count.</li>
-        <li class="reveal"><b>One annotator, five routes.</b> There is no inter-annotator agreement measure, and the domain is limited.</li>
+        <li class="reveal"><b>Five routes, no agreement measure.</b> Review was a second pass in CVAT, not an independent labelling, so there is no inter-annotator agreement score, and the domain is limited.</li>
       </ul>
       <p class="note reveal" style="margin-top:16px">The full dataset (23,551 frames, 8.13 GB) is private and not available for download. The <a href="https://www.kaggle.com/datasets/satyamsaxena12/railway-overhead-line-showcase" style="text-decoration:underline">Kaggle write-up</a> has sample frames, the full numbers, and the data-prep steps.</p>
     </section>
@@ -257,6 +257,6 @@
   <script src="../assets/js/site.js?v=3" defer></script>
   <script src="../assets/js/bg.js?v=5" defer></script>
   <script src="../assets/js/route-map.js?v=4" defer></script>
-  <script src="../assets/js/charts.js?v=3" data-json="../assets/data/charts.json?v=2" defer></script>
+  <script src="../assets/js/charts.js?v=4" data-json="../assets/data/charts.json?v=3" defer></script>
 </body>
 </html>

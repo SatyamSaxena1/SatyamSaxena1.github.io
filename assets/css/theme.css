@@ -317,3 +317,26 @@ figure.vz-heat{cursor:default}figure.vz-heat:hover{transform:none;border-color:t
 @media(max-width:760px){.vz-flow{flex-direction:column}.vz-flow .vz-arrow{width:2px;height:20px;align-self:center;transform:scaleY(0);transform-origin:top}.in .vz-flow .vz-arrow{transform:scaleY(1)}.vz-flow .vz-arrow:after{right:-4px;top:auto;bottom:-1px;border:5px solid transparent;border-top:7px solid var(--faint);border-bottom:0}
   .vz-splits{grid-template-columns:1fr}.vz-splits .vz-arrow{width:2px;height:20px;margin:8px auto;transform:scaleY(0);transform-origin:top}.in .vz-splits .vz-arrow{transform:scaleY(1)}.vz-splits .vz-arrow:after{right:-4px;top:auto;bottom:-1px;border:5px solid transparent;border-top:7px solid var(--faint);border-bottom:0}
   .vz-gantt .scale,.vz-gantt .grow{grid-template-columns:96px 1fr}.vz-bars.h .vz-row{grid-template-columns:76px 1fr auto}}
+
+/* clickable pipeline + evidence panel */
+.vz-node[role=button]{cursor:pointer;position:relative;transition:opacity .7s var(--i),transform .8s cubic-bezier(.2,.8,.2,1) var(--i),box-shadow .25s,background .25s}
+.in .vz-node[role=button]:hover,.vz-node.on{box-shadow:0 0 0 1px var(--c),0 10px 34px color-mix(in srgb,var(--c) 38%,transparent);background:color-mix(in srgb,var(--c) 26%,transparent)}
+.vz-node[role=button]:focus-visible{outline:2px solid var(--c);outline-offset:3px}
+.vz-more{display:block;margin-top:9px;font-style:normal;font-size:11.5px;font-weight:650;letter-spacing:.04em;color:var(--c)}
+.vz-more:after{content:" \2192"}.vz-node.on .vz-more:after{content:" \2191"}
+.vz-panel{display:none}
+.vz-panel.open{display:block;margin-top:16px;padding:22px;border:1px solid var(--c);border-radius:22px;background:color-mix(in srgb,var(--c) 9%,var(--card));animation:pin .45s ease}
+@keyframes pin{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.vz-panel h4{font-size:20px;margin:0 0 6px}.vz-panel p{margin:0 0 14px;color:var(--muted);font-size:15px}
+.vz-panel .ev2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.vz-panel .ev4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.vz-panel figure{margin:0}.vz-panel figure img{width:100%;border-radius:12px;display:block}.vz-panel figcaption{font-size:12.5px;color:var(--muted);margin-top:6px}
+.ev-code{margin:0 0 12px;padding:14px;border-radius:12px;background:color-mix(in srgb,var(--fg) 8%,transparent);font-size:13px;overflow:auto}
+.trk{max-width:760px;margin:0 auto}.trk-tabs{display:flex;gap:8px;margin-bottom:10px}
+.trk-tabs button{border:1px solid var(--line);background:transparent;color:var(--fg);padding:6px 14px;border-radius:99px;cursor:pointer;font:inherit;font-size:13px}.trk-tabs button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.trk-stage{position:relative;border-radius:14px;overflow:hidden;background:#000;aspect-ratio:16/10}
+.trk-stage img,.trk-stage svg{position:absolute;inset:0;width:100%;height:100%;display:block}.trk-stage img{object-fit:cover}
+.trk-n{position:absolute;left:10px;bottom:10px;padding:3px 10px;border-radius:99px;font-size:12px;background:rgba(0,0,0,.6);color:#fff}
+.trk-ctl{display:flex;align-items:center;gap:12px;margin:12px 0 4px}.trk-ctl input[type=range]{flex:1;accent-color:var(--accent)}
+.trk-play{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--fg);cursor:pointer;font-size:12px}
+.trk-trail{font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:center}.trk-cap{font-size:13px!important}
+@media(max-width:760px){.vz-panel .ev4{grid-template-columns:1fr 1fr}.vz-panel .ev2{grid-template-columns:1fr}}
