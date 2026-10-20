@@ -97,6 +97,15 @@
       f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen'; f.allowFullscreen = true; f.className = 'yt-frame'; b.replaceWith(f); f.focus();
     });
   });
+  document.querySelectorAll('.opener').forEach(function (b) {
+    var dw = document.getElementById(b.getAttribute('aria-controls')), box = b.closest('.drawer'), calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    b.addEventListener('click', function () {
+      var on = b.getAttribute('aria-expanded') !== 'true';
+      var go = function () { b.setAttribute('aria-expanded', on); dw.classList.toggle('open', on); box.classList.toggle('open', on); box.classList.remove('snap'); b.querySelector('span').textContent = on ? 'Hide the explanation' : 'How to read this'; };
+      if (calm) { go(); return; }
+      box.classList.add('snap'); setTimeout(go, 230);
+    });
+  });
   var hk = document.getElementById('hw-hook');
   document.querySelectorAll('.hook video, video[data-auto]').forEach(function (v) {
     v.muted = true; var go = function () { var p = v.play(); if (p && p.catch) p.catch(function () {}); };
