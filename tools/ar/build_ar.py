@@ -21,6 +21,7 @@ with sync_playwright() as p:
     for stem, r, t, g, s, cap in STATES:
         res = pg.evaluate(f"buildAR({r}, {t}, {g}, '{s}')")
         open(f"{OUT}/{stem}.usdz", "wb").write(base64.b64decode(res["usdz"]))
+        open(f"{OUT}/{stem}.glb", "wb").write(base64.b64decode(res["glb"]))
         im = Image.open(io.BytesIO(base64.b64decode(res["png"].split(",", 1)[1]))).convert("RGB")
         # Quick Look wants the link's only child to be an image, so the label is drawn into it
         d = ImageDraw.Draw(im, "RGBA"); W, H = im.size

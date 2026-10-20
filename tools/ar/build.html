@@ -13,6 +13,7 @@
 <script type="module">
 import * as THREE from 'three';
 import { USDZExporter } from 'three/addons/exporters/USDZExporter.js';
+import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 
 const E = window.FuzzyEngine;
 const COL = { low: 0xe23b3b, medium: 0xffb870, high: 0x59e0a5 }, ACCENT = 0x8a6bff, BLUE = 0x3d7bff;
@@ -65,9 +66,10 @@ function diorama(road, traffic, gap, setName) {
     box(g, 1.5, 0.55, 2.1, std(0x0c0c16, { roughness: 0.2, metalness: 0.6 }), x, 1.05, z - 0.2);
     box(g, 1.5, 0.16, 0.08, std(0xff3b4e, { emissive: 0xff3b4e }), x, 0.55, z + 2.12);
   } });
-  // your car on the slip road
-  box(g, 1.8, 0.7, 4.2, std(ACCENT, { emissive: ACCENT, emissiveIntensity: 0.4 }), RAMP, 0.45, L * 0.32);
-  box(g, 1.5, 0.55, 2.1, std(0x0c0c16, { roughness: 0.2, metalness: 0.6 }), RAMP, 1.05, L * 0.32 - 0.2);
+  // your car on the slip road (its own group, so the GLB can animate the merge)
+  const ego = new THREE.Group(); ego.name = 'ego'; ego.position.set(RAMP, 0, L * 0.32); g.add(ego);
+  box(ego, 1.8, 0.7, 4.2, std(ACCENT, { emissive: ACCENT, emissiveIntensity: 0.4 }), 0, 0.45, 0);
+  box(ego, 1.5, 0.55, 2.1, std(0x0c0c16, { roughness: 0.2, metalness: 0.6 }), 0, 1.05, -0.2);
   // gantry and the live sign
   const pole = std(0x55546a); const GZ = -6;
   box(g, 0.4, 9, 0.4, pole, -6.6, 4.5, GZ); box(g, 0.4, 9, 0.4, pole, 10.2, 4.5, GZ); box(g, 17.2, 0.5, 0.5, pole, 1.8, 9, GZ);
@@ -105,11 +107,21 @@ function diorama(road, traffic, gap, setName) {
   title.position.set(1.8, 1.9, L / 2 + 2.1); title.rotation.x = -0.35; g.add(title);
   g.position.set(-1.8, 0.35, 0);
   root.scale.setScalar(0.014);   // 1 unit = 1.4 cm, so the diorama is about 60 cm long on a table
-  return { root, o };
+  return { root, o, clip: mergeClip(RAMP, LANES[2], L * 0.32, 4, o.ok) };
+}
+
+// 6 s loop for the GLB (Scene Viewer plays it): your car appears on the slip road, runs up level with the gap,
+// slides into it and rides there, then fades out. With no rule firing it rolls to the end of the slip road and waits.
+function mergeClip(xRamp, xLane, z0, zGap, ok) {
+  const t = [0, 0.4, 2.4, 4.0, 5.4, 6.0];
+  const pos = ok ? [xRamp, 0, z0, xRamp, 0, z0 - 1, xRamp, 0, zGap, xLane, 0, zGap, xLane, 0, zGap - 2, xLane, 0, zGap - 2.5]
+                 : [xRamp, 0, z0, xRamp, 0, z0 - 1, xRamp, 0, zGap + 2, xRamp, 0, zGap + 2, xRamp, 0, zGap + 2, xRamp, 0, zGap + 2];
+  const s = [0.001, 1, 1, 1, 1, 0.001].flatMap(v => [v, v, v]);
+  return new THREE.AnimationClip('merge', 6, [new THREE.VectorKeyframeTrack('ego.position', t, pos), new THREE.VectorKeyframeTrack('ego.scale', t, s)]);
 }
 
 window.buildAR = async function (road, traffic, gap, setName) {
-  const { root, o } = diorama(road, traffic, gap, setName);
+  const { root, o, clip } = diorama(road, traffic, gap, setName);
   const scene = new THREE.Scene(); scene.add(root);
   // a preview render for the button thumbnail
   const r = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true }); r.setSize(800, 560); r.setClearColor(0x0b0a14);
@@ -117,9 +129,10 @@ window.buildAR = async function (road, traffic, gap, setName) {
   const cam = new THREE.PerspectiveCamera(32, 800 / 560, 0.01, 10); cam.position.set(0.55, 0.42, 0.62); cam.lookAt(0.0, 0.1, -0.03);
   r.render(scene, cam); const png = r.domElement.toDataURL('image/png');
   scene.remove(scene.children[1], scene.children[2]);   // lights aren't exported; Quick Look lights the model itself
-  const buf = await new USDZExporter().parse(scene);
-  let bin = ''; const u8 = new Uint8Array(buf); for (let i = 0; i < u8.length; i += 0x8000) bin += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000));
-  return { usdz: btoa(bin), png, value: o.ok ? o.value : null };
+  const b64 = (buf) => { let bin = ''; const u8 = new Uint8Array(buf); for (let i = 0; i < u8.length; i += 0x8000) bin += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(bin); };
+  const usdz = b64(await new USDZExporter().parse(scene));   // Quick Look: still (three's USDZ exporter has no animation)
+  const glb = b64(await new GLTFExporter().parseAsync(scene, { binary: true, animations: [clip] }));   // Scene Viewer: animated
+  return { usdz, glb, png, value: o.ok ? o.value : null };
 };
 window.ready = true;
 </script>

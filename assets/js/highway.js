@@ -234,7 +234,7 @@
     bm.visible = pu.visible = false; scene.add(bm); scene.add(pu);
     beams.push({ m: bm, p: pu, src: null, a: 0, ta: 0, ph: bi / 28 });
   }
-  var SIGN_TOP = new T.Vector3(1.8, 8.95, GZ + 0.3), UP = new T.Vector3(0, 1, 0), vA = new T.Vector3(), vD = new T.Vector3();
+  var SIGN_TOP = new T.Vector3(1.8, 8.95, GZ + 0.3), UP = new T.Vector3(0, 1, 0), vA = new T.Vector3(), vD = new T.Vector3(), sceneInv = new T.Matrix4();
 
   function applyRules(d) {
     var OUTC = { low: C.red, medium: C.warm, high: C.good }, rs = d.rules || [], acts = d.acts || [], b = 0;
@@ -254,7 +254,7 @@
   function animateRules(dt, t) {
     var k = reduce ? 1 : Math.min(1, dt * 6);
     if (!reduce) holo.rotation.y = 0.5 + Math.sin(t * 0.18) * 0.45;
-    holo.updateMatrixWorld();
+    scene.updateMatrixWorld(); sceneInv.copy(scene.matrixWorld).invert();   // in AR the scene itself is moved and shrunk
     cubes.forEach(function (c) {
       c.a += (c.ta - c.a) * k;
       var col = c.used ? c.col : GREY;
@@ -270,6 +270,7 @@
       var show = bm.a > 0.01 && bm.src;
       bm.m.visible = bm.p.visible = !!show; if (!show) return;
       if (bm.src === 'shell') holo.getWorldPosition(vA); else bm.src.g.getWorldPosition(vA);
+      vA.applyMatrix4(sceneInv);
       vD.subVectors(SIGN_TOP, vA); var len = vD.length();
       bm.m.position.copy(vA).addScaledVector(vD, 0.5);
       bm.m.quaternion.setFromUnitVectors(UP, vD.clone().normalize());
@@ -373,6 +374,7 @@
     } else egoTail.material.color.set(0xff3b4e);
 
     animateRules(dt, t);
+    if (inXR) return;   // the AR loop renders with the phone's camera
 
     // camera: three-quarter view behind the merge, gentle drift and pointer parallax
     px += (tpx - px) * 0.06; py += (tpy - py) * 0.06;
@@ -397,11 +399,88 @@
     requestAnimationFrame(loop);
   }
   function setRun(on) {
+    if (inXR) return;
     if (phone) window.dispatchEvent(new CustomEvent('lava:pause', { detail: on }));   // one animated WebGL scene at a time on phones
     if (on === running || reduce || failed) return; running = on; if (on) { last = performance.now(); requestAnimationFrame(loop); }
   }
   if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { visible = e[0].isIntersecting; setRun(visible && !document.hidden); }).observe(host);
   document.addEventListener('visibilitychange', function () { setRun(visible && !document.hidden); });
+
+  // ---------- live AR (WebXR: Chrome on Android phones with ARCore) ----------
+  // The same scene, shrunk onto a table through the camera. The page's own rule-base chips, presets and sliders
+  // move into the AR overlay for the session, so they keep driving the fuzzy engine and the scene as usual.
+  var inXR = false;
+  if (navigator.xr && navigator.xr.isSessionSupported && window.isSecureContext)
+    navigator.xr.isSessionSupported('immersive-ar').then(function (ok) { if (ok) addXR(); }).catch(function () {});
+  function addXR() {
+    var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'fz-xr'; btn.textContent = 'Live AR'; host.appendChild(btn);
+    var ui = document.createElement('div'); ui.className = 'fz-xr-ui';
+    ui.innerHTML = '<div class="fz-xr-top"><span class="fz-xr-hint"></span><button type="button" class="chip fz-xr-x">Exit AR</button></div><div class="fz-xr-panel"></div>';
+    document.body.appendChild(ui);
+    var top = ui.firstChild, panel = ui.lastChild, hint = top.firstChild, moved = [];
+    // touching the controls must not count as "tap the table"
+    [top, panel].forEach(function (el) { el.addEventListener('beforexrselect', function (e) { e.preventDefault(); }); });
+    var session = null, hitSrc = null, ref = null, placed = false, hasHit = false;
+    var hit = new T.Matrix4(), eye = new T.Vector3(), spot = new T.Vector3(), SCALE = 0.006, PIVOT = new T.Vector3(3, 0, -24);   // ~1.6 m of road
+    var reticle = new T.Mesh(new T.RingGeometry(0.05, 0.065, 32).rotateX(-Math.PI / 2), new T.MeshBasicMaterial({ color: C.accent }));
+    reticle.matrixAutoUpdate = false; reticle.visible = false; scene.add(reticle);
+    function show(on) { scene.children.forEach(function (c) { if (c !== reticle && c !== hemi && c !== moon) c.visible = on && c !== ground && c !== city; }); }
+
+    btn.addEventListener('click', function () {
+      if (session) return;
+      ui.classList.add('on');
+      navigator.xr.requestSession('immersive-ar', { requiredFeatures: ['hit-test'], optionalFeatures: ['dom-overlay'], domOverlay: { root: ui } })
+        .then(start, function (e) { ui.classList.remove('on'); btn.textContent = 'AR could not start'; if (window.__fzDebug) window.__fzDebug('AR: ' + e.message); });
+    });
+    function start(s) {
+      session = s; inXR = true; placed = false; running = false;
+      window.dispatchEvent(new CustomEvent('lava:pause', { detail: true }));
+      ['.fz-sets', '.fz-presets', '.fz-inputs'].forEach(function (q) {
+        var el = fz.querySelector(q); if (!el) return;
+        var mark = document.createComment('xr'); el.parentNode.insertBefore(mark, el); panel.appendChild(el); moved.push([el, mark]);
+      });
+      hint.textContent = 'Point at a table, then tap to place the highway';
+      cam.near = 0.02; cam.far = 20; cam.updateProjectionMatrix();   // three passes these on as the AR depth range
+      scene.position.set(0, 0, 0); scene.rotation.set(0, 0, 0); scene.scale.setScalar(1); show(false);
+      s.addEventListener('select', place); s.addEventListener('end', end);
+      renderer.xr.enabled = true; renderer.xr.setReferenceSpaceType('local');
+      renderer.xr.setSession(s).then(function () {
+        ref = renderer.xr.getReferenceSpace();
+        s.requestReferenceSpace('viewer').then(function (vs) { return s.requestHitTestSource({ space: vs }); }).then(function (h) { hitSrc = h; });
+        last = performance.now(); renderer.setAnimationLoop(xrFrame);
+      });
+    }
+    function xrFrame(now, xf) {
+      var dt = Math.min(0.05, (now - last) / 1000); last = now;
+      if (xf && ref) {
+        var vp = xf.getViewerPose(ref); if (vp) eye.copy(vp.transform.position);
+        var r = hitSrc ? xf.getHitTestResults(hitSrc) : []; hasHit = r.length > 0;
+        if (hasHit) hit.fromArray(r[0].getPose(ref).transform.matrix);
+      }
+      reticle.visible = hasHit && !placed;
+      if (reticle.visible) { scene.updateMatrixWorld(); reticle.matrix.copy(scene.matrixWorld).invert().multiply(hit); }
+      if (placed) frame(dt);
+      renderer.render(scene, cam);
+    }
+    function place() {
+      if (!hasHit) return;
+      spot.setFromMatrixPosition(hit);
+      // the road runs away from you, seen a little from the right like the page's own camera
+      scene.scale.setScalar(SCALE); scene.rotation.set(0, Math.atan2(eye.x - spot.x, eye.z - spot.z) - 0.23, 0);
+      scene.position.copy(PIVOT).multiplyScalar(-SCALE).applyEuler(scene.rotation).add(spot);
+      if (!placed) { placed = true; show(true); hint.textContent = 'Drag the sliders. Tap the table to move it.'; }
+    }
+    function end() {
+      renderer.setAnimationLoop(null); renderer.xr.enabled = false;
+      if (hitSrc) hitSrc.cancel(); hitSrc = null; session = null; inXR = false; hasHit = false;
+      moved.forEach(function (m) { m[1].parentNode.insertBefore(m[0], m[1]); m[1].parentNode.removeChild(m[1]); }); moved = [];
+      ui.classList.remove('on');
+      scene.position.set(0, 0, 0); scene.rotation.set(0, 0, 0); scene.scale.setScalar(1);
+      scene.children.forEach(function (c) { c.visible = c !== reticle; });
+      cam.near = 1; cam.far = 300; resize(); setRun(visible && !document.hidden);
+    }
+    ui.querySelector('.fz-xr-x').addEventListener('click', function () { if (session) session.end(); });
+  }
 
   window.addEventListener('themechange', function () {
     palette(); scene.fog.color.copy(C.bg); groundMat.color.copy(C.ground); edgeMat.color.copy(C.accent); rampMat.color.copy(C.blue);

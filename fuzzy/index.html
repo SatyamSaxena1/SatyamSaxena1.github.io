@@ -84,6 +84,19 @@
     .fz-ar a{display:block;border-radius:16px;overflow:hidden;border:1px solid var(--line)}.fz-ar img{width:100%;display:block}
     .fz-ar .ar-no{display:none}.fz-ar.no-ar .ar-yes{display:none}.fz-ar.no-ar .ar-no{display:inline}.fz-ar.no-ar a{cursor:default;opacity:.85}
     @media(max-width:760px){.fz-ar{grid-template-columns:1fr 1fr}.fz-ar-copy{grid-column:1/-1}}
+    .fz-ar-copy small{display:block;margin-top:6px;font-size:12.5px;color:var(--muted)}
+    /* live AR (WebXR on Android): the button in the scene, and the overlay that holds the page's own controls */
+    .fz-xr{position:absolute;left:12px;top:10px;z-index:3;min-height:44px;padding:0 16px;border:0;border-radius:99px;background:var(--accent);color:#fff;font:inherit;font-size:13.5px;font-weight:650;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+    .fz-xr-ui{display:none;position:fixed;inset:0;z-index:60;flex-direction:column;justify-content:space-between;gap:10px;padding:max(12px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom));background:transparent;pointer-events:none}
+    .fz-xr-ui.on{display:flex}
+    .fz-xr-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+    .fz-xr-hint,.fz-xr-panel{pointer-events:auto;background:color-mix(in srgb,var(--bg) 80%,transparent);color:var(--fg);border-radius:16px}
+    .fz-xr-top .chip{pointer-events:auto}
+    .fz-xr-hint{padding:9px 13px;font-size:13px}
+    .fz-xr-panel{max-height:44vh;overflow:auto;padding:10px;display:grid;gap:8px}
+    .fz-xr-panel .fz-sets,.fz-xr-panel .fz-presets{margin:0}
+    .fz-xr-panel .fz-inputs{grid-template-columns:1fr;gap:6px}.fz-xr-panel .fz-in{padding:8px 12px}
+    .fz-xr-panel svg,.fz-xr-panel .fz-chips{display:none}
     .fz-sets{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px}
     .fz-sets>span{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-right:4px}
     .fz-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -136,9 +149,10 @@
         </div>
       </div>
       <div class="fz-ar reveal" id="fz-ar">
-        <div class="fz-ar-copy"><b>See it on your desk</b><span class="ar-yes">Two still models of the highway for AR on iPhone and iPad. Tap one, then place it on a table and walk around it.</span><span class="ar-no">Two still models of the highway in AR. Open this page on an iPhone or iPad to place one on your desk.</span></div>
-        <a rel="ar" href="../assets/fuzzy/ar/highway-2023-dense.usdz"><img src="../assets/fuzzy/ar/highway-2023-dense.jpg" alt="View in AR: the 2023 rules with dense traffic, where the OR rule's red shell forces a limit of 17" loading="lazy"></a>
-        <a rel="ar" href="../assets/fuzzy/ar/highway-rewrite.usdz"><img src="../assets/fuzzy/ar/highway-rewrite.jpg" alt="View in AR: the 27-rule rewrite with light traffic, several rules firing to a limit of 56" loading="lazy"></a>
+        <div class="fz-ar-copy"><b>See it on your desk</b><span class="ar-yes">Two models of the highway in AR, with no app to install: still on iPhone and iPad, with your car merging on Android. Tap one, then place it on a table and walk around it.</span><span class="ar-no">Two models of the highway in AR. Open this page on a phone (iPhone, iPad or Android) to place one on your desk.</span>
+          <small>Want the sliders in AR too? On an Android phone in Chrome, tap <i>Live AR</i> on the scene above. Live AR on iPhone: in development.</small></div>
+        <a rel="ar" data-title="Fuzzy Highway: 2023 rules, dense traffic" href="../assets/fuzzy/ar/highway-2023-dense.usdz"><img src="../assets/fuzzy/ar/highway-2023-dense.jpg" alt="View in AR: the 2023 rules with dense traffic, where the OR rule's red shell forces a limit of 17" loading="lazy"></a>
+        <a rel="ar" data-title="Fuzzy Highway: my 27-rule rewrite" href="../assets/fuzzy/ar/highway-rewrite.usdz"><img src="../assets/fuzzy/ar/highway-rewrite.jpg" alt="View in AR: the 27-rule rewrite with light traffic, several rules firing to a limit of 56" loading="lazy"></a>
       </div>
       <div class="fz-sets reveal" role="group" aria-label="Rule base">
         <span>Rule base</span>
@@ -225,11 +239,18 @@
   <script src="../assets/js/bg.js?v=10" defer></script>
   <script src="../assets/js/fuzzy-engine.js?v=2" defer></script>
   <script src="../assets/js/fuzzy-demo.js?v=6" defer></script>
-  <script src="../assets/js/highway.js?v=12" defer></script>
+  <script src="../assets/js/highway.js?v=13" defer></script>
   <script>
-  // AR Quick Look links only work in Safari on iPhone and iPad; elsewhere keep the pictures but don't download the file
+  // iPhone/iPad: AR Quick Look opens the .usdz. Android: the same link opens the animated .glb in Google's Scene Viewer
+  // (built into the Google app). Anywhere else keep the pictures but don't download the file.
   (function () { var a = document.createElement('a'), ua = navigator.userAgent, ok = (a.relList && a.relList.supports && a.relList.supports('ar')) || /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1), box = document.getElementById('fz-ar');
-    if (!box || ok) return; box.classList.add('no-ar'); [].forEach.call(box.querySelectorAll('a[rel=ar]'), function (l) { l.removeAttribute('href'); l.setAttribute('aria-disabled', 'true'); }); })();
+    if (!box || ok) return; var links = box.querySelectorAll('a[rel=ar]');
+    if (/Android/.test(ua)) { [].forEach.call(links, function (l) {
+      var glb = new URL(l.getAttribute('href').replace(/\.usdz$/, '.glb'), location.href).href, back = location.href.split('#')[0] + '#fz-ar';
+      l.href = 'intent://arvr.google.com/scene-viewer/1.0?file=' + encodeURIComponent(glb) + '&mode=ar_preferred&title=' + encodeURIComponent(l.getAttribute('data-title')) +
+        '#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=' + encodeURIComponent(back) + ';end;';
+      l.removeAttribute('rel'); }); return; }
+    box.classList.add('no-ar'); [].forEach.call(links, function (l) { l.removeAttribute('href'); l.setAttribute('aria-disabled', 'true'); }); })();
   </script>
 </body>
 </html>
