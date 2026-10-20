@@ -6,6 +6,7 @@
   var NAMES = ['Road condition', 'Traffic density', 'Gap in traffic'], KEYS = ['road', 'traffic', 'gap'];
   var TERM_COL = { poor: 'var(--c-cp)', average: 'var(--warm)', good: 'var(--good)', low: 'var(--c-cp)', medium: 'var(--warm)', high: 'var(--good)' };
   var state = { road: 7.5, traffic: 2.5, gap: 9 };
+  var ICONS = {"road": "<svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"><path d=\"M7 21 10 3M17 21 14 3M12 6v2M12 11v2M12 16v2\"/></svg>", "traffic": "<svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linejoin=\"round\"><path d=\"M5 16V11l2-5h10l2 5v5H5z\"/><path d=\"M5 11h14\"/><circle cx=\"8\" cy=\"16\" r=\"1.6\"/><circle cx=\"16\" cy=\"16\" r=\"1.6\"/></svg>", "gap": "<svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"><path d=\"M3 12h4M17 12h4M9 8l-2 4 2 4M15 8l2 4-2 4\"/></svg>"};
 
   function S(tag, a, p) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
   function path(xs, ys, X, Y) { return xs.map(function (x, i) { return (i ? 'L' : 'M') + X(x).toFixed(1) + ' ' + Y(ys[i]).toFixed(1); }).join(''); }
@@ -14,7 +15,7 @@
   var inputs = root.querySelector('.fz-inputs');
   var panels = KEYS.map(function (k, idx) {
     var card = document.createElement('div'); card.className = 'fz-in';
-    card.innerHTML = '<div class="fz-head"><label for="fz-' + k + '">' + NAMES[idx] + '</label><output id="fz-' + k + '-v"></output></div>' +
+    card.innerHTML = '<div class="fz-head"><label for="fz-' + k + '"><span class="fz-ic" aria-hidden="true">' + ICONS[k] + '</span>' + NAMES[idx] + '</label><output id="fz-' + k + '-v"></output></div>' +
       '<input type="range" id="fz-' + k + '" min="0" max="10" step="0.1" value="' + state[k] + '">';
     var W = 300, H = 110, m = { l: 8, r: 8, t: 8, b: 20 };
     var svg = S('svg', { viewBox: '0 0 ' + W + ' ' + H, class: 'fz-plot', role: 'img', 'aria-label': NAMES[idx] + ' membership functions' }, card);
@@ -85,6 +86,9 @@
     }
     var mx = state.road / 10 * 100, my = (10 - state.gap) / 10 * 100; mapMark.style.left = mx + '%'; mapMark.style.top = my + '%';
     drawMap();
+    // let the 3D highway (highway.js) follow along
+    root.__fz = { road: state.road, traffic: state.traffic, gap: state.gap, ok: o.ok, value: o.value, cut: o.cut };
+    root.dispatchEvent(new CustomEvent('fz:update', { detail: root.__fz }));
   }
 
   root.querySelectorAll('[data-preset]').forEach(function (b) {
