@@ -226,9 +226,8 @@
     if (throttled && now - lastDraw < 160) { requestAnimationFrame(frame); return; }
     lastDraw = now;
     var dt = Math.min((now - last) / 1000, .05); last = now;
-    step(dt);
-    U.uDark.value += (targetDark - U.uDark.value) * (1 - Math.exp(-dt * 4));
-    draw();
+    try { step(dt); U.uDark.value += (targetDark - U.uDark.value) * (1 - Math.exp(-dt * 4)); draw(); }
+    catch (err) { broken = true; running = false; canvas.style.display = 'none'; document.documentElement.classList.add('no-webgl'); if (window.__fzDebug) window.__fzDebug('background error: ' + (err && err.message) + (err && err.stack ? ' | ' + String(err.stack).split('\n').slice(0, 2).join(' / ') : '')); return; }
     requestAnimationFrame(frame);
   }
 

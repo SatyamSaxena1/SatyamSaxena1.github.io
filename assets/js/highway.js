@@ -31,7 +31,7 @@
   host.insertBefore(renderer.domElement, host.firstChild);
   renderer.domElement.setAttribute('aria-hidden', 'true');
 
-  var scene = new T.Scene(), cam = new T.PerspectiveCamera(36, 16 / 9, 0.5, 420);
+  var scene = new T.Scene(), cam = new T.PerspectiveCamera(36, 16 / 9, 1, 300);   // tight depth range: better precision on phone GPUs
   var dummy = new T.Object3D(), css = getComputedStyle(document.documentElement);
   function cv(n) { return new T.Color((css.getPropertyValue(n) || '#888').trim()); }
 
@@ -53,7 +53,7 @@
   var LANES = [-3.6, 0, 3.6], RAMP_X = 7.6, LEN = 260, Z0 = 60, Z1 = Z0 - LEN;
   function box(w, h, d, mat, x, y, z) { var m = new T.Mesh(new T.BoxGeometry(w, h, d), mat); m.position.set(x, y, z); scene.add(m); return m; }
   var groundMat = new T.MeshLambertMaterial({ color: C.ground });
-  var ground = new T.Mesh(new T.PlaneGeometry(600, 600), groundMat); ground.rotation.x = -Math.PI / 2; ground.position.set(0, -0.02, -80); scene.add(ground);
+  var ground = new T.Mesh(new T.PlaneGeometry(320, 320), groundMat); ground.rotation.x = -Math.PI / 2; ground.position.set(0, -0.02, -80); scene.add(ground);
   var roadMat = new T.MeshStandardMaterial({ color: C.road, roughness: 0.85, metalness: 0.05 });
   box(10.8, 0.05, LEN, roadMat, 0, 0, (Z0 + Z1) / 2);
   box(4, 0.05, 90, roadMat, RAMP_X, 0, Z0 - 45);                       // slip road
@@ -149,7 +149,7 @@
   var gapBox = box(3.3, 0.04, 1, gapMat, LANES[2], 0.05, 0);
   var gapEdges = [box(3.3, 0.08, 0.14, new T.MeshBasicMaterial({ color: C.good }), LANES[2], 0.06, 0), box(3.3, 0.08, 0.14, new T.MeshBasicMaterial({ color: C.good }), LANES[2], 0.06, 0)];
   function layoutTraffic(traffic, gap) {
-    var per = Math.round(2 + traffic * 2.2), spacing = LEN / per;
+    var per = Math.round(2 + traffic * (oldIOS ? 1.4 : 2.2)), spacing = LEN / per;   // fewer cars on older iPhones
     gapLen = 6 + gap * 3.2; trafficSpeed = 15 - traffic * 1.1;
     cars = [];
     LANES.forEach(function (x, li) { for (var n = 0; n < per; n++) cars.push({ lane: li, off: n * spacing + (li * spacing / 3) }); });
@@ -285,7 +285,11 @@
   host.addEventListener('pointerleave', function () { tpx = tpy = 0; });
 
   var t0 = performance.now(), last = t0, scroll = 0, running = false, visible = true;
+  var frames = 0;
   function frame(dt) {
+    try { frameBody(dt); frames++; } catch (err) { fail(err); }
+  }
+  function frameBody(dt) {
     if (!S) return;
     var t = (performance.now() - t0) / 1000;
     // traffic flows away from the camera; the gap window moves with lane 3
@@ -329,12 +333,13 @@
     var drift = reduce ? 0 : Math.sin(t * 0.12) * 2.5;
     cam.position.set(18 + drift + px * 6, 10.5 - py * 3, Z0 - 40 + px * 3);
     cam.lookAt(1.5 + px * 3, 0.5, Z0 - 110);
-    try { renderer.render(scene, cam); } catch (err) { fail(err); }
+    renderer.render(scene, cam);
   }
+  if (window.__fzDebug) setInterval(function () { window.__fzDebug('3D frames drawn: ' + frames + (failed ? ' (stopped after an error)' : ''), '3d'); }, 2000);
   var failed = false;
   function fail(err) {
     if (failed) return; failed = true; running = false;
-    if (window.__fzDebug) window.__fzDebug('3D render error: ' + (err && err.message) + (err && err.stack ? ' | ' + String(err.stack).split('\n').slice(0, 3).join(' / ') : ''));
+    if (window.__fzDebug) window.__fzDebug('3D error: ' + (err && err.message) + (err && err.stack ? ' | ' + String(err.stack).split('\n').slice(0, 3).join(' / ') : ''));
     if (phone) window.dispatchEvent(new CustomEvent('lava:pause', { detail: false }));
     renderer.domElement.style.display = 'none';
     var img = new Image(); img.src = host.getAttribute('data-still'); img.alt = 'The highway scene (a still, because 3D could not run on this device)';
