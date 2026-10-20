@@ -61,7 +61,7 @@
     var ymin = +(el.getAttribute('data-ymin') || 0), ymax = +(el.getAttribute('data-ymax') || 1), best = el.getAttribute('data-best'), xs = d[el.getAttribute('data-x') || 'x'];
     var svg = S('svg', { viewBox: '0 0 ' + W + ' ' + Hh, role: 'img', 'aria-label': el.getAttribute('data-label') || 'Line chart', preserveAspectRatio: 'xMidYMid meet' }, el); svg.setAttribute('class', 'vz-svg');
     var x0 = xs[0], x1 = xs[xs.length - 1]; function X(v) { return m.l + (v - x0) / (x1 - x0 || 1) * (W - m.l - m.r); } function Y(v) { return Hh - m.b - (v - ymin) / (ymax - ymin) * (Hh - m.t - m.b); }
-    for (var i = 0; i <= 5; i++) { var yv = ymin + (ymax - ymin) * i / 5, yy = Y(yv); S('line', { x1: m.l, x2: W - m.r, y1: yy, y2: yy, class: 'vz-grid' }, svg); S('text', { x: m.l - 8, y: yy + 4, class: 'vz-tick', 'text-anchor': 'end' }, svg).textContent = yv.toFixed(ymax <= 1.5 ? 1 : 0); }
+    for (var i = 0; i <= 5; i++) { var yv = ymin + (ymax - ymin) * i / 5, yy = Y(yv); S('line', { x1: m.l, x2: W - m.r, y1: yy, y2: yy, class: 'vz-grid' }, svg); S('text', { x: m.l - 8, y: yy + 4, class: 'vz-tick', 'text-anchor': 'end' }, svg).textContent = yv.toFixed((ymax - ymin) / 5 < .1 ? 2 : ymax <= 1.5 ? 1 : 0); }
     var step = Math.ceil(xs.length / 8 / 5) * 5 || 1; xs.forEach(function (v, k) { if (k % Math.max(1, Math.round(xs.length / 8)) === 0 || k === xs.length - 1) S('text', { x: X(v), y: Hh - 10, class: 'vz-tick', 'text-anchor': 'middle' }, svg).textContent = v; });
     var paths = [];
     keys.forEach(function (k, si) {
@@ -70,12 +70,12 @@
       var p = S('path', { d: dd, class: 'vz-line', stroke: SER[si % SER.length], fill: 'none' }, svg); p.style.setProperty('--d', (si * .25) + 's'); paths.push(p);
     });
     var mk = null;
-    if (best) { var bi = d[best].indexOf(Math.max.apply(null, d[best])); mk = S('g', { class: 'vz-best' }, svg); S('circle', { cx: X(xs[bi]), cy: Y(d[best][bi]), r: 6 }, mk); var tx = S('text', { x: Math.min(X(xs[bi]), W - 120), y: Y(d[best][bi]) - 14, class: 'vz-bestlab', 'text-anchor': 'middle' }, mk); tx.textContent = 'best ' + d[best][bi].toFixed(3) + ' · epoch ' + xs[bi]; }
+    if (best) { var bi = d[best].indexOf(Math.max.apply(null, d[best])); mk = S('g', { class: 'vz-best' }, svg); S('circle', { cx: X(xs[bi]), cy: Y(d[best][bi]), r: 6 }, mk); var tx = S('text', { x: Math.min(X(xs[bi]), W - 120), y: Y(d[best][bi]) - 14, class: 'vz-bestlab', 'text-anchor': 'middle' }, mk); tx.textContent = 'best ' + d[best][bi].toFixed(3) + ' · ' + (el.getAttribute('data-xlabel') || 'epoch') + ' ' + xs[bi]; }
     var cross = S('line', { y1: m.t, y2: Hh - m.b, class: 'vz-cross' }, svg), dots = keys.map(function (k, si) { return S('circle', { r: 4.5, class: 'vz-dot', fill: SER[si % SER.length] }, svg); });
     var hit = S('rect', { x: m.l, y: m.t, width: W - m.l - m.r, height: Hh - m.t - m.b, fill: 'transparent', class: 'vz-hover' }, svg);
     function at(e) { var r = svg.getBoundingClientRect(), px = (e.clientX - r.left) / r.width * W, f = (px - m.l) / (W - m.l - m.r), k = Math.max(0, Math.min(xs.length - 1, Math.round(f * (xs.length - 1))));
       cross.setAttribute('x1', X(xs[k])); cross.setAttribute('x2', X(xs[k])); cross.style.opacity = 1; keys.forEach(function (key, si) { dots[si].setAttribute('cx', X(xs[k])); dots[si].setAttribute('cy', Y(d[key][k])); dots[si].style.opacity = 1; });
-      showTip('<b>epoch ' + xs[k] + '</b>' + keys.map(function (key, si) { return '<br><i class="dotk" style="background:' + SER[si % SER.length] + '"></i>' + esc(names[si]) + ': ' + d[key][k].toFixed(3); }).join(''), e.clientX, e.clientY); }
+      showTip('<b>' + (el.getAttribute('data-xlabel') || 'epoch') + ' ' + xs[k] + '</b>' + keys.map(function (key, si) { return '<br><i class="dotk" style="background:' + SER[si % SER.length] + '"></i>' + esc(names[si]) + ': ' + d[key][k].toFixed(3); }).join(''), e.clientX, e.clientY); }
     hit.addEventListener('pointermove', at); hit.addEventListener('pointerleave', function () { cross.style.opacity = 0; dots.forEach(function (c) { c.style.opacity = 0; }); hideTip(); });
     legend(el, names, SER);
     el.__paths = paths; paths.forEach(function (p) { var L = p.getTotalLength(); p.style.setProperty('--len', L); });

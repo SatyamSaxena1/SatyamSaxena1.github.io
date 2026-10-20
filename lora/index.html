@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Teaching SDXL my face - LoRA fine-tuning | Satyam Saxena</title>
+  <meta name="description" content="Fine-tuning Stable Diffusion XL with a LoRA trained on 34 photos in 19 minutes, compared against Textual Inversion: the data, the training log, the outputs and what went wrong.">
+  <meta name="theme-color" content="#05050b">
+  <meta name="color-scheme" content="dark light">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="apple-mobile-web-app-title" content="Satyam Saxena">
+  <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
+  <meta property="og:title" content="Teaching SDXL my face">
+  <meta property="og:description" content="A LoRA on Stable Diffusion XL, trained on 34 photos in 19 minutes, against Textual Inversion on SD 2.">
+  <link rel="canonical" href="https://satyamsaxena1.github.io/lora/">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238a6bff'/%3E%3Cstop offset='1' stop-color='%233d7bff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Ctext x='32' y='42' font-size='26' font-family='Arial' font-weight='800' fill='white' text-anchor='middle'%3ESS%3C/text%3E%3C/svg%3E">
+  <script>try{var t=localStorage.getItem('theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))</script>
+  <link rel="stylesheet" href="../assets/css/theme.css?v=22y">
+  <style>
+    .lh-hero{display:grid;grid-template-columns:1.1fr .9fr;gap:34px;align-items:center}
+    .lh-collage{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .lh-collage figure{margin:0}.lh-collage img{width:100%;border-radius:18px;border:1px solid var(--line)}
+    .lh-collage figure:first-child{grid-row:span 2}.lh-collage figure:first-child img{height:100%;object-fit:cover}
+    .tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:6px}
+    .tgrid img{width:100%;border-radius:8px;aspect-ratio:3/4;object-fit:cover;border:1px solid var(--line)}
+    .folder{font:13px/1.7 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;padding:14px 16px;border-radius:14px;background:var(--fill,rgba(255,255,255,.06));border:1px solid var(--line);overflow:auto;white-space:pre}
+    .folder b{color:var(--accent)}
+    .kv{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;margin:0;font-size:14.5px}
+    .kv dt{color:var(--muted)}.kv dd{margin:0;font-variant-numeric:tabular-nums}
+    .vs{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .vs figure{margin:0}.vs img{width:100%;border-radius:16px;border:1px solid var(--line)}
+    .vs figcaption{font-size:13px;color:var(--muted);margin-top:8px}.vs figcaption code{color:var(--fg)}
+    .bigtab{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+    .bigtab th,.bigtab td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left}
+    .bigtab td.n{text-align:right;font-size:20px;font-weight:700}.bigtab th:not(:first-child){text-align:right}
+    .bigtab .win{color:var(--good)}
+    .gal-grid .g-item figcaption small{display:block;font-size:11.5px;color:var(--faint);margin-top:4px;line-height:1.45}
+    .g-item.fail{outline:1.5px solid var(--pink);outline-offset:-1.5px}
+    .g-item .badge{position:absolute;top:10px;left:10px;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:700;color:#fff;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+    .g-item .badge.t{background:color-mix(in srgb,var(--accent) 80%,transparent)}.g-item .badge.f{background:var(--pink)}
+    .g-item{position:relative}
+    #lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;columns:auto}
+    #lgrid .g-item{margin:0}#lgrid .g-item img{aspect-ratio:1;object-fit:cover}
+    .vs img{max-height:560px;object-fit:cover}
+    @supports not (color:color-mix(in srgb,red,red)){.g-item .badge.t{background:var(--accent)}}
+    @media(max-width:860px){.lh-hero,.vs{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <canvas id="bg" aria-hidden="true"></canvas>
+
+  <header class="nav">
+    <a class="logo" href="../"><i>SS</i><span>Satyam Saxena</span></a>
+    <nav aria-label="Primary">
+      <a href="../#projects">Projects</a>
+      <a href="../railway/" class="keep">Railway story</a>
+      <a href="./" class="keep" aria-current="page">LoRA</a>
+      <a href="https://github.com/SatyamSaxena1" class="keep">GitHub</a>
+    </nav>
+    <button class="theme-btn" type="button" aria-label="Toggle light and dark theme">
+      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+  </header>
+
+  <main>
+    <section class="story-hero wrap lh-hero">
+      <div>
+        <p class="eyebrow reveal">MSc AI &middot; Deep Learning &middot; Feb 2024</p>
+        <h1 class="reveal">Teaching SDXL <span class="grad">my face</span></h1>
+        <p class="lead reveal">Stable Diffusion XL has never seen me. I taught it with a LoRA: a few small extra weight matrices trained on 34 photos, in 19 minutes on a consumer GPU, with the 6.9 GB base model left untouched. Then I compared it against Textual Inversion and kept a record of everything that broke.</p>
+        <div class="stats reveal">
+          <div class="stat"><b data-count="34">0</b><span>training photos</span></div>
+          <div class="stat"><b data-count="612">0</b><span>training steps</span></div>
+          <div class="stat"><b data-count="19" data-suffix=" min">0</b><span>to train</span></div>
+          <div class="stat"><b data-count="0.0996" data-dec="4">0</b><span>final average loss</span></div>
+        </div>
+        <div class="cta reveal">
+          <a class="btn primary" href="#outputs">See all 44 outputs <b class="ar">&rarr;</b></a>
+          <a class="btn" href="#versus">LoRA vs Textual Inversion <b class="ar">&rarr;</b></a>
+        </div>
+      </div>
+      <div class="lh-collage reveal">
+        <figure data-zoom><img src="../assets/lora/gen/g35.jpg" alt="Generated: dancing on a beach"><figcaption hidden>Generated with the LoRA: <code>satyam guy dancing on the beach</code></figcaption></figure>
+        <figure data-zoom><img src="../assets/lora/gen/g22.jpg" alt="Generated: at an airport"><figcaption hidden>Generated: <code>satyam guy at the airport, looking at the camera</code></figcaption></figure>
+        <figure data-zoom><img src="../assets/lora/gen/g33.jpg" alt="Generated: on a laptop"><figcaption hidden>Generated: <code>satyam guy on a laptop</code></figcaption></figure>
+      </div>
+    </section>
+
+    <section class="sec wrap">
+      <div class="sec-head reveal"><h2>Why a <span class="grad">LoRA</span></h2><p>Retraining a foundation model to add one new person is wildly expensive. A LoRA learns the difference instead.</p></div>
+      <div class="two">
+        <div class="card reveal">
+          <h3>The idea</h3>
+          <p style="margin-top:10px">SDXL makes images by denoising in a compressed latent space with a large U-Net, steered by two text encoders. LoRA (Hu et al., 2021) freezes all of that and adds a pair of thin low-rank matrices beside the attention layers. Only those are trained, so the result is a small file you load on top of the base model, and you can switch it on or off per prompt with <code>&lt;lora:TrialV1:1&gt;</code>.</p>
+        </div>
+        <div class="card reveal">
+          <h3>The question</h3>
+          <p style="margin-top:10px">Can mixed-precision (bf16) training on a consumer RTX 30-series card make this fast enough to be practical? And how does it compare with Textual Inversion, which only learns a new word embedding and leaves the image model's weights alone?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec wrap">
+      <div class="sec-head reveal"><h2>The <span class="grad">data</span></h2><p>34 iPhone photos of me at 3024&times;4032, on a black backdrop so the subject is easy to separate.</p></div>
+      <div class="two">
+        <div class="card reveal">
+          <h3>All 34 training photos</h3>
+          <div class="tgrid" id="tgrid" style="margin-top:12px"></div>
+          <p style="margin-top:12px">Many head angles, one outfit, waist up. That made it quick to shoot, and it shows in the results below.</p>
+        </div>
+        <div class="card reveal">
+          <h3>How kohya_ss reads the folder</h3>
+          <div class="folder" style="margin-top:12px">img/
+  <b>6</b>_<b>satyam</b> <b>guy</b>/   repeats_trigger class
+    IMG_5755.jpg
+    IMG_5755.txt  &larr; caption
+log/  models/</div>
+          <dl class="kv" style="margin-top:14px">
+            <dt>Repeats</dt><dd><b>6</b>: each photo is seen 6 times per epoch (about 200 views / 34 photos)</dd>
+            <dt>Trigger</dt><dd><b>satyam</b>: a word the model has no prior meaning for</dd>
+            <dt>Class</dt><dd><b>guy</b>: the general category the subject belongs to</dd>
+            <dt>Captions</dt><dd>BLIP, beam search (15 beams), prefixed with <code>satyam, </code></dd>
+          </dl>
+          <p style="margin-top:12px">A real caption: <code id="cap0">satyam, a man in a blue shirt is looking down</code>. I skipped regularisation images, which would have meant generating about 204 extra images of "a guy".</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec wrap">
+      <div class="sec-head reveal"><h2>The <span class="grad">training run</span></h2><p>Straight from the TensorBoard log: 29 Feb 2024, 04:51, 612 steps in about 19 minutes.</p></div>
+      <div class="card vz-block reveal">
+        <h3>Loss over 612 steps</h3>
+        <p>Per-step loss in diffusion training jumps around (from 0.001 to 0.48 here), because each step picks a random noise level. So this shows a 25-step rolling mean alongside the trainer's running average, which ends at 0.0996. Hover for exact values.</p>
+        <div class="vz" data-chart="line" data-id="lora" data-keys="roll,avg" data-names="25-step rolling mean,running average" data-ymax="0.25" data-xlabel="step" data-label="LoRA training loss by step"></div>
+      </div>
+      <div class="two" style="margin-top:16px">
+        <div class="card reveal">
+          <h3>Settings that mattered</h3>
+          <dl class="kv" style="margin-top:12px">
+            <dt>Base model</dt><dd>sd_xl_base_1.0</dd>
+            <dt>Trainer</dt><dd>kohya_ss (Python 3.10, Anaconda env)</dd>
+            <dt>Steps</dt><dd>34 photos &times; 6 repeats &times; 3 epochs = 612</dd>
+            <dt>Precision</dt><dd>bf16 mixed precision</dd>
+            <dt>Optimizer</dt><dd>Adafactor</dd>
+            <dt>Learning rate</dt><dd>about 2.1&times;10<sup>-4</sup> text encoder, 2.3&times;10<sup>-4</sup> U-Net (logged)</dd>
+            <dt>Resolution</dt><dd>512 px training, to fit memory</dd>
+            <dt>Output</dt><dd>.safetensors, loaded in Automatic1111 v1.7.0</dd>
+          </dl>
+        </div>
+        <div class="card reveal">
+          <h3>Why bf16</h3>
+          <p style="margin-top:10px">bf16 keeps FP32's 8-bit exponent and gives up mantissa instead, so it covers the same range of values without loss-scaling tricks. On Ampere tensor cores it runs at several times FP32 throughput. That combination is what made a 19-minute run possible.</p>
+          <p style="margin-top:10px">The same idea on a T4 (Turing, fp16 only) took hours longer, which is half of the comparison below.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec wrap">
+      <div class="sec-head reveal"><h2>The trigger word <span class="grad">is the switch</span></h2><p>Same LoRA loaded both times. Only the prompt changes.</p></div>
+      <div class="vs">
+        <figure class="reveal" data-zoom><img src="../assets/lora/gen/g13.jpg" alt="Prompt without the trigger word: a woman on a balcony" loading="lazy"><figcaption>Without the trigger: <code>in a balcony</code>. The model invents a stranger.</figcaption></figure>
+        <figure class="reveal" data-zoom><img src="../assets/lora/gen/g16.jpg" alt="Prompt with the trigger word: me on a balcony" loading="lazy"><figcaption>With it: <code>satyam guy in the balcony</code>. The likeness locks in.</figcaption></figure>
+      </div>
+      <p class="reveal" style="margin-top:14px;color:var(--muted)">My first 16 outputs used prompts like "superman outfit" or "in a balcony" with no trigger. They were hit and miss: sometimes me (output 12), often a stranger (outputs 10 and 13). From output 16 on, every prompt starts with <code>satyam guy</code> (the trigger plus the class), and the likeness becomes consistent.</p>
+    </section>
+
+    <section class="sec wrap" id="versus">
+      <div class="sec-head reveal"><h2>LoRA vs <span class="grad">Textual Inversion</span></h2><p>Textual Inversion learns one new word embedding and leaves the image model's weights alone. LoRA adds new weights to the model itself.</p></div>
+      <div class="two">
+        <div class="card reveal">
+          <table class="bigtab">
+            <thead><tr><th></th><th>LoRA</th><th>Textual Inversion</th></tr></thead>
+            <tbody>
+              <tr><td>Base model</td><td class="n" style="font-size:15px">SDXL 1.0</td><td class="n" style="font-size:15px">SD 2</td></tr>
+              <tr><td>GPU</td><td class="n" style="font-size:15px">RTX 30-series, bf16</td><td class="n" style="font-size:15px">T4, fp16</td></tr>
+              <tr><td>Seconds per step</td><td class="n win">1.95</td><td class="n">4.43</td></tr>
+              <tr><td>Final loss</td><td class="n win">0.0996</td><td class="n">0.475</td></tr>
+              <tr><td>Steps</td><td class="n" style="font-size:15px">612</td><td class="n" style="font-size:15px">2,000 (batch 4)</td></tr>
+            </tbody>
+          </table>
+          <p style="margin-top:12px;font-size:13px">LoRA numbers are from the training log (1.95 s &times; 612 steps &asymp; 19.9 min, matching the 19 minutes logged). The Textual Inversion speed and loss are as recorded in my report. The two runs used different base models and GPUs, so read this as practical experience rather than a controlled benchmark.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Same idea, two methods</h3>
+          <figure data-zoom style="margin-top:10px"><img src="../assets/lora/ti_balcony.jpg" alt="Textual Inversion outputs on SD 2: a small, unrecognisable figure on a balcony" loading="lazy"><figcaption>Textual Inversion on SD 2, <code>satyam guy on a balcony</code>, 30 steps. It got my skin tone and facial structure right, and little else.</figcaption></figure>
+          <p style="margin-top:12px">Textual Inversion only gets a new word to point at things the model already knows. It got my facial structure and skin tone, but not a likeness. The LoRA can change what the model draws, and it produced my actual face.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec wrap" data-kind="work">
+      <div class="sec-head reveal"><h2>What <span class="grad">went wrong</span></h2><p>Every failure here traces back to a choice I made, which is the useful part.</p></div>
+      <ul class="issues">
+        <li class="reveal"><b>The shirt is part of "me" now.</b> All 34 photos show the same patterned blue shirt, so the LoRA learned it as part of my identity. It turns up at the airport, on the beach and in the sky.</li>
+        <li class="reveal"><b>The backdrop leaks.</b> Black backgrounds made the subject easy to isolate, but plain dark walls keep appearing behind me in scenes that should have a setting.</li>
+        <li class="reveal"><b>No legs in the data.</b> Every photo is waist up, so whenever a prompt needed my full body the model had to guess what the rest of me looks like.</li>
+        <li class="reveal"><b>Mixing model families.</b> I tried an SD 1.5 refiner (epiCRealism) on the SDXL base. The two don't share a latent space, so the image turns to noise (outputs 37 and 38).</li>
+        <li class="reveal"><b>Too few steps.</b> At 10 sampling steps the face broke into colour blotches (output 26). Most of the good outputs used 20 steps.</li>
+        <li class="reveal"><b>What I'd change:</b> several outfits, full-body and seated shots, real backgrounds, and a regularisation set of generic "guy" images to keep the class broad.</li>
+      </ul>
+    </section>
+
+    <section class="sec wrap" id="outputs">
+      <div class="sec-head reveal"><h2>All 44 <span class="grad">outputs</span></h2><p>Every image I generated, in order, with its real prompt and settings. Failures are outlined.</p></div>
+      <div class="gal-bar">
+        <div class="chips" role="group" aria-label="Filter outputs">
+          <button class="chip" data-f="all" aria-pressed="true">All <i>44</i></button>
+          <button class="chip" data-f="trig" aria-pressed="false">With trigger <i></i></button>
+          <button class="chip" data-f="none" aria-pressed="false">No trigger <i></i></button>
+          <button class="chip" data-f="fail" aria-pressed="false">Failures <i></i></button>
+        </div>
+      </div>
+      <div class="gal-grid" id="lgrid"></div>
+      <p class="note reveal" style="margin-top:16px">All outputs: SDXL 1.0 base with the LoRA at strength 1, Automatic1111 v1.7.0, CFG 7 (one at 6). Most are 512&times;512.</p>
+    </section>
+  </main>
+
+  <dialog id="lb" aria-label="Enlarged image"><img alt=""><p></p></dialog>
+  <footer class="wrap"><span>&copy; <span id="yr">2026</span> Satyam Saxena</span><span><a href="../">&larr; Back to home</a></span></footer>
+
+  <script>
+  (function () {
+    function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+    fetch('../assets/lora/manifest.json').then(function (r) { return r.json(); }).then(function (m) {
+      var tg = document.getElementById('tgrid');
+      Object.keys(m.train).forEach(function (f) { var i = document.createElement('img'); i.src = '../assets/lora/train/' + f; i.alt = m.train[f]; i.title = m.train[f]; i.loading = 'lazy'; tg.appendChild(i); });
+      var g = document.getElementById('lgrid'), items = m.generated;
+      items.forEach(function (it) {
+        var set = [it.sampler, it.steps + ' steps', 'seed ' + it.seed, it.size].concat(it.refiner ? ['refiner: ' + it.refiner] : [], it.hires ? ['hires: ' + it.hires] : []).join(' · ');
+        var f = document.createElement('figure'); f.className = 'g-item card' + (it.fail ? ' fail' : ''); f.setAttribute('data-zoom', ''); f.dataset.k = it.fail ? 'fail' : '';
+        f.dataset.t = it.trig ? 'trig' : 'none';
+        f.innerHTML = '<span class="badge ' + (it.fail ? 'f' : it.trig ? 't' : '') + '">#' + it.n + (it.fail ? ' · failed' : it.trig ? '' : ' · no trigger') + '</span>' +
+          '<img src="../assets/lora/gen/' + it.f + '" alt="' + esc(it.prompt) + '" loading="lazy">' +
+          '<figcaption><b>' + esc(it.prompt || '(empty prompt)') + '</b><small>' + esc(set) + (it.why ? '<br>' + esc(it.why) : '') + '</small></figcaption>';
+        g.appendChild(f);
+      });
+      var count = { trig: 0, none: 0, fail: 0 }; items.forEach(function (i) { count[i.trig ? 'trig' : 'none']++; if (i.fail) count.fail++; });
+      document.querySelectorAll('.chip[data-f]').forEach(function (c) {
+        var k = c.dataset.f; if (count[k] != null) c.querySelector('i').textContent = count[k];
+        c.onclick = function () {
+          document.querySelectorAll('.chip[data-f]').forEach(function (x) { x.setAttribute('aria-pressed', x === c); });
+          [].forEach.call(g.children, function (f) { f.hidden = !(k === 'all' || f.dataset.t === k || f.dataset.k === k); });
+        };
+      });
+      document.querySelectorAll('figure[data-zoom]').forEach(function (f) { f.tabIndex = 0; f.setAttribute('role', 'button'); });
+    });
+  })();
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+  <script src="../assets/js/site.js?v=11" defer></script>
+  <script src="../assets/js/bg.js?v=5" defer></script>
+  <script src="../assets/js/charts.js?v=12" data-json="../assets/data/lora.json?v=2" defer></script>
+</body>
+</html>
