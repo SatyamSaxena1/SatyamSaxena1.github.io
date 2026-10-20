@@ -113,7 +113,8 @@
         <article class="card reveal">
           <span class="tag">Accessibility</span>
           <h3>Live Captions</h3>
-          <p>Local, lightweight live transcription with a fast highlighted mode and a long-context mode. Built after losing live captions in my browser.</p>
+          <p>Captions for any sound on a Windows PC, fully offline. VB-CABLE routes system audio into faster-whisper, shown in an always-on-top window in about 150&nbsp;MB. <b>Live</b> mode gives bold, instant lines for short clips; <b>Comprehensive</b> mode writes paragraphs when context matters. Built after switching browsers cost me Chrome's live captions.</p>
+          <div class="tags"><span>Whisper</span><span>VB-CABLE</span><span>Offline</span></div>
           <a class="more stretch" href="https://github.com/SatyamSaxena1/Subtitles-for-Visual-Impairment-Assistance-">Repository <b class="ar">&rarr;</b></a>
         </article>
 
@@ -126,10 +127,18 @@
 
         <article class="card c-w reveal">
           <span class="tag">Knowledge tools</span>
-          <h3>Mind Map from saved posts</h3>
-          <p>A Reddit scraper that turns saved posts into a connected, navigable personal knowledge base, so forgotten ideas resurface.</p>
-          <div class="tags"><span>Automation</span><span>Scraping</span><span>Knowledge tools</span></div>
-          <a class="more stretch" href="https://github.com/SatyamSaxena1/reddit-scraper-for-mind-map-project">Repository <b class="ar">&rarr;</b></a>
+          <h3>Reddit saves to a Zettelkasten</h3>
+          <p>600+ saved posts I never reopened, turned into an Obsidian Zettelkasten that runs locally. Each post becomes one note with its top comments and media. TF-IDF keywords become linked concept notes, cosine similarity fills each note's "related" list, and PageRank plus centrality give every node a weight. Community detection groups concepts into "syndicates", so the graph reads as themes, not a hairball. Content hashing means a re-run never overwrites my own edits.</p>
+          <div class="tags"><span>PRAW</span><span>scikit-learn</span><span>NetworkX</span><span>Obsidian</span></div>
+          <a class="more stretch" href="https://github.com/SatyamSaxena1/Reddit-scrape-to-zettelkasten-obsidian-workflow">Repository <b class="ar">&rarr;</b></a>
+        </article>
+
+        <article class="card reveal">
+          <span class="tag">Audio</span>
+          <h3>One-click karaoke</h3>
+          <p>Drop songs in a folder, run one batch file, and get vocal and instrumental stems from Demucs, on a GPU or a CPU. Next up: a small USB box with a headphone jack that plays the vocals to the singer.</p>
+          <div class="tags"><span>Demucs</span><span>Source separation</span></div>
+          <a class="more stretch" href="https://github.com/SatyamSaxena1/music-speech-isolation">Repository <b class="ar">&rarr;</b></a>
         </article>
 
         <article class="card reveal">
@@ -249,9 +258,13 @@ steps: 12%| 71/612 [02:43&lt;20:48, 2.31s/it, <span class="ok">avr_loss=0.124</s
           <div class="tl-body">
             <span class="when">2025</span>
             <h3>Tools I needed, so I built them</h3>
-            <p>Live captions after losing them in my browser, an offline RAG pipeline on llama.cpp and FAISS, and a Reddit-to-mind-map scraper (Aug&ndash;Sep). All on <a href="https://github.com/SatyamSaxena1" style="text-decoration:underline">GitHub</a>.</p>
+            <p>Live captions after losing them in my browser, an offline RAG pipeline on llama.cpp and FAISS, one-click karaoke with Demucs, and a Reddit-to-Zettelkasten pipeline (Aug&ndash;Sep). All on <a href="https://github.com/SatyamSaxena1" style="text-decoration:underline">GitHub</a>.</p>
+            <div class="links"><a href="https://www.linkedin.com/pulse/revolutionizing-accessibility-my-journey-building-locally-saxena-4d5hc">Live captions write-up</a><a href="https://www.linkedin.com/pulse/from-reddit-knowledge-graph-building-zettelkasten-system-saxena-ptl9c">Zettelkasten write-up</a></div>
           </div>
-          <div class="tl-fig"></div>
+          <div class="tl-fig">
+            <figure data-zoom class="reveal"><img src="assets/projects/zk_graph.webp" alt="Obsidian graph of notes made from saved Reddit posts, with the huggingface concept note highlighted and linked to the posts that mention it" loading="lazy" width="1000" height="718"><figcaption>The graph from about 1,000 saves: one concept note (huggingface) and every post linked to it.</figcaption></figure>
+            <figure data-zoom class="reveal" style="margin-top:12px"><img src="assets/projects/zk_note.webp" alt="One generated note: title, source link, tags and keyword weights, then the post and its top comments" loading="lazy" width="853" height="720"><figcaption>One generated note, with its tags and keyword weights.</figcaption></figure>
+          </div>
         </article>
 
         <article class="tl-item reveal">
