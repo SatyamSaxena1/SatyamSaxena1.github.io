@@ -185,46 +185,58 @@
     pane.innerHTML =
       '<div class="lab-main"><div class="lab-col">' +
       '<div class="chips" role="group" aria-label="Class"></div>' +
-      '<div class="szgrid"><div class="szheat"><canvas aria-label="Box width against height density"></canvas><div class="ax ay">height ↑</div><div class="ax axx">width →</div><div class="mk"></div><div class="tip"></div></div>' +
-      '<div class="szpv"><div class="pv"><img src="' + BASE + 'heat/frame.jpg" alt=""><div class="med"></div><div class="ghost"></div></div><p class="pvt"></p></div></div>' +
+      '<h4 class="lh">The typical box of each class, drawn to scale</h4>' +
+      '<p class="lp">The same 1920 × 1080 frame, with each class\'s median box at its usual spot. A contact point is barely a dot.</p>' +
+      '<div class="tframe" role="img" aria-label="A frame outline with the median box of each class drawn to scale"><span class="tf-l">1920 × 1080 frame</span></div>' +
+      '<h4 class="lh">How much the size varies</h4>' +
+      '<p class="lp">Every cell counts boxes of one size. Brighter means more boxes, and the white dot is the median.</p>' +
+      '<div class="szheat"><canvas aria-label="Box width against height density"></canvas><div class="mk"></div><div class="tip"></div><div class="tx"><span>0</span><span class="m"></span><span class="e"></span></div><div class="ty"><span class="e"></span><span class="m"></span><span>0</span></div><div class="ax axx">across: box width · up: box height · both as a % of the frame</div></div>' +
       '</div><aside class="lab-side"><h3>The nudge test</h3><p class="lead">A box counts as right when it overlaps the true box enough (IoU). Slip every box sideways and down by a few pixels and watch the overlap.</p>' +
       '<label class="nudge">Slip by <output></output><input type="range" min="0" max="30" value="5" aria-label="Pixels of slip"></label>' +
       '<canvas class="ill" aria-label="A box and a copy slipped by a few pixels"></canvas><div class="ious"></div>' +
       '<p class="note">AP@50:95 averages the score over overlap thresholds from 0.5 to 0.95, so a box that overlaps by 0.3 fails every one of them. Median box sizes are on a 1920 × 1080 frame.</p></aside></div>';
-    Z.pane = pane; Z.cls = 'contact_point'; Z.d = 5; Z.ghost = null;
-    var chips = $('.chips', pane); CLS.forEach(function (c) { var b = el('button', null, '<i style="background:var(' + c[2] + ')"></i>' + c[1], chips); b.type = 'button'; b.dataset.c = c[0]; b.onclick = function () { Z.cls = c[0]; Z.ghost = null; sizeRefresh(); }; });
+    Z.pane = pane; Z.cls = 'contact_point'; Z.d = 5;
+    var chips = $('.chips', pane); CLS.forEach(function (c) { var b = el('button', null, '<i style="background:var(' + c[2] + ')"></i>' + c[1], chips); b.type = 'button'; b.dataset.c = c[0]; b.onclick = function () { Z.cls = c[0]; sizeRefresh(); }; });
     Z.cv = $('.szheat canvas', pane); Z.range = $('.nudge input', pane); Z.out = $('.nudge output', pane);
     Z.range.oninput = function () { Z.d = +Z.range.value; nudge(); };
     var ious = $('.ious', pane); CLS.forEach(function (c) { el('div', 'iou', '<label style="color:var(' + c[2] + ')">' + c[1] + '</label><div class="trk"><i style="background:var(' + c[2] + ')"></i><u style="left:50%"></u><u style="left:75%"></u></div><b></b>', ious).dataset.c = c[0]; });
     var hm = $('.szheat', pane);
     hm.addEventListener('pointermove', function (e) {
       var r = Z.cv.getBoundingClientRect(), x = Math.floor((e.clientX - r.left) / r.width * 30), y = Math.floor((e.clientY - r.top) / r.height * 30);
-      if (x < 0 || y < 0 || x > 29 || y > 29) return; Z.ghost = { x: x, y: y }; ghost(true);
+      if (x < 0 || y < 0 || x > 29 || y > 29) return;
       var tip = $('.tip', hm), d = D.classes[Z.cls], c = d.size[y][x], e30 = d.extent / 30;
-      tip.innerHTML = '<b>' + fmt(c) + '</b> boxes<br><span>' + pct(x * e30, 1) + '–' + pct((x + 1) * e30, 1) + '% wide, ' + pct((29 - y) * e30, 1) + '–' + pct((30 - y) * e30, 1) + '% tall</span>';
+      tip.innerHTML = '<b>' + fmt(c) + '</b> boxes<br><span>about ' + Math.round((x + .5) * e30 * FW) + ' × ' + Math.round((29 - y + .5) * e30 * FH) + ' px</span>';
       tip.classList.add('on'); var hr = hm.getBoundingClientRect(), tx = e.clientX - hr.left + 14, ty = e.clientY - hr.top - 10; tip.style.left = Math.min(tx, hr.width - tip.offsetWidth - 6) + 'px'; tip.style.top = Math.max(4, ty - tip.offsetHeight) + 'px';
     });
-    hm.addEventListener('pointerleave', function () { Z.ghost = null; $('.tip', hm).classList.remove('on'); ghost(false); });
+    hm.addEventListener('pointerleave', function () { $('.tip', hm).classList.remove('on'); });
   }
   function sizeEnter() { if (!Z.pane || TAB !== 1) return; setTimeout(function () { sizeRefresh(); refit(); }, reduce ? 0 : 420); }
   function sizeResize() { if (Z.pane && Z.pane.clientWidth) sizeRefresh(); }
   function sizeRefresh() {
-    var d = D.classes[Z.cls], size = Math.min(Z.pane.querySelector('.szheat').clientWidth, 460), dpr = Math.min(2, devicePixelRatio || 1);
+    var d = D.classes[Z.cls], size = Math.max(160, Math.min(Z.pane.querySelector('.szheat').clientWidth - 46, 460)), dpr = Math.min(2, devicePixelRatio || 1);
     Z.cv.style.width = size + 'px'; Z.cv.style.height = size + 'px'; Z.cv.width = size * dpr; Z.cv.height = size * dpr;
     var ctx = Z.cv.getContext('2d'), m = maxOf(d.size), cs = Z.cv.width / 30; ctx.clearRect(0, 0, Z.cv.width, Z.cv.height);
     for (var y = 0; y < 30; y++) for (var x = 0; x < 30; x++) { var c = d.size[y][x]; if (c) { ctx.fillStyle = fill(logT(c, m)); ctx.fillRect(Math.floor(x * cs), Math.floor(y * cs), Math.ceil(cs), Math.ceil(cs)); } }
-    var mk = $('.mk', Z.pane); mk.style.left = d.median[0] / d.extent * 100 + '%'; mk.style.top = (1 - d.median[1] / d.extent) * 100 + '%'; mk.innerHTML = '<span>median</span>';
+    var tx = $('.tx', Z.pane), ty = $('.ty', Z.pane); tx.style.width = size + 'px'; tx.style.top = size + 6 + 'px'; ty.style.height = size + 'px';
+    $('.e', tx).textContent = pct(d.extent) + '%'; $('.m', tx).textContent = pct(d.extent / 2) + '%'; $('.e', ty).textContent = pct(d.extent) + '%'; $('.m', ty).textContent = pct(d.extent / 2) + '%';
+    var mk = $('.mk', Z.pane); mk.style.left = 46 + d.median[0] / d.extent * size + 'px'; mk.style.top = (1 - d.median[1] / d.extent) * size + 'px'; mk.innerHTML = '<span>median</span>';
     Z.pane.querySelectorAll('.chips button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.c === Z.cls); });
-    $('.axx', Z.pane).textContent = 'box width, 0 to ' + pct(d.extent) + '% of the frame →'; $('.ay', Z.pane).textContent = 'box height, 0 to ' + pct(d.extent) + '% ↑';
-    ghost(false); nudge();
+    scaleBoxes(); nudge();
   }
-  function ghost(on) {
-    var d = D.classes[Z.cls], g = $('.ghost', Z.pane), med = $('.med', Z.pane), t = $('.pvt', Z.pane), col = 'var(' + CLS.filter(function (k) { return k[0] === Z.cls; })[0][2] + ')';
-    med.style.cssText = 'width:' + d.median[0] * 100 + '%;height:' + d.median[1] * 100 + '%;border-color:' + col;
-    if (on && Z.ghost) {
-      var e30 = d.extent / 30, w = (Z.ghost.x + .5) * e30, h = (29 - Z.ghost.y + .5) * e30;
-      g.style.cssText = 'display:block;width:' + w * 100 + '%;height:' + h * 100 + '%;border-color:' + col; t.innerHTML = 'A box this size is about <b>' + Math.round(w * FW) + ' × ' + Math.round(h * FH) + ' px</b> on a 1920 × 1080 frame.';
-    } else { g.style.display = 'none'; t.innerHTML = 'Dashed: the median box, <b>' + Math.round(d.median[0] * FW) + ' × ' + Math.round(d.median[1] * FH) + ' px</b>. Hover the heat map to see other sizes.'; }
+  function medPos(c) {
+    var pos = D.classes[c].pos, cx = new Array(96).fill(0), cy = new Array(54).fill(0);
+    pos.forEach(function (r, y) { r.forEach(function (v, x) { cx[x] += v; cy[y] += v; }); });
+    function med(a, n) { var tot = a.reduce(function (s, v) { return s + v; }, 0), h = 0, i; for (i = 0; i < a.length; i++) { h += a[i]; if (h >= tot / 2) break; } return (i + .5) / n; }
+    return [med(cx, 96), med(cy, 54)];
+  }
+  function scaleBoxes() {
+    var fr = $('.tframe', Z.pane); fr.querySelectorAll('.tb').forEach(function (e) { e.remove(); });
+    CLS.forEach(function (c) {
+      var d = D.classes[c[0]], m = medPos(c[0]), w = d.median[0], h = d.median[1];
+      var b = el('div', 'tb' + (c[0] === Z.cls ? ' sel' : '') + (c[0] === 'contact_point' ? ' cp' : ''), null, fr);
+      b.style.cssText = 'left:' + (m[0] - w / 2) * 100 + '%;top:' + (m[1] - h / 2) * 100 + '%;width:' + w * 100 + '%;height:' + h * 100 + '%;--c:var(' + c[2] + ')';
+      el('span', 'tl', '<b>' + c[1] + '</b> ' + Math.round(w * FW) + ' × ' + Math.round(h * FH) + ' px', b);
+    });
   }
   function iou(w, h, d) { var o = Math.max(0, w - d) * Math.max(0, h - d); return o / (2 * w * h - o); }
   function nudge() {
