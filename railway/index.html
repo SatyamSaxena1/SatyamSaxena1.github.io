@@ -11,7 +11,7 @@
   <link rel="canonical" href="https://satyamsaxena1.github.io/railway/">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238a6bff'/%3E%3Cstop offset='1' stop-color='%233d7bff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Ctext x='32' y='42' font-size='26' font-family='Arial' font-weight='800' fill='white' text-anchor='middle'%3ESS%3C/text%3E%3C/svg%3E">
   <script>try{var t=localStorage.getItem('theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))</script>
-  <link rel="stylesheet" href="../assets/css/theme.css?v=3">
+  <link rel="stylesheet" href="../assets/css/theme.css?v=4">
 </head>
 <body>
   <canvas id="bg" aria-hidden="true"></canvas>
@@ -79,7 +79,7 @@
           <div class="tl-body">
             <span class="when">Dec 2025 &ndash; Apr 2026</span>
             <h3>Depth exploration</h3>
-            <p>I tried stereo and monocular depth (a ZED 2i camera, Isaac Sim synthetic scenes, Depth Anything) to see whether annotation and measurement could be automated. A real-time detection and measurement system was built and run on trains in Lucknow; that part isn't published here.</p>
+            <p>I tried stereo and monocular depth (a ZED 2i camera, Isaac Sim synthetic scenes, Depth Anything) to see whether annotation and measurement could be automated. A real-time detection and measurement system was built and run on trains in Lucknow; the code isn't published, but <a href="#route" style="text-decoration:underline">here is where it ran</a>.</p>
             <p>The depth work didn't end up in the final labelling method, but it taught me what the camera could and couldn't resolve.</p>
           </div>
           <div class="tl-fig">
@@ -141,6 +141,29 @@
             <figure data-zoom class="reveal"><img src="../assets/story/s11-yolo-training.jpg" alt="YOLO training log with NaN loss warnings and recovery" loading="lazy"><figcaption>YOLO26x early epochs: NaN losses and automatic recovery.</figcaption></figure>
           </div>
         </article>
+      </div>
+    </section>
+
+    <section class="sec wrap" id="route">
+      <div class="sec-head reveal"><h2>Where it <span class="grad">ran</span></h2><p>The system was built for a moving train, so every recording has a place as well as a picture.</p></div>
+      <div class="route">
+        <div class="route-copy">
+          <div class="stats reveal">
+            <div class="stat"><b data-count="71" data-suffix=" km">0</b><span>of line in this logged run</span></div>
+            <div class="stat"><b data-count="1188">0</b><span>GPS fixes</span></div>
+            <div class="stat"><b>Gonda &harr; Bahraich</b><span>the stretch shown</span></div>
+          </div>
+          <ol class="steps">
+            <li class="reveal"><b>Record together</b>A field recorder captures camera video, depth and a GPS log in one session, with a manifest that keeps them in step.</li>
+            <li class="reveal"><b>Match to the masts</b>A GPS file of mast positions lets an alert say where it happened: the alert table records the mast name and latitude.</li>
+            <li class="reveal"><b>Measure and flag</b>Detections feed measurements checked by category, with alert tabs for stagger, height, setting distance, gradient and double contact. That is why box geometry matters so much.</li>
+          </ol>
+          <figure data-zoom class="reveal"><img src="../assets/story/s12-alert-gui.jpg" alt="The operator screen with settings, a live video panel and alert tabs" loading="lazy"><figcaption>The operator view, from a test session at a depot (GPS not connected in this capture, about 5 FPS): detector threshold, train and pantograph heights, mast direction, per-measurement corrections and the alert tabs.</figcaption></figure>
+        </div>
+        <div class="card route-map-card reveal">
+          <div id="route-map" data-src="../assets/data/route.json" role="img" aria-label="Map of a logged GPS run between Gonda and Bahraich"><div class="map-loading" id="route-loading">Loading route</div></div>
+          <div class="map-cap">A logged run on the Gonda&ndash;Bahraich line, replayed from its GPS fixes. The glowing marker travels the logged route; it is an illustration, not live data. Hold Ctrl and scroll to zoom.</div>
+        </div>
       </div>
     </section>
 
@@ -217,5 +240,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
   <script src="../assets/js/site.js?v=3" defer></script>
   <script src="../assets/js/bg.js?v=5" defer></script>
+  <script src="../assets/js/route-map.js?v=4" defer></script>
 </body>
 </html>

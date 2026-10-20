@@ -9,6 +9,7 @@ A neo-futuristic portfolio with a dark and a light theme. The animated backgroun
 - `assets/css/theme.css` - the shared design system (dark and light tokens).
 - `assets/js/bg.js` - the WebGL background; falls back to CSS gradients without WebGL and holds still for reduced-motion users.
 - `assets/js/site.js` - theme toggle, scroll reveals, counters and the screenshot lightbox.
+- `assets/js/route-map.js` and `assets/data/route.json` - the interactive route map on the railway page (MapLibre, OpenStreetMap tiles, a logged 71 km GPS run between Gonda and Bahraich).
 - `assets/story/` - screenshots used on the railway page (cropped and blurred where needed).
 
 Source code for the railway system is proprietary and not published; see the documentation-only project at https://github.com/SatyamSaxena1/railway-overhead-line-detection.
