@@ -159,7 +159,7 @@
     bar.style.background = 'linear-gradient(90deg,' + RAMP.map(function (r) { var c = rgb(r[0]); return 'rgb(' + c.join(',') + ') ' + r[0] * 100 + '%'; }).join(',') + ')';
     if (s === 0) { tk.innerHTML = ''; return; }
     var g = rebin(D.classes[P.cls].pos, STOPS[s - 1][0], STOPS[s - 1][1]), m = maxOf(g), h = '';
-    [1, 10, 100, 1000, 10000, 100000].forEach(function (v) { if (v < m) h += '<span style="left:' + logT(v, m) * 100 + '%">' + fmt(v) + '</span>'; });
+    [1, 10, 100, 1000, 10000, 100000].forEach(function (v) { if (v < m && logT(v, m) < .84) h += '<span style="left:' + logT(v, m) * 100 + '%">' + fmt(v) + '</span>'; });
     tk.innerHTML = h + '<span style="left:100%;transform:translateX(-100%)">' + fmt(m) + '</span>';
   }
   function posMeasure() {

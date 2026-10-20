@@ -13,7 +13,7 @@
     grid.innerHTML = '';
     view.forEach(function (m, i) {
       var f = el('figure', 'g-item'); f.tabIndex = 0; f.setAttribute('role', 'button'); f.setAttribute('aria-label', m.title);
-      f.innerHTML = '<img loading="lazy" decoding="async" src="' + BASE + m.file + '" alt="' + esc(m.title + '. ' + m.caption) + '"><figcaption><b>' + esc(m.title) + '</b><span>' + esc(m.group) + '</span></figcaption>';
+      var tb = BASE.replace('images/', 'thumbs/'); f.innerHTML = '<img loading="lazy" decoding="async" width="' + m.w + '" height="' + m.h + '" src="' + tb + '400/' + m.file + '" srcset="' + tb + '400/' + m.file + ' 400w, ' + tb + '800/' + m.file + ' 800w" sizes="(max-width:760px) 50vw, 33vw" alt="' + esc(m.title + '. ' + m.caption) + '"><figcaption><b>' + esc(m.title) + '</b><span>' + esc(m.group) + '</span></figcaption>';
       f.addEventListener('click', function () { open(i); });
       f.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(i); } });
       grid.appendChild(f);

@@ -6,700 +6,900 @@
    "group": "Labelled frames",
    "title": "Ahmedabad",
    "caption": "A labelled frame from Ahmedabad: 4 mast, 2 pantograph, 4 arm, 2 contact_point.",
-   "n": 1
+   "n": 1,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f02_ahmedabad.jpg",
    "group": "Labelled frames",
    "title": "Ahmedabad",
    "caption": "A labelled frame from Ahmedabad: 4 mast, 2 pantograph, 2 contact_point.",
-   "n": 2
+   "n": 2,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f03_ahmedabad.jpg",
    "group": "Labelled frames",
    "title": "Ahmedabad",
    "caption": "A labelled frame from Ahmedabad: 1 mast, 3 arm, 1 pantograph, 1 contact_point.",
-   "n": 3
+   "n": 3,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f04_ahmedabad.jpg",
    "group": "Labelled frames",
    "title": "Ahmedabad",
    "caption": "A labelled frame from Ahmedabad: 2 mast, 1 arm, 1 pantograph.",
-   "n": 4
+   "n": 4,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f05_ahmedabad.jpg",
    "group": "Labelled frames",
    "title": "Ahmedabad",
    "caption": "A labelled frame from Ahmedabad: 1 mast, 1 arm, 1 pantograph, 2 contact_point.",
-   "n": 5
+   "n": 5,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f06_ahmedabad.jpg",
    "group": "Labelled frames",
    "title": "Ahmedabad",
    "caption": "A labelled frame from Ahmedabad: 1 mast, 3 arm, 1 pantograph.",
-   "n": 6
+   "n": 6,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f07_ahmedabad.jpg",
    "group": "Labelled frames",
    "title": "Ahmedabad",
    "caption": "A labelled frame from Ahmedabad: 2 arm, 1 pantograph, 2 contact_point.",
-   "n": 7
+   "n": 7,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f08_ahmedabad.jpg",
    "group": "Labelled frames",
    "title": "Ahmedabad",
    "caption": "A labelled frame from Ahmedabad: 1 mast, 1 arm, 1 pantograph, 2 contact_point.",
-   "n": 8
+   "n": 8,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f09_ahmedabad.jpg",
    "group": "Labelled frames",
    "title": "Ahmedabad",
    "caption": "A labelled frame from Ahmedabad: 2 arm, 1 mast, 1 pantograph, 2 contact_point.",
-   "n": 9
+   "n": 9,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f10_ahmedabad.jpg",
    "group": "Labelled frames",
    "title": "Ahmedabad",
    "caption": "A labelled frame from Ahmedabad: 1 arm, 1 pantograph, 2 contact_point.",
-   "n": 10
+   "n": 10,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f11_ahmedabad.jpg",
    "group": "Labelled frames",
    "title": "Ahmedabad",
    "caption": "A labelled frame from Ahmedabad: 1 mast, 2 arm, 1 pantograph, 3 contact_point.",
-   "n": 11
+   "n": 11,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f12_lucknow.jpg",
    "group": "Labelled frames",
    "title": "Lucknow",
    "caption": "A labelled frame from Lucknow: 1 pantograph, 2 arm, 1 contact_point, 4 mast.",
-   "n": 12
+   "n": 12,
+   "w": 848,
+   "h": 480
   },
   {
    "file": "f13_lucknow.jpg",
    "group": "Labelled frames",
    "title": "Lucknow",
    "caption": "A labelled frame from Lucknow: 1 arm, 2 mast, 1 pantograph, 2 contact_point.",
-   "n": 13
+   "n": 13,
+   "w": 848,
+   "h": 480
   },
   {
    "file": "f14_mehsana.jpg",
    "group": "Labelled frames",
    "title": "Mehsana",
    "caption": "A labelled frame from Mehsana: 1 arm, 1 pantograph, 2 contact_point.",
-   "n": 14
+   "n": 14,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f15_mehsana.jpg",
    "group": "Labelled frames",
    "title": "Mehsana",
    "caption": "A labelled frame from Mehsana: 1 arm, 1 pantograph, 2 contact_point.",
-   "n": 15
+   "n": 15,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f16_mehsana.jpg",
    "group": "Labelled frames",
    "title": "Mehsana",
    "caption": "A labelled frame from Mehsana: 1 arm, 1 pantograph, 2 contact_point.",
-   "n": 16
+   "n": 16,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f17_mehsana.jpg",
    "group": "Labelled frames",
    "title": "Mehsana",
    "caption": "A labelled frame from Mehsana: 2 arm, 1 pantograph, 2 contact_point.",
-   "n": 17
+   "n": 17,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f18_mehsana.jpg",
    "group": "Labelled frames",
    "title": "Mehsana",
    "caption": "A labelled frame from Mehsana: 2 arm, 1 pantograph, 2 contact_point.",
-   "n": 18
+   "n": 18,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f19_mehsana.jpg",
    "group": "Labelled frames",
    "title": "Mehsana",
    "caption": "A labelled frame from Mehsana: 1 arm, 1 pantograph, 2 contact_point.",
-   "n": 19
+   "n": 19,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f20_mehsana.jpg",
    "group": "Labelled frames",
    "title": "Mehsana",
    "caption": "A labelled frame from Mehsana: 1 arm, 1 pantograph, 2 contact_point.",
-   "n": 20
+   "n": 20,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f21_mehsana.jpg",
    "group": "Labelled frames",
    "title": "Mehsana",
    "caption": "A labelled frame from Mehsana: 2 arm, 1 pantograph, 3 contact_point.",
-   "n": 21
+   "n": 21,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f22_mehsana.jpg",
    "group": "Labelled frames",
    "title": "Mehsana",
    "caption": "A labelled frame from Mehsana: 2 arm, 1 pantograph, 2 contact_point.",
-   "n": 22
+   "n": 22,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f23_mehsana.jpg",
    "group": "Labelled frames",
    "title": "Mehsana",
    "caption": "A labelled frame from Mehsana: 1 arm, 1 pantograph, 3 contact_point.",
-   "n": 23
+   "n": 23,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f24_mehsana.jpg",
    "group": "Labelled frames",
    "title": "Mehsana",
    "caption": "A labelled frame from Mehsana: 1 arm, 1 pantograph, 2 contact_point.",
-   "n": 24
+   "n": 24,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f25_mumbai.jpg",
    "group": "Labelled frames",
    "title": "Mumbai",
    "caption": "A labelled frame from Mumbai: 8 mast, 2 pantograph, 2 arm, 2 contact_point.",
-   "n": 25
+   "n": 25,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f26_mumbai.jpg",
    "group": "Labelled frames",
    "title": "Mumbai",
    "caption": "A labelled frame from Mumbai: 2 mast, 2 pantograph, 4 arm, 3 contact_point.",
-   "n": 26
+   "n": 26,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f27_mumbai.jpg",
    "group": "Labelled frames",
    "title": "Mumbai",
    "caption": "A labelled frame from Mumbai: 2 arm, 1 pantograph, 1 mast.",
-   "n": 27
+   "n": 27,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f28_mumbai.jpg",
    "group": "Labelled frames",
    "title": "Mumbai",
    "caption": "A labelled frame from Mumbai: 1 mast, 1 pantograph, 2 contact_point.",
-   "n": 28
+   "n": 28,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f29_mumbai.jpg",
    "group": "Labelled frames",
    "title": "Mumbai",
    "caption": "A labelled frame from Mumbai: 1 pantograph, 2 mast, 1 contact_point.",
-   "n": 29
+   "n": 29,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f30_mumbai.jpg",
    "group": "Labelled frames",
    "title": "Mumbai",
    "caption": "A labelled frame from Mumbai: 1 pantograph, 2 mast, 1 contact_point.",
-   "n": 30
+   "n": 30,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f31_mumbai.jpg",
    "group": "Labelled frames",
    "title": "Mumbai",
    "caption": "A labelled frame from Mumbai: 2 arm, 1 pantograph, 2 contact_point.",
-   "n": 31
+   "n": 31,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f32_mumbai.jpg",
    "group": "Labelled frames",
    "title": "Mumbai",
    "caption": "A labelled frame from Mumbai: 1 mast, 1 pantograph, 2 contact_point.",
-   "n": 32
+   "n": 32,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f33_mumbai.jpg",
    "group": "Labelled frames",
    "title": "Mumbai",
    "caption": "A labelled frame from Mumbai: 1 arm, 1 mast, 1 pantograph, 2 contact_point.",
-   "n": 33
+   "n": 33,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f34_mumbai.jpg",
    "group": "Labelled frames",
    "title": "Mumbai",
    "caption": "A labelled frame from Mumbai: 2 arm, 1 mast, 1 pantograph, 1 contact_point.",
-   "n": 34
+   "n": 34,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f35_mumbai.jpg",
    "group": "Labelled frames",
    "title": "Mumbai",
    "caption": "A labelled frame from Mumbai: 2 arm, 1 pantograph, 1 mast, 1 contact_point.",
-   "n": 35
+   "n": 35,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f36_palanpur.jpg",
    "group": "Labelled frames",
    "title": "Palanpur",
    "caption": "A labelled frame from Palanpur: 1 arm, 2 contact_point, 1 pantograph.",
-   "n": 36
+   "n": 36,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f37_palanpur.jpg",
    "group": "Labelled frames",
    "title": "Palanpur",
    "caption": "A labelled frame from Palanpur: 1 arm, 1 pantograph, 2 contact_point.",
-   "n": 37
+   "n": 37,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f38_palanpur.jpg",
    "group": "Labelled frames",
    "title": "Palanpur",
    "caption": "A labelled frame from Palanpur: 2 arm, 1 pantograph, 1 contact_point.",
-   "n": 38
+   "n": 38,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f39_palanpur.jpg",
    "group": "Labelled frames",
    "title": "Palanpur",
    "caption": "A labelled frame from Palanpur: 2 arm, 1 pantograph, 1 contact_point.",
-   "n": 39
+   "n": 39,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f40_palanpur.jpg",
    "group": "Labelled frames",
    "title": "Palanpur",
    "caption": "A labelled frame from Palanpur: 1 arm, 2 contact_point, 1 pantograph.",
-   "n": 40
+   "n": 40,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f41_palanpur.jpg",
    "group": "Labelled frames",
    "title": "Palanpur",
    "caption": "A labelled frame from Palanpur: 1 arm, 1 pantograph, 2 contact_point.",
-   "n": 41
+   "n": 41,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f42_palanpur.jpg",
    "group": "Labelled frames",
    "title": "Palanpur",
    "caption": "A labelled frame from Palanpur: 1 arm, 2 contact_point, 1 pantograph.",
-   "n": 42
+   "n": 42,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f43_palanpur.jpg",
    "group": "Labelled frames",
    "title": "Palanpur",
    "caption": "A labelled frame from Palanpur: 1 arm, 1 pantograph, 2 contact_point.",
-   "n": 43
+   "n": 43,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f44_palanpur.jpg",
    "group": "Labelled frames",
    "title": "Palanpur",
    "caption": "A labelled frame from Palanpur: 1 arm, 1 pantograph, 2 contact_point.",
-   "n": 44
+   "n": 44,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f45_palanpur.jpg",
    "group": "Labelled frames",
    "title": "Palanpur",
    "caption": "A labelled frame from Palanpur: 1 arm, 1 pantograph, 2 contact_point.",
-   "n": 45
+   "n": 45,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f46_palanpur.jpg",
    "group": "Labelled frames",
    "title": "Palanpur",
    "caption": "A labelled frame from Palanpur: 1 arm, 2 contact_point, 1 pantograph.",
-   "n": 46
+   "n": 46,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f47_zed.jpg",
    "group": "Labelled frames",
    "title": "ZED camera, Lucknow",
    "caption": "A labelled frame from ZED camera, Lucknow: 1 mast, 1 arm, 1 pantograph, 1 contact_point.",
-   "n": 47
+   "n": 47,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f48_zed.jpg",
    "group": "Labelled frames",
    "title": "ZED camera, Lucknow",
    "caption": "A labelled frame from ZED camera, Lucknow: 1 mast, 3 contact_point, 1 pantograph.",
-   "n": 48
+   "n": 48,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f49_zed.jpg",
    "group": "Labelled frames",
    "title": "ZED camera, Lucknow",
    "caption": "A labelled frame from ZED camera, Lucknow: 1 pantograph, 3 contact_point, 1 arm.",
-   "n": 49
+   "n": 49,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f50_zed.jpg",
    "group": "Labelled frames",
    "title": "ZED camera, Lucknow",
    "caption": "A labelled frame from ZED camera, Lucknow: 2 contact_point, 1 pantograph, 1 arm.",
-   "n": 50
+   "n": 50,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f51_zed.jpg",
    "group": "Labelled frames",
    "title": "ZED camera, Lucknow",
    "caption": "A labelled frame from ZED camera, Lucknow: 1 mast, 1 arm, 2 contact_point, 1 pantograph.",
-   "n": 51
+   "n": 51,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f52_zed.jpg",
    "group": "Labelled frames",
    "title": "ZED camera, Lucknow",
    "caption": "A labelled frame from ZED camera, Lucknow: 1 pantograph, 2 contact_point, 1 arm.",
-   "n": 52
+   "n": 52,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f53_zed.jpg",
    "group": "Labelled frames",
    "title": "ZED camera, Lucknow",
    "caption": "A labelled frame from ZED camera, Lucknow: 3 contact_point, 1 arm, 1 pantograph.",
-   "n": 53
+   "n": 53,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "k_pantograph_1.jpg",
    "group": "Class close-ups",
    "title": "Pantograph (1)",
    "caption": "The pantograph: a wide box around the collector head and its horns. Source: Mehsana.",
-   "n": 54
+   "n": 54,
+   "w": 900,
+   "h": 558
   },
   {
    "file": "k_pantograph_2.jpg",
    "group": "Class close-ups",
    "title": "Pantograph (2)",
    "caption": "The pantograph: a wide box around the collector head and its horns. Source: Palanpur.",
-   "n": 55
+   "n": 55,
+   "w": 900,
+   "h": 558
   },
   {
    "file": "k_pantograph_3.jpg",
    "group": "Class close-ups",
    "title": "Pantograph (3)",
    "caption": "The pantograph: a wide box around the collector head and its horns. Source: Ahmedabad.",
-   "n": 56
+   "n": 56,
+   "w": 900,
+   "h": 558
   },
   {
    "file": "k_pantograph_4.jpg",
    "group": "Class close-ups",
    "title": "Pantograph (4)",
    "caption": "The pantograph: a wide box around the collector head and its horns. Source: Mumbai.",
-   "n": 57
+   "n": 57,
+   "w": 900,
+   "h": 558
   },
   {
    "file": "k_mast_1.jpg",
    "group": "Class close-ups",
    "title": "Mast (1)",
    "caption": "Masts are tall, thin boxes at the edges of the frame. Source: Ahmedabad.",
-   "n": 58
+   "n": 58,
+   "w": 341,
+   "h": 341
   },
   {
    "file": "k_mast_2.jpg",
    "group": "Class close-ups",
    "title": "Mast (2)",
    "caption": "Masts are tall, thin boxes at the edges of the frame. Source: Mumbai.",
-   "n": 59
+   "n": 59,
+   "w": 336,
+   "h": 336
   },
   {
    "file": "k_mast_3.jpg",
    "group": "Class close-ups",
    "title": "Mast (3)",
    "caption": "Masts are tall, thin boxes at the edges of the frame. Source: ZED camera.",
-   "n": 60
+   "n": 60,
+   "w": 591,
+   "h": 591
   },
   {
    "file": "k_mast_4.jpg",
    "group": "Class close-ups",
    "title": "Mast (4)",
    "caption": "Masts are tall, thin boxes at the edges of the frame. Source: Lucknow.",
-   "n": 61
+   "n": 61,
+   "w": 320,
+   "h": 320
   },
   {
    "file": "k_arm_1.jpg",
    "group": "Class close-ups",
    "title": "Arm (1)",
    "caption": "Arms (the cantilever and registration arms) are long, low boxes below the pantograph. Source: Ahmedabad.",
-   "n": 62
+   "n": 62,
+   "w": 825,
+   "h": 512
   },
   {
    "file": "k_arm_2.jpg",
    "group": "Class close-ups",
    "title": "Arm (2)",
    "caption": "Arms (the cantilever and registration arms) are long, low boxes below the pantograph. Source: Mumbai.",
-   "n": 63
+   "n": 63,
+   "w": 448,
+   "h": 277
   },
   {
    "file": "k_arm_3.jpg",
    "group": "Class close-ups",
    "title": "Arm (3)",
    "caption": "Arms (the cantilever and registration arms) are long, low boxes below the pantograph. Source: Mehsana.",
-   "n": 64
+   "n": 64,
+   "w": 900,
+   "h": 558
   },
   {
    "file": "k_arm_4.jpg",
    "group": "Class close-ups",
    "title": "Arm (4)",
    "caption": "Arms (the cantilever and registration arms) are long, low boxes below the pantograph. Source: Palanpur.",
-   "n": 65
+   "n": 65,
+   "w": 713,
+   "h": 442
   },
   {
    "file": "k_contact_point_1.jpg",
    "group": "Class close-ups",
    "title": "Contact Point (1)",
    "caption": "The contact point is a tiny box where the wire meets the strip; zoomed in here with its neighbours. Source: Palanpur.",
-   "n": 66
+   "n": 66,
+   "w": 260,
+   "h": 161
   },
   {
    "file": "k_contact_point_2.jpg",
    "group": "Class close-ups",
    "title": "Contact Point (2)",
    "caption": "The contact point is a tiny box where the wire meets the strip; zoomed in here with its neighbours. Source: Mumbai.",
-   "n": 67
+   "n": 67,
+   "w": 260,
+   "h": 161
   },
   {
    "file": "k_contact_point_3.jpg",
    "group": "Class close-ups",
    "title": "Contact Point (3)",
    "caption": "The contact point is a tiny box where the wire meets the strip; zoomed in here with its neighbours. Source: ZED camera.",
-   "n": 68
+   "n": 68,
+   "w": 260,
+   "h": 161
   },
   {
    "file": "k_contact_point_4.jpg",
    "group": "Class close-ups",
    "title": "Contact Point (4)",
    "caption": "The contact point is a tiny box where the wire meets the strip; zoomed in here with its neighbours. Source: Ahmedabad.",
-   "n": 69
+   "n": 69,
+   "w": 495,
+   "h": 306
   },
   {
    "file": "h_crowded_1.jpg",
    "group": "Hard cases",
    "title": "A crowded frame (Mumbai)",
    "caption": "14 boxes in one frame from Mumbai: masts, arms and the pantograph together.",
-   "n": 70
+   "n": 70,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "h_crowded_2.jpg",
    "group": "Hard cases",
    "title": "A crowded frame (Ahmedabad)",
    "caption": "10 boxes in one frame from Ahmedabad: masts, arms and the pantograph together.",
-   "n": 71
+   "n": 71,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "s01-isaac-sim.jpg",
    "group": "Behind the scenes",
    "title": "Synthetic depth in Isaac Sim",
    "caption": "A synthetic stereo-depth scene in Isaac Sim, one of the early depth experiments (1280 x 720).",
-   "n": 75
+   "n": 75,
+   "w": 1500,
+   "h": 848
   },
   {
    "file": "s02-zed-depth.jpg",
    "group": "Behind the scenes",
    "title": "ZED live depth and point cloud",
    "caption": "The ZED 2i depth viewer with a live point cloud. The camera view is blurred for privacy.",
-   "n": 76
+   "n": 76,
+   "w": 1500,
+   "h": 913
   },
   {
    "file": "s03-tensorrt-benchmark.jpg",
    "group": "Behind the scenes",
    "title": "TensorRT benchmark",
    "caption": "A TensorRT engine for one of the models: about 55 FPS, 18 ms per frame.",
-   "n": 77
+   "n": 77,
+   "w": 1142,
+   "h": 237
   },
   {
    "file": "s13-zed-settings.jpg",
    "group": "Behind the scenes",
    "title": "ZED depth settings",
    "caption": "ZED depth set to NEURAL PLUS, range 0.01 to 20 m, stabilisation 30%, confidence 95%.",
-   "n": 78
+   "n": 78,
+   "w": 1286,
+   "h": 1312
   },
   {
    "file": "s14-stereo-pair.jpg",
    "group": "Behind the scenes",
    "title": "A raw stereo pair",
    "caption": "The left and right ZED views of the same scene: the input to stereo depth.",
-   "n": 79
+   "n": 79,
+   "w": 1500,
+   "h": 421
   },
   {
    "file": "s04-wire-height.jpg",
    "group": "Behind the scenes",
    "title": "Wire height from two depth sources",
    "caption": "Wire height overlay comparing ZED depth with Fast-FoundationStereo, with the gaps where wires cross.",
-   "n": 80
+   "n": 80,
+   "w": 1500,
+   "h": 637
   },
   {
    "file": "s15-wire-height-347.jpg",
    "group": "Behind the scenes",
    "title": "Wire height, frame 347",
    "caption": "Segment S4: 5.89 m from ZED depth against 6.15 m from Fast-FoundationStereo (+0.26 m), anchored to a median thick-line height of 5.88 m.",
-   "n": 81
+   "n": 81,
+   "w": 1600,
+   "h": 670
   },
   {
    "file": "s16-wire-height-262.jpg",
    "group": "Behind the scenes",
    "title": "Wire height, frame 262",
    "caption": "Where wires cross the two depth sources can disagree by more than half a metre (segment S13: 6.41 m against 7.06 m).",
-   "n": 82
+   "n": 82,
+   "w": 1600,
+   "h": 671
   },
   {
    "file": "s05-detection-depth.jpg",
    "group": "Behind the scenes",
    "title": "Detection with a depth reading",
    "caption": "A pantograph at 0.93 confidence and a contact point at 0.35, with a depth of 3.85 m.",
-   "n": 83
+   "n": 83,
+   "w": 1500,
+   "h": 832
   },
   {
    "file": "s12-alert-gui.jpg",
    "group": "Behind the scenes",
    "title": "The operator view",
    "caption": "The alert application from a depot test: detector threshold, heights, mast direction, corrections and alert tabs.",
-   "n": 84
+   "n": 84,
+   "w": 1500,
+   "h": 706
   },
   {
    "file": "s17-field-recorder.jpg",
    "group": "Behind the scenes",
    "title": "The field recorder",
    "caption": "The launcher's recorder: synchronised webcam, ZED and GPS in one session, plus inspect, replay and export-preview options.",
-   "n": 85
+   "n": 85,
+   "w": 1500,
+   "h": 704
   },
   {
    "file": "s06-source-videos.jpg",
    "group": "Behind the scenes",
    "title": "Raw source videos",
    "caption": "The raw footage, named by route: Ahmedabad (amd), Lucknow (lck), Mehsana (mhsn) and Palanpur (plnpr).",
-   "n": 86
+   "n": 86,
+   "w": 1225,
+   "h": 1007
   },
   {
    "file": "s08-auto-annotate-dialog.jpg",
    "group": "Behind the scenes",
    "title": "Pre-annotation in CVAT",
    "caption": "Running a pretrained detector inside CVAT and mapping its labels to the task's labels.",
-   "n": 87
+   "n": 87,
+   "w": 590,
+   "h": 631
   },
   {
    "file": "s18-ai-tools.jpg",
    "group": "Behind the scenes",
    "title": "An automatic proposal",
    "caption": "The AI Tools panel and a pantograph box proposed automatically (979 x 291 px), ready for review.",
-   "n": 88
+   "n": 88,
+   "w": 1500,
+   "h": 1032
   },
   {
    "file": "s19-auto-done.jpg",
    "group": "Behind the scenes",
    "title": "Automatic annotation finished",
    "caption": "A task finishes pre-annotating: pantograph and contact-point proposals appear in the object list for review.",
-   "n": 89
+   "n": 89,
+   "w": 1500,
+   "h": 931
   },
   {
    "file": "s09-auto-box.jpg",
    "group": "Behind the scenes",
    "title": "A proposal that needs fixing",
    "caption": "An automatic proposal that runs too tall, so it gets corrected.",
-   "n": 90
+   "n": 90,
+   "w": 1292,
+   "h": 821
   },
   {
    "file": "s10-manual-box.jpg",
    "group": "Behind the scenes",
    "title": "The reviewed result",
    "caption": "The corrected pantograph box after review.",
-   "n": 91
+   "n": 91,
+   "w": 1116,
+   "h": 717
   },
   {
    "file": "s20-cvat-objects.jpg",
    "group": "Behind the scenes",
    "title": "Reviewing a frame in CVAT",
    "caption": "The object list for one frame: contact points, a mast and an arm, each a plain rectangle.",
-   "n": 92
+   "n": 92,
+   "w": 1400,
+   "h": 1290
   },
   {
    "file": "s21-two-contact-points.jpg",
    "group": "Behind the scenes",
    "title": "Two contact points on one pantograph",
    "caption": "Double-wire sections give two contact-point boxes on the strip.",
-   "n": 93
+   "n": 93,
+   "w": 1400,
+   "h": 1286
   },
   {
    "file": "s22-tiny-contact-points.jpg",
    "group": "Behind the scenes",
    "title": "Tiny contact points",
    "caption": "Contact points are small boxes (red) on the top edge of the strip, labelled at high zoom.",
-   "n": 94
+   "n": 94,
+   "w": 1500,
+   "h": 976
   },
   {
    "file": "s23-mast-and-arms.jpg",
    "group": "Behind the scenes",
    "title": "Pantograph, arms and a mast",
    "caption": "A pantograph box, two arm boxes and a tall mast box in one frame.",
-   "n": 95
+   "n": 95,
+   "w": 1279,
+   "h": 746
   },
   {
    "file": "s24-track-glare.jpg",
    "group": "Behind the scenes",
    "title": "Tracking through glare",
    "caption": "A tracked pantograph box (and tracked masts) on a frame with strong sun glare.",
-   "n": 96
+   "n": 96,
+   "w": 1272,
+   "h": 849
   },
   {
    "file": "s25-overexposed.jpg",
    "group": "Behind the scenes",
    "title": "An overexposed frame",
    "caption": "Washed-out frames still carry a tracked pantograph box and two contact points.",
-   "n": 97
+   "n": 97,
+   "w": 1500,
+   "h": 785
   },
   {
    "file": "s26-dark.jpg",
    "group": "Behind the scenes",
    "title": "A dark frame",
    "caption": "Under a shelter the pantograph is a silhouette: a hand-placed box, masts and a contact point.",
-   "n": 98
+   "n": 98,
+   "w": 1500,
+   "h": 832
   },
   {
    "file": "s07-oriented-boxes.jpg",
    "group": "Behind the scenes",
    "title": "The dropped detour",
    "caption": "Rotated-box candidates in CVAT: the approach that was dropped for plain boxes.",
-   "n": 99
+   "n": 99,
+   "w": 1282,
+   "h": 727
   },
   {
    "file": "s11-yolo-training.jpg",
    "group": "Behind the scenes",
    "title": "YOLO26x: NaN losses and recovery",
    "caption": "Early YOLO26x epochs went to NaN loss; training recovered automatically from the last checkpoint and was resumed.",
-   "n": 100
+   "n": 100,
+   "w": 1500,
+   "h": 826
   },
   {
    "file": "f49_palanpur.jpg",
    "group": "Labelled frames",
    "title": "Palanpur",
    "caption": "A labelled frame from Palanpur: 1 contact_point, 1 pantograph.",
-   "n": 101
+   "n": 101,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f50_palanpur.jpg",
    "group": "Labelled frames",
    "title": "Palanpur",
    "caption": "A labelled frame from Palanpur: 2 contact_point, 1 pantograph.",
-   "n": 102
+   "n": 102,
+   "w": 1500,
+   "h": 844
   },
   {
    "file": "f51_palanpur.jpg",
    "group": "Labelled frames",
    "title": "Palanpur",
    "caption": "A labelled frame from Palanpur: 2 contact_point, 1 pantograph.",
-   "n": 103
+   "n": 103,
+   "w": 1500,
+   "h": 844
   }
  ]
 }

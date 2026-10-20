@@ -148,8 +148,10 @@
       function tog() {
         var tk = pn.querySelector('.ev-track'); if (tk && tk.__stop) tk.__stop();
         if (open === i) { open = -1; pn.classList.remove('open'); pn.innerHTML = ''; } else {
-          open = i; pn.innerHTML = '<h4>' + esc(s[0]) + '</h4>' + PANEL[i](); pn.classList.add('open'); pn.style.setProperty('--c', s[2]);
+          open = i; if (matchMedia('(max-width:760px)').matches) { var nx = n.nextElementSibling; (nx && nx.classList.contains('vz-arrow') ? nx : n).after(pn); } else el.appendChild(pn);
+          pn.innerHTML = '<h4>' + esc(s[0]) + '</h4>' + PANEL[i](); pn.classList.add('open'); pn.style.setProperty('--c', s[2]);
           var t2 = pn.querySelector('.ev-track'); if (t2) { track(t2); t2.__start(); }
+          if (matchMedia('(max-width:760px)').matches) setTimeout(function () { n.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }); }, 60);
         }
         nodes.forEach(function (x, j) { x.classList.toggle('on', j === open); x.setAttribute('aria-expanded', j === open); x.querySelector('.vz-more .t').textContent = j === open ? 'Hide the evidence' : 'See the evidence'; });
       }

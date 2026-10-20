@@ -1,6 +1,6 @@
 /* Neo-futuristic theme: dark + light. Colours are tokens; the WebGL background reads the same theme. */
 :root,:root[data-theme="dark"]{
-  --bg:#05050b; --fg:#eceaff; --muted:#a6a3c8; --faint:#6f6c94;
+  --bg:#05050b; --fg:#eceaff; --muted:#a6a3c8; --faint:#807da6;
   --card:rgba(255,255,255,.045); --card-hi:rgba(255,255,255,.075); --line:rgba(255,255,255,.11);
   --accent:#8a6bff; --accent-2:#3d7bff; --warm:#ffb870; --good:#59e0a5;
   --chip:rgba(138,107,255,.16); --shadow:0 30px 80px -30px rgba(0,0,0,.8);
@@ -9,7 +9,7 @@
   --c-pan:#00e08a;--c-arm:#4aa3ff;--c-cp:#ff5252;--c-mast:#ffc400;--s2:#3d7bff;--pink:#ff7a8a;--cyan:#7fd6ff;
 }
 :root[data-theme="light"]{
-  --bg:#f4f3fc; --fg:#14122b; --muted:#59567a; --faint:#8a87a8;
+  --bg:#f4f3fc; --fg:#14122b; --muted:#59567a; --faint:#65628a;
   --card:rgba(255,255,255,.62); --card-hi:rgba(255,255,255,.86); --line:rgba(70,60,150,.15);
   --accent:#5b3df5; --accent-2:#2563eb; --warm:#e88a2e; --good:#0f9d6a;
   --chip:rgba(91,61,245,.10); --shadow:0 30px 70px -34px rgba(60,50,140,.35);
@@ -684,3 +684,17 @@ html.vt-theme::view-transition-new(root){animation:vt-reveal .6s var(--spring)}
 .vz-alluv.cmp{min-width:0}.vz-alluv .sl.halo{paint-order:stroke;stroke:var(--bg);stroke-width:4px;stroke-linejoin:round}
 @media(max-width:560px){.facts3{grid-template-columns:1fr}.lab-tabs{display:flex;width:calc(100% - 52px);border-radius:16px;gap:2px}.lab-tabs button{flex:1;padding:9px 8px;font-size:13px;border-radius:12px;line-height:1.2}}
 @media(prefers-reduced-motion:reduce){.vz-node[role=button]:hover:before,.vz-node[role=button]:hover:after,.opener:hover:before,.opener:hover:after{animation:none}.dw{transition:none}}
+
+/* Phone pass: tap sizes, stats grid, nav with Kaggle */
+.theme-btn{flex:none;min-width:44px}
+.logo{min-height:44px}.logo i{flex:none}
+footer a,.note a{display:inline-block;padding:.4em 0}
+@media(max-width:760px){
+  .nav nav a{padding:8px 9px;font-size:13px}.nav nav a .nl{display:none}.nav{gap:4px}
+  .story-hero .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.story-hero .stat{min-width:0;padding:14px 16px}
+  input[type=range]{height:44px}
+  .lab-x{width:44px;height:44px}.lab .chips button,.try button,.trk-tabs button,.gal-bar .chips button,#chips button{min-height:44px}
+  .trk-play{width:44px;height:44px}
+}
+.logo{min-width:44px;justify-content:center}
+footer a,.note a{display:inline-flex;align-items:center;min-height:44px;padding:0}
