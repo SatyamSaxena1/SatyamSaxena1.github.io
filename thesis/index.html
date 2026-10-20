@@ -75,7 +75,7 @@
           <dl class="kv" style="margin-top:12px">
             <dt>Base model</dt><dd>Mistral-7B-v0.1, loaded in 4-bit (QLoRA)</dd>
             <dt>Adapter</dt><dd>LoRA rank 128, alpha 256, dropout 0.05, on the attention q and v projections: about 54.5 million trainable parameters (a 218 MB adapter file at 32-bit)</dd>
-            <dt>Data</dt><dd>Shakespeare as raw text, 375 KB, cut into 320-token blocks</dd>
+            <dt>Data</dt><dd>Shakespeare as raw text, 375 KB, cut into 320-token blocks. The corpus came from my NLP group project in Oct 2023, a spell checker built on a Shakespeare trigram model.</dd>
             <dt>Optimiser</dt><dd>AdamW, learning rate 3&times;10<sup>-5</sup>, linear decay after 100 warm-up steps</dd>
             <dt>Batch</dt><dd>7 per step &times; 5 accumulated = 35</dd>
             <dt>Stop rule</dt><dd>stop once loss falls below 1.2</dd>
