@@ -15,7 +15,7 @@
   <link rel="canonical" href="https://satyamsaxena1.github.io/railway/">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238a6bff'/%3E%3Cstop offset='1' stop-color='%233d7bff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Ctext x='32' y='42' font-size='26' font-family='Arial' font-weight='800' fill='white' text-anchor='middle'%3ESS%3C/text%3E%3C/svg%3E">
   <script>try{var t=localStorage.getItem('theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))</script>
-  <link rel="stylesheet" href="../assets/css/theme.css?v=19">
+  <link rel="stylesheet" href="../assets/css/theme.css?v=21">
 </head>
 <body>
   <canvas id="bg" aria-hidden="true"></canvas>
@@ -236,32 +236,73 @@
 
     <section data-kind="work" class="sec wrap" id="numbers">
       <div class="sec-head reveal"><span class="kind kind-work">Data work</span><h2>By the <span class="grad">numbers</span></h2><p>Live charts drawn from the real label files and training logs. Hover or tap a bar for exact values.</p></div>
-      <div class="vz-grid2">
+      <div class="pair">
         <div class="card vz-block reveal"><h3>Frames per route</h3><p>Train and validation: 23,551 in all.</p><div class="vz" data-chart="vbar" data-id="frames_per_site" data-series="train,validation" data-stacked style="--ph:270px"></div></div>
-        <div class="card vz-block reveal"><h3>133,245 labelled boxes</h3><p>Four classes; every box is a plain rectangle.</p><div class="vz" data-chart="hbar" data-id="boxes_per_class" data-series="train,validation" data-colors="class" data-stacked></div></div>
-        <div class="card vz-block reveal"><h3>Boxes per frame</h3><p>How many labelled boxes a frame holds (15 means 15 or more).</p><div class="vz" data-chart="vbar" data-id="per_frame" data-series="frames" data-compact style="--ph:230px"></div></div>
-        <div class="card vz-block reveal"><h3>Two kinds of camera</h3><p>A standard webcam, plus a ZED stereo camera tested as its replacement.</p><div class="vz" data-chart="donut" data-id="camera_mix" data-label="Share of frames from the webcam and the ZED camera"></div></div>
+        <figure class="card media reveal"><button class="yt" type="button" data-yt="9SGVe_s8hmc" aria-label="Play video: A production run"><img src="https://i.ytimg.com/vi/9SGVe_s8hmc/hqdefault.jpg" alt="" loading="lazy"><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span></button><figcaption><b>Where the frames come from</b><span>A longer webcam recording from a production run.</span></figcaption></figure>
       </div>
-      <div class="card vz-block heat-card reveal" style="margin-top:16px" role="button" tabindex="0" data-lab="size" aria-haspopup="dialog" aria-label="Why contact points are hard: open the interactive explainer"><span class="explore" aria-hidden="true">Explore <svg viewBox="0 0 24 24" width="14" height="14"><path d="M14 4h6v6M20 4l-8 8M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><h3>Why contact points are hard</h3><p>Width against height of every box, as a share of the frame. Contact points are tiny: a few pixels of offset costs most of their overlap score. Open it to nudge a box and watch the overlap fall.</p><div class="vz" data-chart="sizes"></div></div>
-      <div class="card vz-block heat-card reveal" style="margin-top:16px" role="button" tabindex="0" data-lab="pos" aria-haspopup="dialog" aria-label="Where things appear in the frame: open the interactive explainer"><span class="explore" aria-hidden="true">Explore <svg viewBox="0 0 24 24" width="14" height="14"><path d="M14 4h6v6M20 4l-8 8M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><h3>Where things appear in the frame</h3><p>Density of box centres. Pantographs cluster on the centre line, contact points sit along it just above, masts spread out to the sides and arms sit lower. Open it to watch the dots turn into this map.</p><div class="vz" data-chart="heat"></div></div>
+      <div class="pair flip">
+        <div class="card vz-block reveal"><h3>133,245 labelled boxes</h3><p>Four classes; every box is a plain rectangle.</p><div class="vz" data-chart="hbar" data-id="boxes_per_class" data-series="train,validation" data-colors="class" data-stacked></div></div>
+        <figure class="card media reveal"><div class="win"><div class="win-bar"><i></i><i></i><i></i></div><video src="../assets/media/annotating-cvat.mp4" poster="../assets/media/annotating-cvat.jpg" autoplay muted loop playsinline preload="metadata" data-auto aria-label="Screen recording of boxes being placed in CVAT"></video></div><figcaption><b>One of them, being made</b><span>A screen recording of boxes placed and corrected in CVAT.</span></figcaption></figure>
+      </div>
+      <div class="pair">
+        <div class="card vz-block reveal"><h3>Boxes per frame</h3><p>How many labelled boxes a frame holds (15 means 15 or more).</p><div class="vz" data-chart="vbar" data-id="per_frame" data-series="frames" data-compact style="--ph:230px"></div></div>
+        <figure class="card media reveal"><button class="yt" type="button" data-yt="bIiVpss6Pi4" aria-label="Play video: First trial run"><img src="https://i.ytimg.com/vi/bIiVpss6Pi4/hqdefault.jpg" alt="" loading="lazy"><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span></button><figcaption><b>The detector on the line</b><span>The trained model running on the first trial run, from the webcam's point of view.</span></figcaption></figure>
+      </div>
+      <div class="pair flip">
+        <div class="card vz-block reveal"><h3>Two kinds of camera</h3><p>A standard webcam, plus a ZED stereo camera tested as its replacement.</p><div class="vz" data-chart="donut" data-id="camera_mix" data-label="Share of frames from the webcam and the ZED camera"></div></div>
+        <figure class="card media tallm reveal"><video src="../assets/hw/mount-on-loco.mp4" poster="../assets/hw/mount-on-loco.jpg" autoplay muted loop playsinline preload="metadata" data-auto aria-label="The webcam and ZED camera mounted side by side on a locomotive"></video><figcaption><b>Side by side on the cab</b><span>Both cameras on the locomotive, facing the line ahead.</span></figcaption></figure>
+      </div>
+      <div class="card vz-block heat-card reveal" style="margin-top:16px" role="button" tabindex="0" data-lab="size" aria-haspopup="dialog" aria-label="Why contact points are hard: open the interactive explainer"><div class="heat-head"><div><h3>Why contact points are hard</h3><p>Width against height of every box, as a share of the frame. Contact points are tiny: a few pixels of offset costs most of their overlap score. Open it to nudge a box and watch the overlap fall.</p></div><span class="explore" aria-hidden="true"><svg viewBox="0 0 24 24" width="15" height="15"><path d="M15 3h6v6M9 21H3v-6M21 3l-7.5 7.5M3 21l7.5-7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Explore</span></div><div class="vz" data-chart="sizes"></div></div>
+      <div class="card vz-block heat-card reveal" style="margin-top:16px" role="button" tabindex="0" data-lab="pos" aria-haspopup="dialog" aria-label="Where things appear in the frame: open the interactive explainer"><div class="heat-head"><div><h3>Where things appear in the frame</h3><p>Density of box centres. Pantographs cluster on the centre line, contact points sit along it just above, masts spread out to the sides and arms sit lower. Open it to watch the dots turn into this map.</p></div><span class="explore" aria-hidden="true"><svg viewBox="0 0 24 24" width="15" height="15"><path d="M15 3h6v6M9 21H3v-6M21 3l-7.5 7.5M3 21l7.5-7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Explore</span></div><div class="vz" data-chart="heat"></div></div>
     </section>
 
     <section class="sec wrap" data-kind="work">
       <div class="sec-head reveal"><span class="kind kind-work">Data work</span><h2>How the labels were <span class="grad">made</span></h2><p>Six steps, repeated task by task. Press any step to see the evidence.</p></div>
       <div class="vz" data-chart="pipeline" id="flow"></div>
-      <div class="two" style="margin-top:16px">
-        <div class="card reveal">
-          <h3>How the labelling was run</h3>
-          <div class="vz" data-chart="roles"></div>
-          <p style="margin-top:14px">I hosted CVAT on my own machine and used ngrok so it could be reached locally and from off-site. Two roles worked each task: a labeller, and a reviewer who followed behind correcting mistakes. I switched between the two roles, as well as being the admin and the host.</p>
+      <div class="card studio reveal">
+        <div class="studio-media">
+          <div class="win"><div class="win-bar"><i></i><i></i><i></i></div><video src="../assets/media/annotating-cvat.mp4" poster="../assets/media/annotating-cvat.jpg" autoplay muted loop playsinline preload="metadata" data-auto aria-label="Screen recording of boxes being placed and corrected in CVAT"></video></div>
+          <p class="cap">The labelling screen, recorded on 29 May 2026.</p>
         </div>
-        <div class="card reveal">
-          <h3>Model proposes, I decide</h3>
-          <figure data-zoom style="margin-top:6px"><img src="../assets/story/s09-auto-box.jpg" alt="An automatic pantograph proposal that is too tall" loading="lazy"><figcaption>An automatic proposal: the box runs too tall, so it gets corrected.</figcaption></figure>
-          <figure data-zoom style="margin-top:12px"><img src="../assets/story/s10-manual-box.jpg" alt="A manually corrected pantograph box" loading="lazy"><figcaption>The reviewed result: a tight box on the pantograph.</figcaption></figure>
+        <div class="studio-copy">
+          <h3>How the labelling was run</h3>
+          <p class="lede">CVAT ran on my own PC and was reachable both locally and from off-site through an ngrok tunnel.</p>
+          <svg class="relay" viewBox="0 0 520 230" role="img" aria-labelledby="relay-t">
+            <title id="relay-t">CVAT on my PC reaches a labeller seat and a reviewer seat through an ngrok tunnel; I switched between the two seats</title>
+            <rect x="10" y="58" width="118" height="100" rx="18" class="r-box" style="--c:var(--accent)"/>
+            <rect x="26" y="76" width="86" height="16" rx="5" class="r-unit"/><rect x="26" y="100" width="86" height="16" rx="5" class="r-unit"/><rect x="26" y="124" width="86" height="16" rx="5" class="r-unit"/>
+            <circle cx="98" cy="84" r="3" class="r-led"/><circle cx="98" cy="108" r="3" class="r-led" style="animation-delay:.4s"/><circle cx="98" cy="132" r="3" class="r-led" style="animation-delay:.8s"/>
+            <text x="69" y="184" text-anchor="middle" class="r-h">My PC</text><text x="69" y="202" text-anchor="middle" class="r-s">CVAT in Docker</text>
+            <path d="M128 108 H250 C300 108 316 64 352 64" class="r-tun" style="--c:var(--warm)"/><path d="M250 108 C300 108 316 166 352 166" class="r-tun" style="--c:var(--warm)"/>
+            <rect x="170" y="86" width="64" height="24" rx="12" class="r-pill"/><text x="202" y="102" text-anchor="middle" class="r-pt">ngrok</text>
+            <circle cx="384" cy="64" r="32" class="r-seat" style="--c:var(--good)"/><circle cx="384" cy="166" r="32" class="r-seat" style="--c:var(--pink)"/>
+            <path d="M372 76 L376 66 L394 48 L400 54 L382 72 Z M372 76 L370 82 L376 80" class="r-glyph" style="--c:var(--good)"/>
+            <path d="M370 166 L380 176 L400 154" class="r-glyph r-check" style="--c:var(--pink)"/>
+            <text x="428" y="60" class="r-h">Labeller</text><text x="428" y="78" class="r-s">draws the boxes</text>
+            <text x="428" y="162" class="r-h">Reviewer</text><text x="428" y="180" class="r-s">follows behind,</text><text x="428" y="195" class="r-s">fixes mistakes</text>
+            <path d="M384 100 V130 M379 106 L384 100 L389 106 M379 124 L384 130 L389 124" class="r-swap"/><text x="398" y="119" class="r-s">swapped seats</text>
+          </svg>
+          <ul class="facts">
+            <li><b>31 tasks</b> of about 500 frames, taken one at a time.</li>
+            <li><b>Two seats</b> on every task: a labeller, and a reviewer who follows behind correcting mistakes.</li>
+            <li><b>One person</b> as admin and host, switching between the two seats.</li>
+          </ul>
         </div>
       </div>
-      <div class="card vz-block reveal" style="margin-top:16px"><h3>How the data was split</h3><p>Whole video segments stay together, so no segment appears in both train and validation. A separate mast-focused set joins at training time.</p><div class="vz" data-chart="splits"></div></div>
+      <div class="card propose reveal">
+        <div class="propose-head"><h3>The model proposes, I decide</h3><p>A small pretrained detector draws a first box. It is a starting point: reviewing means fixing it.</p></div>
+        <div class="propose-figs">
+          <figure data-zoom><img src="../assets/story/s09-auto-box.jpg" alt="An automatic pantograph proposal that is too tall" loading="lazy"><figcaption>The proposal: the box runs too tall.</figcaption></figure>
+          <figure data-zoom><img src="../assets/story/s10-manual-box.jpg" alt="A manually corrected pantograph box" loading="lazy"><figcaption>After review: a tight box on the pantograph.</figcaption></figure>
+        </div>
+      </div>
+      <div class="card vz-block reveal split-card">
+        <h3>How the data was split</h3>
+        <p>Every bar is drawn to the same scale, so a ribbon is as wide as the number of images it carries. Both models trained on the same 29,380 images and were checked on different cuts of the rest.</p>
+        <ul class="alluv-key" aria-label="Colour key"><li><i style="background:var(--accent)"></i>Reviewed frames</li><li><i style="background:var(--pink)"></i>Mast-focused set</li><li><i style="background:var(--good)"></i>Train</li><li><i style="background:var(--warm)"></i>Validation</li><li><i style="background:var(--cyan)"></i>Test</li></ul>
+        <div class="vz vz-alluv-wrap" data-chart="alluvial"></div>
+        <p class="fine">The mast-focused set (11,022 images, annotated separately) joined at training time. RF-DETR's validation and test sets are one held-out pool cut in two by image, so they share video segments. YOLO26x's run counted 5,114 validation images, 79 fewer than the 5,193 held out.</p>
+      </div>
     </section>
 
     <section class="sec wrap" data-kind="work">
@@ -275,7 +316,7 @@
             <div class="bar" style="--w:71.4%"><label>Arm</label><div class="t"><i></i></div><b>0.714</b></div>
             <div class="bar" style="--w:38.6%"><label>Contact pt</label><div class="t"><i></i></div><b>0.386</b></div>
           </div>
-          <p style="margin-top:14px">Overall mAP@50:95 <b>0.698</b> on 5,114 validation images. 1280 px, about 8 days on one RTX 4070.</p>
+          <p style="margin-top:14px">Overall mAP@50:95 <b>0.698</b> on 5,114 validation images. 1280 px, about 8 days on one RTX 4070 Ti.</p>
         </div>
         <div class="card reveal">
           <h3>RF-DETR Large</h3>
@@ -321,7 +362,7 @@
   <script src="../assets/js/site.js?v=11" defer></script>
   <script src="../assets/js/bg.js?v=5" defer></script>
   <script src="../assets/js/route-map.js?v=4" defer></script>
-  <script src="../assets/js/heatlab.js?v=4" data-base="../assets/" data-json="../assets/data/heatlab.json?v=1" defer></script>
-  <script src="../assets/js/charts.js?v=8" data-json="../assets/data/charts.json?v=7" defer></script>
+  <script src="../assets/js/heatlab.js?v=5" data-base="../assets/" data-json="../assets/data/heatlab.json?v=1" defer></script>
+  <script src="../assets/js/charts.js?v=10" data-json="../assets/data/charts.json?v=7" defer></script>
 </body>
 </html>

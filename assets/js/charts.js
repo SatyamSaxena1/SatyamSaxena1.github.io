@@ -1,6 +1,6 @@
 /* Live charts: dependency-free, theme-aware, animated on scroll.
    Usage:  <div class="vz" data-chart="hbar" data-id="boxes_per_class" data-series="train,validation" data-colors="class" data-stacked></div>
-   Types: vbar, hbar, line, donut, heat, sizes, pipeline, roles, splits, gantt. Data comes from one JSON file (data-json on the script tag). */
+   Types: vbar, hbar, line, donut, heat, sizes, pipeline, alluvial, gantt. Data comes from one JSON file (data-json on the script tag). */
 (function () {
   var NS = 'http://www.w3.org/2000/svg', D = null;
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -139,39 +139,75 @@
     function () { return '<p>Drawing a contact point on every frame by hand would take far too long, so boxes were set on keyframes and tracking carried them between. Below: two real runs of 25 consecutive frames.</p><div class="ev-track"></div>'; },
     function () { return '<p>Two roles in CVAT: a <b>labeller</b>, and a <b>reviewer</b> who follows behind fixing mistakes. The reviewed box on the right is what goes into the dataset.</p><div class="ev2">' + img('story/s09-auto-box.jpg', 'Before: automatic proposal') + img('story/s10-manual-box.jpg', 'After: reviewed box') + '</div>'; },
     function () { return '<p>Reviewed tasks are exported as plain YOLO text, one line per box: <code>class x_centre y_centre width height</code>, all as fractions of the frame. Boxes are axis-aligned, so a box top stays parallel to the frame bottom.</p><pre class="ev-code">0 0.583358 0.326869 0.006539 0.012406\n0 0.405194 0.341024 0.007124 0.012655</pre><p>133,245 boxes, four classes.</p>'; },
-    function () { return '<p>YOLO26x: mAP@50:95 <b>0.698</b>, 1280 px, about 8 days on one RTX 4070. RF-DETR Large: <b>0.679</b>, 1120 px, about 19 hours on one H100. Different validation sets, so not a ranking.</p><div class="ev2">' + img('story/s11-yolo-training.jpg', 'A YOLO training run') + '</div>'; }];
+    function () { return '<p>YOLO26x: mAP@50:95 <b>0.698</b>, 1280 px, about 8 days on one RTX 4070 Ti. RF-DETR Large: <b>0.679</b>, 1120 px, about 19 hours on one H100. Different validation sets, so not a ranking.</p><div class="ev2">' + img('story/s11-yolo-training.jpg', 'A YOLO training run') + '</div>'; }];
   function pipeline(el) {
     var w = H('div', 'vz-flow', null, el), pn = H('div', 'vz-panel', null, el), open = -1, nodes = [];
     BASE = document.querySelector('script[src*="charts.js"]').getAttribute('data-json').replace(/data\/charts\.json.*/, '');
     STEPS.forEach(function (s, i) {
-      var n = node(w, s[2], s[0], s[1], i); n.setAttribute('role', 'button'); n.tabIndex = 0; n.setAttribute('aria-expanded', 'false'); H('em', 'vz-more', 'See the evidence', n); nodes.push(n);
+      var n = node(w, s[2], s[0], s[1], i); n.setAttribute('role', 'button'); n.tabIndex = 0; n.setAttribute('aria-expanded', 'false'); H('em', 'vz-more', '<span class="t">See the evidence</span><i class="chev" aria-hidden="true"></i>', n); nodes.push(n);
       function tog() {
         var tk = pn.querySelector('.ev-track'); if (tk && tk.__stop) tk.__stop();
         if (open === i) { open = -1; pn.classList.remove('open'); pn.innerHTML = ''; } else {
           open = i; pn.innerHTML = '<h4>' + esc(s[0]) + '</h4>' + PANEL[i](); pn.classList.add('open'); pn.style.setProperty('--c', s[2]);
           var t2 = pn.querySelector('.ev-track'); if (t2) { track(t2); t2.__start(); }
         }
-        nodes.forEach(function (x, j) { x.classList.toggle('on', j === open); x.setAttribute('aria-expanded', j === open); });
+        nodes.forEach(function (x, j) { x.classList.toggle('on', j === open); x.setAttribute('aria-expanded', j === open); x.querySelector('.vz-more .t').textContent = j === open ? 'Hide the evidence' : 'See the evidence'; });
       }
       n.onclick = tog; n.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tog(); } };
       if (i < STEPS.length - 1) { var a = H('i', 'vz-arrow', null, w); a.style.setProperty('--i', i * .18 + .12 + 's'); }
     });
   }
-  function roles(el) {
-    var w = H('div', 'vz-splits', null, el);
-    var c1 = H('div', 'col', null, w); node(c1, 'var(--accent)', 'CVAT on my PC', 'self-hosted in Docker,<br>31 tasks', 0);
-    H('i', 'vz-arrow', null, w);
-    var c2 = H('div', 'col', null, w); node(c2, 'var(--warm)', 'ngrok tunnel', 'the same server reachable<br>locally and from off-site', 1);
-    H('i', 'vz-arrow', null, w);
-    var c3 = H('div', 'col', null, w); node(c3, 'var(--good)', 'Labeller', 'draws and corrects the boxes', 2); node(c3, 'var(--pink)', 'Reviewer', 'follows behind, catches and<br>fixes mistakes', 3);
-  }
-  function splits(el) {
-    var w = H('div', 'vz-splits', null, el);
-    var c1 = H('div', 'col', null, w); node(c1, 'var(--accent)', 'Reviewed frames', '23,551 frames<br>301 video segments', 0); node(c1, 'var(--pink)', 'Mast-focused set', 'about 11k images,<br>annotated separately', 1);
-    H('i', 'vz-arrow', null, w);
-    var c2 = H('div', 'col', null, w); node(c2, 'var(--good)', 'train', '20,059 frames', 2); node(c2, 'var(--warm)', 'val', '3,492 frames', 3);
-    H('i', 'vz-arrow', null, w);
-    var c3 = H('div', 'col', null, w); node(c3, 'var(--accent)', 'YOLO26x', 'train + mast-focused train<br>val: 5,114 images', 4); node(c3, 'var(--pink)', 'RF-DETR (COCO)', 'train 29,380 · valid 3,941 · test 1,252<br>YOLO val split in two, by image', 5);
+  /* How the data was split: an alluvial diagram. Every bar is drawn to one scale (one pixel = the same number of images in every row),
+     and the ribbons between rows show where each group of images went. Counts come from the dataset build summaries. */
+  function alluvial(el) {
+    var X0 = 170, X1 = 985, BH = 54, K = (X1 - X0) / 34573, YA = 58, YB = 236, YC = 414, VH = 490;
+    var rows = [
+      { y: YA, title: 'All images', sub: '34,573 in total', segs: [
+        { id: 'a1', n: 20059, c: 'var(--accent)', o: 1, t: '<b>Reviewed frames, train</b><br>20,059 images', lab: 'Reviewed frames, train', pos: 'in' },
+        { id: 'a2', n: 9321, c: 'var(--pink)', o: 1, t: '<b>Mast-focused set, train</b><br>9,321 images', lab: 'Mast-focused, train', pos: 'in' },
+        { id: 'a3', n: 3492, c: 'var(--accent)', o: .72, t: '<b>Reviewed frames, held out</b><br>3,492 images', lab: 'Reviewed, held out', pos: 'up1' },
+        { id: 'a4', n: 1701, c: 'var(--pink)', o: .72, t: '<b>Mast-focused set, held out</b><br>1,701 images', lab: 'Mast-focused, held out', pos: 'up2' }] },
+      { y: YB, title: 'YOLO26x', sub: 'trained first', segs: [
+        { id: 'b1', n: 29380, c: 'var(--good)', o: 1, t: '<b>YOLO26x train</b><br>reviewed + mast-focused train', lab: 'Train', pos: 'in' },
+        { id: 'b2', n: 5114, c: 'var(--warm)', o: 1, t: '<b>YOLO26x validation</b><br>5,114 images counted by the run', lab: 'Validation', pos: 'in' }] },
+      { y: YC, title: 'RF-DETR Large', sub: 'trained second', segs: [
+        { id: 'c1', n: 29380, c: 'var(--good)', o: 1, t: '<b>RF-DETR train</b><br>29,380 images, the same set', lab: 'Train', pos: 'in' },
+        { id: 'c2', n: 3941, c: 'var(--warm)', o: 1, t: '<b>RF-DETR validation</b><br>3,941 images: 2,795 reviewed + 1,146 mast-focused', lab: 'Validation', pos: 'in' },
+        { id: 'c3', n: 1252, c: 'var(--cyan)', o: 1, t: '<b>RF-DETR test</b><br>1,252 images: 697 reviewed + 555 mast-focused', lab: 'Test', pos: 'dn' }] }];
+    var geo = {}, off;
+    rows.forEach(function (r) { off = 0; r.segs.forEach(function (s) { s.r = r; s.x = X0 + off * K; s.w = s.n * K; s.off = off; geo[s.id] = s; off += s.n; }); });
+    var svg = S('svg', { viewBox: '0 0 1000 ' + VH, 'class': 'vz-alluv', role: 'img', 'aria-label': 'Diagram of how 34,573 images were split into train and held-out sets for YOLO26x and RF-DETR' }, el);
+    var defs = S('defs', {}, svg), gid = 0;
+    function rib(a, a0, a1, b, b0, b1, tip, c0, c1) {
+      var id = 'ag' + (gid++), g = S('linearGradient', { id: id, x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
+      S('stop', { offset: 0, style: 'stop-color:' + c1 + ';stop-opacity:.22' }, g); S('stop', { offset: 1, style: 'stop-color:' + c1 + ';stop-opacity:.42' }, g);
+      var xa0 = X0 + a0 * K, xa1 = X0 + a1 * K, xb0 = X0 + b0 * K, xb1 = X0 + b1 * K, ya = a.r.y + BH, yb = b.r.y, m = (ya + yb) / 2;
+      var p = S('path', { d: 'M' + xa0 + ' ' + ya + ' L' + xa1 + ' ' + ya + ' C' + xa1 + ' ' + m + ' ' + xb1 + ' ' + m + ' ' + xb1 + ' ' + yb + ' L' + xb0 + ' ' + yb + ' C' + xb0 + ' ' + m + ' ' + xa0 + ' ' + m + ' ' + xa0 + ' ' + ya + ' Z', fill: 'url(#' + id + ')', 'class': 'rib' }, svg);
+      p.style.setProperty('--i', (.5 + gid * .08) + 's'); bindTip(p, tip);
+    }
+    rib(geo.a1, 0, 20059, geo.b1, 0, 20059, '<b>Reviewed train</b><br>20,059 images into YOLO26x training', 'var(--accent)', 'var(--good)');
+    rib(geo.a2, 20059, 29380, geo.b1, 20059, 29380, '<b>Mast-focused train</b><br>9,321 images added at training time', 'var(--pink)', 'var(--good)');
+    var hv = 5114 / 5193;
+    rib(geo.a3, 29380, 32872, geo.b2, 29380, 29380 + 3492 * hv, '<b>Held out</b><br>3,492 reviewed images, validation', 'var(--accent)', 'var(--warm)');
+    rib(geo.a4, 32872, 34573, geo.b2, 29380 + 3492 * hv, 34494, '<b>Held out</b><br>1,701 mast-focused images, validation', 'var(--pink)', 'var(--warm)');
+    rib(geo.b1, 0, 29380, geo.c1, 0, 29380, '<b>The same 29,380 training images</b><br>RF-DETR trained on the YOLO training set', 'var(--good)', 'var(--good)');
+    var sv = 3941 / 5193 * 5114;
+    rib(geo.b2, 29380, 29380 + sv, geo.c2, 29380, 33321, '<b>Validation</b><br>held-out images cut in two, by image', 'var(--warm)', 'var(--warm)');
+    rib(geo.b2, 29380 + sv, 34494, geo.c3, 33321, 34573, '<b>Test</b><br>the other part of the held-out images', 'var(--warm)', 'var(--cyan)');
+    rows.forEach(function (r, ri) {
+      var g = S('g', { 'class': 'row' }, svg);
+      var t = S('text', { x: 0, y: r.y + 24, 'class': 'rt' }, g); t.textContent = r.title; var u = S('text', { x: 0, y: r.y + 42, 'class': 'rs' }, g); u.textContent = r.sub;
+      r.segs.forEach(function (s, si) {
+        var bar = S('rect', { x: s.x, y: r.y, width: s.w, height: BH, rx: 7, 'class': 'seg', fill: s.c, 'fill-opacity': s.o }, g); bar.style.setProperty('--i', (ri * .25 + si * .08) + 's'); bindTip(bar, s.t);
+        var cx = s.x + s.w / 2, lab = S('text', { 'class': 'sl' }, g), num = null;
+        if (s.pos === 'in') { lab.setAttribute('x', cx); lab.setAttribute('y', r.y + 23); lab.setAttribute('text-anchor', 'middle'); num = S('text', { x: cx, y: r.y + 42, 'text-anchor': 'middle', 'class': 'sn' }, g); }
+        else if (s.pos === 'dn') { lab.setAttribute('x', s.x + s.w); lab.setAttribute('y', r.y + BH + 20); lab.setAttribute('text-anchor', 'end'); }
+        else { var ly = s.pos === 'up1' ? r.y - 18 : r.y - 40; lab.setAttribute('x', s.x + s.w); lab.setAttribute('y', ly); lab.setAttribute('text-anchor', 'end'); S('line', { x1: s.x + s.w / 2, x2: s.x + s.w / 2, y1: ly + 6, y2: r.y - 2, 'class': 'ld' }, g); }
+        lab.textContent = s.lab + (s.pos === 'in' ? '' : '  ' + fmt(s.n)); if (num) num.textContent = fmt(s.n);
+      });
+    });
+    var n1 = S('text', { x: X0 + 8, y: (YA + BH + YB) / 2 + 4, 'class': 'an' }, svg); n1.textContent = 'reviewed frames split by video segment';
+    var n2 = S('text', { x: X1, y: (YB + BH + YC) / 2 + 4, 'class': 'an', 'text-anchor': 'end' }, svg); n2.textContent = 'held-out images cut in two, by image';
   }
   function gantt(el) {
     var months = ['Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'], rows = [['Proof of concept (public dataset)', 0, 1.2, 'var(--accent)'], ['Depth exploration', .8, 4.5, 'var(--s2)'], ['Real-time system on trains', 2.2, 5.2, 'var(--cyan)'], ['Wire height from depth', 6.0, 7.3, 'var(--warm)'], ['Rotated-box detour (dropped)', 6.3, 7.6, 'var(--pink)'], ['CVAT labelling campaign', 6.9, 8.2, 'var(--good)'], ['YOLO26x training', 7.4, 8.1, 'var(--accent)'], ['RF-DETR training', 8.0, 8.35, 'var(--pink)']];
@@ -179,7 +215,7 @@
     rows.forEach(function (r, i) { var row = H('div', 'grow', null, w); H('label', null, esc(r[0]), row); var tr = H('div', 'tr', null, row), b = H('div', 'gb', null, tr); b.style.left = (r[1] / 9 * 100) + '%'; b.style.width = ((r[2] - r[1]) / 9 * 100) + '%'; b.style.background = r[3]; b.style.setProperty('--i', i * .09 + 's'); bindTip(b, '<b>' + esc(r[0]) + '</b>'); });
   }
 
-  var B = { vbar: function (e) { bars(e, false); }, hbar: function (e) { bars(e, true); }, line: line, donut: donut, heat: function (e) { heat(e, 'positions'); }, sizes: function (e) { heat(e, 'sizes'); }, pipeline: pipeline, roles: roles, splits: splits, gantt: gantt };
+  var B = { vbar: function (e) { bars(e, false); }, hbar: function (e) { bars(e, true); }, line: line, donut: donut, heat: function (e) { heat(e, 'positions'); }, sizes: function (e) { heat(e, 'sizes'); }, pipeline: pipeline, alluvial: alluvial, gantt: gantt };
   function build(el) { var f = B[el.getAttribute('data-chart')]; if (!f || el.__built) return; el.__built = true; try { f(el); } catch (e) { el.textContent = 'This chart could not load.'; console.error(e); } }
   function start() {
     var els = [].slice.call(document.querySelectorAll('.vz[data-chart]')); els.forEach(build);

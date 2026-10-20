@@ -176,7 +176,7 @@
     P.timer = setInterval(function () { i++; if (i > 7) { posStop(); return; } P.s = i; posRefresh(true); }, i === 0 ? 700 : 620);
   }
   function posStop() { clearInterval(P.timer); P.timer = null; }
-  function posResize() { if (!P.pane) return; posSize(); posRefresh(false); }
+  function posResize() { if (!P.pane || !P.stage.clientWidth) return; posSize(); posRefresh(false); }
   function posEnter() { if (!P.pane || TAB !== 0) return; setTimeout(function () { posResize(); refit(); if (reduce) { P.s = 7; posRefresh(false); } else posPlay(); }, reduce ? 0 : 480); }
 
   /* ---------------- Tab 2: how big, and why contact points are hard ---------------- */
@@ -207,7 +207,7 @@
     hm.addEventListener('pointerleave', function () { Z.ghost = null; $('.tip', hm).classList.remove('on'); ghost(false); });
   }
   function sizeEnter() { if (!Z.pane || TAB !== 1) return; setTimeout(function () { sizeRefresh(); refit(); }, reduce ? 0 : 420); }
-  function sizeResize() { if (Z.pane) sizeRefresh(); }
+  function sizeResize() { if (Z.pane && Z.pane.clientWidth) sizeRefresh(); }
   function sizeRefresh() {
     var d = D.classes[Z.cls], size = Math.min(Z.pane.querySelector('.szheat').clientWidth, 460), dpr = Math.min(2, devicePixelRatio || 1);
     Z.cv.style.width = size + 'px'; Z.cv.style.height = size + 'px'; Z.cv.width = size * dpr; Z.cv.height = size * dpr;

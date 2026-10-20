@@ -98,7 +98,7 @@
     });
   });
   var hk = document.getElementById('hw-hook');
-  document.querySelectorAll('.hook video').forEach(function (v) {
+  document.querySelectorAll('.hook video, video[data-auto]').forEach(function (v) {
     v.muted = true; var go = function () { var p = v.play(); if (p && p.catch) p.catch(function () {}); };
     go(); v.addEventListener('loadeddata', go); document.addEventListener('pointerdown', go, { once: true });
     if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) go(); else v.pause(); }); }).observe(v);
