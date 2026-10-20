@@ -2,402 +2,402 @@
  "count": 100,
  "items": [
   {
-   "file": "c12_headline.png",
-   "group": "Models",
-   "title": "Headline scores",
-   "caption": "YOLO26x scores 0.870 / 0.698 and RF-DETR Large 0.876 / 0.679 (mAP@50 / mAP@50:95); the two used different validation sets, so this is not a head-to-head ranking.",
-   "n": 1
-  },
-  {
-   "file": "c01_frames_per_site.png",
-   "group": "The data",
-   "title": "Frames per route",
-   "caption": "23,551 frames from five routes plus a ZED stereo-camera set, split by train and validation.",
-   "n": 2
-  },
-  {
-   "file": "c02_boxes_per_class.png",
-   "group": "The data",
-   "title": "Boxes per class",
-   "caption": "Labelled boxes per class across train (solid) and validation (faded): 38,386 masts, 38,189 contact points, 31,272 pantographs and 25,398 arms.",
-   "n": 3
-  },
-  {
-   "file": "c17_camera_mix.png",
-   "group": "The data",
-   "title": "Webcam and ZED",
-   "caption": "Most frames come from a standard webcam; 1,310 come from a ZED stereo camera that was being considered as its replacement.",
-   "n": 4
-  },
-  {
-   "file": "c03_objects_per_frame.png",
-   "group": "The data",
-   "title": "Boxes per frame",
-   "caption": "Most frames hold two to six boxes; 2,297 frames carry no annotation at all, and every one of 30 sampled shows a pantograph, so they are unlabelled frames rather than true negatives.",
-   "n": 5
-  },
-  {
-   "file": "c04_box_sizes.png",
-   "group": "The data",
-   "title": "Box sizes by class",
-   "caption": "Contact-point boxes are tiny (about 2% of the frame width) while pantographs are large; a few pixels of offset costs a contact point most of its overlap score.",
-   "n": 6
-  },
-  {
-   "file": "c05_position_maps.png",
-   "group": "The data",
-   "title": "Where boxes sit in the frame",
-   "caption": "Pantographs sit low and central, contact points hug the top edge of the pantograph, masts line the edges and arms cluster below it: a strong spatial prior for the detector.",
-   "n": 7
-  },
-  {
-   "file": "c16_route.png",
-   "group": "The data",
-   "title": "The logged route",
-   "caption": "The logged GPS run between Gonda and Bahraich: 1,188 fixes covering about 71 km.",
-   "n": 8
-  },
-  {
-   "file": "c13_pipeline.png",
-   "group": "Method",
-   "title": "The labelling pipeline",
-   "caption": "Film, pre-annotate with a small detector, track between keyframes, review every frame in CVAT, then export and train.",
-   "n": 9
-  },
-  {
-   "file": "c14_splits.png",
-   "group": "Method",
-   "title": "How the data was split",
-   "caption": "Splits keep whole video segments together (no segment appears in both train and validation); the mast-focused set was added at training time and RF-DETR's valid and test were cut from the YOLO validation set by image.",
-   "n": 10
-  },
-  {
-   "file": "c15_timeline.png",
-   "group": "Method",
-   "title": "Project timeline",
-   "caption": "Proof of concept in Nov 2025, depth exploration through the winter, the labelling campaign in May-June 2026, then YOLO26x (10-23 Jun) and RF-DETR (29-30 Jun) training.",
-   "n": 11
-  },
-  {
-   "file": "c07_shape_sources.png",
-   "group": "Method",
-   "title": "Where the shapes came from",
-   "caption": "CVAT records how each of 119,972 shapes entered the tool: mostly imported labels that were reviewed, plus tracked, model-assisted, semi-automatic and hand-drawn shapes.",
-   "n": 12
-  },
-  {
-   "file": "c08_yolo_curve.png",
-   "group": "Models",
-   "title": "YOLO26x training curve",
-   "caption": "Validation mAP over all 200 epochs; the best mAP@50:95 (0.6976) came at epoch 178, and the final epochs sit at about 0.694.",
-   "n": 13
-  },
-  {
-   "file": "c09_rfdetr_curve.png",
-   "group": "Models",
-   "title": "RF-DETR training curve",
-   "caption": "Validation mAP over 35 epochs; the best mAP@50:95 (0.6786) came at epoch 34 of 35, with improvement slowing towards the end.",
-   "n": 14
-  },
-  {
-   "file": "c10_losses.png",
-   "group": "Models",
-   "title": "Training and validation losses",
-   "caption": "Both detectors converge smoothly; the validation loss flattens well before the end, which is why more epochs bought very little.",
-   "n": 15
-  },
-  {
-   "file": "c11_per_class_ap.png",
-   "group": "Models",
-   "title": "Per-class AP",
-   "caption": "Pantograph is strong for both models (0.90-0.92) while contact_point sits near 0.39 for both: a data and box-size limit more than a model one.",
-   "n": 16
-  },
-  {
-   "file": "c06_label_gap.png",
-   "group": "Label quality",
-   "title": "Where the label gaps are",
-   "caption": "1,266 frames show a contact point without a pantograph box: about 14% of Mumbai, 8% of Mehsana and Palanpur, and 3% of Ahmedabad and Lucknow. The list is kept for review.",
-   "n": 17
-  },
-  {
    "file": "f01_ahmedabad.jpg",
    "group": "Labelled frames",
    "title": "Ahmedabad",
    "caption": "A labelled frame from Ahmedabad: 4 mast, 2 pantograph, 4 arm, 2 contact_point.",
-   "n": 18
+   "n": 1
   },
   {
    "file": "f02_ahmedabad.jpg",
    "group": "Labelled frames",
    "title": "Ahmedabad",
    "caption": "A labelled frame from Ahmedabad: 4 mast, 2 pantograph, 2 contact_point.",
-   "n": 19
+   "n": 2
   },
   {
    "file": "f03_ahmedabad.jpg",
    "group": "Labelled frames",
    "title": "Ahmedabad",
    "caption": "A labelled frame from Ahmedabad: 1 mast, 3 arm, 1 pantograph, 1 contact_point.",
-   "n": 20
+   "n": 3
   },
   {
    "file": "f04_ahmedabad.jpg",
    "group": "Labelled frames",
    "title": "Ahmedabad",
    "caption": "A labelled frame from Ahmedabad: 2 mast, 1 arm, 1 pantograph.",
-   "n": 21
+   "n": 4
   },
   {
    "file": "f05_ahmedabad.jpg",
    "group": "Labelled frames",
    "title": "Ahmedabad",
    "caption": "A labelled frame from Ahmedabad: 1 mast, 1 arm, 1 pantograph, 2 contact_point.",
-   "n": 22
+   "n": 5
   },
   {
    "file": "f06_ahmedabad.jpg",
    "group": "Labelled frames",
    "title": "Ahmedabad",
    "caption": "A labelled frame from Ahmedabad: 1 mast, 3 arm, 1 pantograph.",
-   "n": 23
+   "n": 6
   },
   {
    "file": "f07_ahmedabad.jpg",
    "group": "Labelled frames",
    "title": "Ahmedabad",
    "caption": "A labelled frame from Ahmedabad: 2 arm, 1 pantograph, 2 contact_point.",
-   "n": 24
+   "n": 7
   },
   {
-   "file": "f08_lucknow.jpg",
+   "file": "f08_ahmedabad.jpg",
+   "group": "Labelled frames",
+   "title": "Ahmedabad",
+   "caption": "A labelled frame from Ahmedabad: 1 mast, 1 arm, 1 pantograph, 2 contact_point.",
+   "n": 8
+  },
+  {
+   "file": "f09_ahmedabad.jpg",
+   "group": "Labelled frames",
+   "title": "Ahmedabad",
+   "caption": "A labelled frame from Ahmedabad: 2 arm, 1 mast, 1 pantograph, 2 contact_point.",
+   "n": 9
+  },
+  {
+   "file": "f10_ahmedabad.jpg",
+   "group": "Labelled frames",
+   "title": "Ahmedabad",
+   "caption": "A labelled frame from Ahmedabad: 1 arm, 1 pantograph, 2 contact_point.",
+   "n": 10
+  },
+  {
+   "file": "f11_ahmedabad.jpg",
+   "group": "Labelled frames",
+   "title": "Ahmedabad",
+   "caption": "A labelled frame from Ahmedabad: 1 mast, 2 arm, 1 pantograph, 3 contact_point.",
+   "n": 11
+  },
+  {
+   "file": "f12_lucknow.jpg",
    "group": "Labelled frames",
    "title": "Lucknow",
    "caption": "A labelled frame from Lucknow: 1 pantograph, 2 arm, 1 contact_point, 4 mast.",
-   "n": 25
+   "n": 12
   },
   {
-   "file": "f09_lucknow.jpg",
+   "file": "f13_lucknow.jpg",
    "group": "Labelled frames",
    "title": "Lucknow",
    "caption": "A labelled frame from Lucknow: 1 arm, 2 mast, 1 pantograph, 2 contact_point.",
-   "n": 26
-  },
-  {
-   "file": "f10_mehsana.jpg",
-   "group": "Labelled frames",
-   "title": "Mehsana",
-   "caption": "A labelled frame from Mehsana: 1 arm, 1 pantograph, 2 contact_point.",
-   "n": 27
-  },
-  {
-   "file": "f11_mehsana.jpg",
-   "group": "Labelled frames",
-   "title": "Mehsana",
-   "caption": "A labelled frame from Mehsana: 1 arm, 1 pantograph, 2 contact_point.",
-   "n": 28
-  },
-  {
-   "file": "f12_mehsana.jpg",
-   "group": "Labelled frames",
-   "title": "Mehsana",
-   "caption": "A labelled frame from Mehsana: 1 arm, 1 pantograph, 2 contact_point.",
-   "n": 29
-  },
-  {
-   "file": "f13_mehsana.jpg",
-   "group": "Labelled frames",
-   "title": "Mehsana",
-   "caption": "A labelled frame from Mehsana: 2 arm, 1 pantograph, 2 contact_point.",
-   "n": 30
+   "n": 13
   },
   {
    "file": "f14_mehsana.jpg",
    "group": "Labelled frames",
    "title": "Mehsana",
-   "caption": "A labelled frame from Mehsana: 2 arm, 1 pantograph, 2 contact_point.",
-   "n": 31
+   "caption": "A labelled frame from Mehsana: 1 arm, 1 pantograph, 2 contact_point.",
+   "n": 14
   },
   {
    "file": "f15_mehsana.jpg",
    "group": "Labelled frames",
    "title": "Mehsana",
    "caption": "A labelled frame from Mehsana: 1 arm, 1 pantograph, 2 contact_point.",
-   "n": 32
+   "n": 15
   },
   {
    "file": "f16_mehsana.jpg",
    "group": "Labelled frames",
    "title": "Mehsana",
    "caption": "A labelled frame from Mehsana: 1 arm, 1 pantograph, 2 contact_point.",
-   "n": 33
+   "n": 16
   },
   {
-   "file": "f17_mumbai.jpg",
+   "file": "f17_mehsana.jpg",
+   "group": "Labelled frames",
+   "title": "Mehsana",
+   "caption": "A labelled frame from Mehsana: 2 arm, 1 pantograph, 2 contact_point.",
+   "n": 17
+  },
+  {
+   "file": "f18_mehsana.jpg",
+   "group": "Labelled frames",
+   "title": "Mehsana",
+   "caption": "A labelled frame from Mehsana: 2 arm, 1 pantograph, 2 contact_point.",
+   "n": 18
+  },
+  {
+   "file": "f19_mehsana.jpg",
+   "group": "Labelled frames",
+   "title": "Mehsana",
+   "caption": "A labelled frame from Mehsana: 1 arm, 1 pantograph, 2 contact_point.",
+   "n": 19
+  },
+  {
+   "file": "f20_mehsana.jpg",
+   "group": "Labelled frames",
+   "title": "Mehsana",
+   "caption": "A labelled frame from Mehsana: 1 arm, 1 pantograph, 2 contact_point.",
+   "n": 20
+  },
+  {
+   "file": "f21_mehsana.jpg",
+   "group": "Labelled frames",
+   "title": "Mehsana",
+   "caption": "A labelled frame from Mehsana: 2 arm, 1 pantograph, 3 contact_point.",
+   "n": 21
+  },
+  {
+   "file": "f22_mehsana.jpg",
+   "group": "Labelled frames",
+   "title": "Mehsana",
+   "caption": "A labelled frame from Mehsana: 2 arm, 1 pantograph, 2 contact_point.",
+   "n": 22
+  },
+  {
+   "file": "f23_mehsana.jpg",
+   "group": "Labelled frames",
+   "title": "Mehsana",
+   "caption": "A labelled frame from Mehsana: 1 arm, 1 pantograph, 3 contact_point.",
+   "n": 23
+  },
+  {
+   "file": "f24_mehsana.jpg",
+   "group": "Labelled frames",
+   "title": "Mehsana",
+   "caption": "A labelled frame from Mehsana: 1 arm, 1 pantograph, 2 contact_point.",
+   "n": 24
+  },
+  {
+   "file": "f25_mumbai.jpg",
    "group": "Labelled frames",
    "title": "Mumbai",
    "caption": "A labelled frame from Mumbai: 8 mast, 2 pantograph, 2 arm, 2 contact_point.",
-   "n": 34
+   "n": 25
   },
   {
-   "file": "f18_mumbai.jpg",
+   "file": "f26_mumbai.jpg",
    "group": "Labelled frames",
    "title": "Mumbai",
    "caption": "A labelled frame from Mumbai: 2 mast, 2 pantograph, 4 arm, 3 contact_point.",
-   "n": 35
+   "n": 26
   },
   {
-   "file": "f19_mumbai.jpg",
+   "file": "f27_mumbai.jpg",
    "group": "Labelled frames",
    "title": "Mumbai",
    "caption": "A labelled frame from Mumbai: 2 arm, 1 pantograph, 1 mast.",
-   "n": 36
+   "n": 27
   },
   {
-   "file": "f20_mumbai.jpg",
+   "file": "f28_mumbai.jpg",
    "group": "Labelled frames",
    "title": "Mumbai",
    "caption": "A labelled frame from Mumbai: 1 mast, 1 pantograph, 2 contact_point.",
-   "n": 37
+   "n": 28
   },
   {
-   "file": "f21_mumbai.jpg",
+   "file": "f29_mumbai.jpg",
    "group": "Labelled frames",
    "title": "Mumbai",
    "caption": "A labelled frame from Mumbai: 1 pantograph, 2 mast, 1 contact_point.",
-   "n": 38
+   "n": 29
   },
   {
-   "file": "f22_mumbai.jpg",
+   "file": "f30_mumbai.jpg",
    "group": "Labelled frames",
    "title": "Mumbai",
    "caption": "A labelled frame from Mumbai: 1 pantograph, 2 mast, 1 contact_point.",
-   "n": 39
+   "n": 30
   },
   {
-   "file": "f23_mumbai.jpg",
+   "file": "f31_mumbai.jpg",
    "group": "Labelled frames",
    "title": "Mumbai",
    "caption": "A labelled frame from Mumbai: 2 arm, 1 pantograph, 2 contact_point.",
+   "n": 31
+  },
+  {
+   "file": "f32_mumbai.jpg",
+   "group": "Labelled frames",
+   "title": "Mumbai",
+   "caption": "A labelled frame from Mumbai: 1 mast, 1 pantograph, 2 contact_point.",
+   "n": 32
+  },
+  {
+   "file": "f33_mumbai.jpg",
+   "group": "Labelled frames",
+   "title": "Mumbai",
+   "caption": "A labelled frame from Mumbai: 1 arm, 1 mast, 1 pantograph, 2 contact_point.",
+   "n": 33
+  },
+  {
+   "file": "f34_mumbai.jpg",
+   "group": "Labelled frames",
+   "title": "Mumbai",
+   "caption": "A labelled frame from Mumbai: 2 arm, 1 mast, 1 pantograph, 1 contact_point.",
+   "n": 34
+  },
+  {
+   "file": "f35_mumbai.jpg",
+   "group": "Labelled frames",
+   "title": "Mumbai",
+   "caption": "A labelled frame from Mumbai: 2 arm, 1 pantograph, 1 mast, 1 contact_point.",
+   "n": 35
+  },
+  {
+   "file": "f36_palanpur.jpg",
+   "group": "Labelled frames",
+   "title": "Palanpur",
+   "caption": "A labelled frame from Palanpur: 1 arm, 2 contact_point, 1 pantograph.",
+   "n": 36
+  },
+  {
+   "file": "f37_palanpur.jpg",
+   "group": "Labelled frames",
+   "title": "Palanpur",
+   "caption": "A labelled frame from Palanpur: 1 arm, 1 pantograph, 2 contact_point.",
+   "n": 37
+  },
+  {
+   "file": "f38_palanpur.jpg",
+   "group": "Labelled frames",
+   "title": "Palanpur",
+   "caption": "A labelled frame from Palanpur: 2 arm, 1 pantograph, 1 contact_point.",
+   "n": 38
+  },
+  {
+   "file": "f39_palanpur.jpg",
+   "group": "Labelled frames",
+   "title": "Palanpur",
+   "caption": "A labelled frame from Palanpur: 2 arm, 1 pantograph, 1 contact_point.",
+   "n": 39
+  },
+  {
+   "file": "f40_palanpur.jpg",
+   "group": "Labelled frames",
+   "title": "Palanpur",
+   "caption": "A labelled frame from Palanpur: 1 arm, 2 contact_point, 1 pantograph.",
    "n": 40
   },
   {
-   "file": "f24_palanpur.jpg",
+   "file": "f41_palanpur.jpg",
    "group": "Labelled frames",
    "title": "Palanpur",
-   "caption": "A labelled frame from Palanpur: 1 arm, 2 contact_point, 1 pantograph.",
+   "caption": "A labelled frame from Palanpur: 1 arm, 1 pantograph, 2 contact_point.",
    "n": 41
   },
   {
-   "file": "f25_palanpur.jpg",
+   "file": "f42_palanpur.jpg",
    "group": "Labelled frames",
    "title": "Palanpur",
-   "caption": "A labelled frame from Palanpur: 1 arm, 1 pantograph, 2 contact_point.",
+   "caption": "A labelled frame from Palanpur: 1 arm, 2 contact_point, 1 pantograph.",
    "n": 42
   },
   {
-   "file": "f26_palanpur.jpg",
-   "group": "Labelled frames",
-   "title": "Palanpur",
-   "caption": "A labelled frame from Palanpur: 2 arm, 1 pantograph, 1 contact_point.",
-   "n": 43
-  },
-  {
-   "file": "f27_palanpur.jpg",
-   "group": "Labelled frames",
-   "title": "Palanpur",
-   "caption": "A labelled frame from Palanpur: 2 arm, 1 pantograph, 1 contact_point.",
-   "n": 44
-  },
-  {
-   "file": "f28_palanpur.jpg",
-   "group": "Labelled frames",
-   "title": "Palanpur",
-   "caption": "A labelled frame from Palanpur: 1 arm, 2 contact_point, 1 pantograph.",
-   "n": 45
-  },
-  {
-   "file": "f29_palanpur.jpg",
+   "file": "f43_palanpur.jpg",
    "group": "Labelled frames",
    "title": "Palanpur",
    "caption": "A labelled frame from Palanpur: 1 arm, 1 pantograph, 2 contact_point.",
-   "n": 46
+   "n": 43
   },
   {
-   "file": "f30_palanpur.jpg",
+   "file": "f44_palanpur.jpg",
+   "group": "Labelled frames",
+   "title": "Palanpur",
+   "caption": "A labelled frame from Palanpur: 1 arm, 1 pantograph, 2 contact_point.",
+   "n": 44
+  },
+  {
+   "file": "f45_palanpur.jpg",
+   "group": "Labelled frames",
+   "title": "Palanpur",
+   "caption": "A labelled frame from Palanpur: 1 arm, 1 pantograph, 2 contact_point.",
+   "n": 45
+  },
+  {
+   "file": "f46_palanpur.jpg",
    "group": "Labelled frames",
    "title": "Palanpur",
    "caption": "A labelled frame from Palanpur: 1 arm, 2 contact_point, 1 pantograph.",
-   "n": 47
+   "n": 46
   },
   {
-   "file": "f31_zed.jpg",
+   "file": "f47_zed.jpg",
    "group": "Labelled frames",
    "title": "ZED camera, Lucknow",
    "caption": "A labelled frame from ZED camera, Lucknow: 1 mast, 1 arm, 1 pantograph, 1 contact_point.",
-   "n": 48
+   "n": 47
   },
   {
-   "file": "f32_zed.jpg",
+   "file": "f48_zed.jpg",
    "group": "Labelled frames",
    "title": "ZED camera, Lucknow",
    "caption": "A labelled frame from ZED camera, Lucknow: 1 mast, 3 contact_point, 1 pantograph.",
-   "n": 49
+   "n": 48
   },
   {
-   "file": "f33_zed.jpg",
+   "file": "f49_zed.jpg",
    "group": "Labelled frames",
    "title": "ZED camera, Lucknow",
    "caption": "A labelled frame from ZED camera, Lucknow: 1 pantograph, 3 contact_point, 1 arm.",
-   "n": 50
+   "n": 49
   },
   {
-   "file": "f34_zed.jpg",
+   "file": "f50_zed.jpg",
    "group": "Labelled frames",
    "title": "ZED camera, Lucknow",
    "caption": "A labelled frame from ZED camera, Lucknow: 2 contact_point, 1 pantograph, 1 arm.",
-   "n": 51
+   "n": 50
   },
   {
-   "file": "f35_zed.jpg",
+   "file": "f51_zed.jpg",
    "group": "Labelled frames",
    "title": "ZED camera, Lucknow",
    "caption": "A labelled frame from ZED camera, Lucknow: 1 mast, 1 arm, 2 contact_point, 1 pantograph.",
-   "n": 52
+   "n": 51
   },
   {
-   "file": "f36_zed.jpg",
+   "file": "f52_zed.jpg",
    "group": "Labelled frames",
    "title": "ZED camera, Lucknow",
    "caption": "A labelled frame from ZED camera, Lucknow: 1 pantograph, 2 contact_point, 1 arm.",
-   "n": 53
+   "n": 52
   },
   {
-   "file": "f37_zed.jpg",
+   "file": "f53_zed.jpg",
    "group": "Labelled frames",
    "title": "ZED camera, Lucknow",
    "caption": "A labelled frame from ZED camera, Lucknow: 3 contact_point, 1 arm, 1 pantograph.",
-   "n": 54
+   "n": 53
   },
   {
    "file": "k_pantograph_1.jpg",
    "group": "Class close-ups",
    "title": "Pantograph (1)",
    "caption": "The pantograph: a wide box around the collector head and its horns. Source: Mehsana.",
-   "n": 55
+   "n": 54
   },
   {
    "file": "k_pantograph_2.jpg",
    "group": "Class close-ups",
    "title": "Pantograph (2)",
    "caption": "The pantograph: a wide box around the collector head and its horns. Source: Palanpur.",
-   "n": 56
+   "n": 55
   },
   {
    "file": "k_pantograph_3.jpg",
    "group": "Class close-ups",
    "title": "Pantograph (3)",
    "caption": "The pantograph: a wide box around the collector head and its horns. Source: Ahmedabad.",
+   "n": 56
+  },
+  {
+   "file": "k_pantograph_4.jpg",
+   "group": "Class close-ups",
+   "title": "Pantograph (4)",
+   "caption": "The pantograph: a wide box around the collector head and its horns. Source: Mumbai.",
    "n": 57
   },
   {
@@ -422,80 +422,80 @@
    "n": 60
   },
   {
+   "file": "k_mast_4.jpg",
+   "group": "Class close-ups",
+   "title": "Mast (4)",
+   "caption": "Masts are tall, thin boxes at the edges of the frame. Source: Lucknow.",
+   "n": 61
+  },
+  {
    "file": "k_arm_1.jpg",
    "group": "Class close-ups",
    "title": "Arm (1)",
    "caption": "Arms (the cantilever and registration arms) are long, low boxes below the pantograph. Source: Ahmedabad.",
-   "n": 61
+   "n": 62
   },
   {
    "file": "k_arm_2.jpg",
    "group": "Class close-ups",
    "title": "Arm (2)",
    "caption": "Arms (the cantilever and registration arms) are long, low boxes below the pantograph. Source: Mumbai.",
-   "n": 62
+   "n": 63
   },
   {
    "file": "k_arm_3.jpg",
    "group": "Class close-ups",
    "title": "Arm (3)",
    "caption": "Arms (the cantilever and registration arms) are long, low boxes below the pantograph. Source: Mehsana.",
-   "n": 63
+   "n": 64
+  },
+  {
+   "file": "k_arm_4.jpg",
+   "group": "Class close-ups",
+   "title": "Arm (4)",
+   "caption": "Arms (the cantilever and registration arms) are long, low boxes below the pantograph. Source: Palanpur.",
+   "n": 65
   },
   {
    "file": "k_contact_point_1.jpg",
    "group": "Class close-ups",
    "title": "Contact Point (1)",
    "caption": "The contact point is a tiny box where the wire meets the strip; zoomed in here with its neighbours. Source: Palanpur.",
-   "n": 64
+   "n": 66
   },
   {
    "file": "k_contact_point_2.jpg",
    "group": "Class close-ups",
    "title": "Contact Point (2)",
    "caption": "The contact point is a tiny box where the wire meets the strip; zoomed in here with its neighbours. Source: Mumbai.",
-   "n": 65
+   "n": 67
   },
   {
    "file": "k_contact_point_3.jpg",
    "group": "Class close-ups",
    "title": "Contact Point (3)",
    "caption": "The contact point is a tiny box where the wire meets the strip; zoomed in here with its neighbours. Source: ZED camera.",
-   "n": 66
-  },
-  {
-   "file": "h_unlabelled_1.jpg",
-   "group": "Label quality",
-   "title": "Known issue: no annotation (Palanpur)",
-   "caption": "A frame from Palanpur with no annotation at all although the pantograph is clearly visible, one of 2,297 such frames. Listed for review.",
-   "n": 67
-  },
-  {
-   "file": "h_unlabelled_2.jpg",
-   "group": "Label quality",
-   "title": "Known issue: no annotation (Mumbai)",
-   "caption": "A frame from Mumbai with no annotation at all although the pantograph is clearly visible, one of 2,297 such frames. Listed for review.",
    "n": 68
   },
   {
-   "file": "h_unlabelled_3.jpg",
-   "group": "Label quality",
-   "title": "Known issue: no annotation (Mehsana)",
-   "caption": "A frame from Mehsana with no annotation at all although the pantograph is clearly visible, one of 2,297 such frames. Listed for review.",
+   "file": "k_contact_point_4.jpg",
+   "group": "Class close-ups",
+   "title": "Contact Point (4)",
+   "caption": "The contact point is a tiny box where the wire meets the strip; zoomed in here with its neighbours. Source: Ahmedabad.",
    "n": 69
   },
   {
    "file": "h_crowded_1.jpg",
    "group": "Hard cases",
    "title": "A crowded frame (Mumbai)",
-   "caption": "18 boxes in one frame from Mumbai: masts, arms and the pantograph together.",
+   "caption": "14 boxes in one frame from Mumbai: masts, arms and the pantograph together.",
    "n": 70
   },
   {
    "file": "h_crowded_2.jpg",
    "group": "Hard cases",
    "title": "A crowded frame (Ahmedabad)",
-   "caption": "16 boxes in one frame from Ahmedabad: masts, arms and the pantograph together.",
+   "caption": "10 boxes in one frame from Ahmedabad: masts, arms and the pantograph together.",
    "n": 71
   },
   {

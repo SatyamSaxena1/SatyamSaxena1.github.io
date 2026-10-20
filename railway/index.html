@@ -11,7 +11,7 @@
   <link rel="canonical" href="https://satyamsaxena1.github.io/railway/">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238a6bff'/%3E%3Cstop offset='1' stop-color='%233d7bff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Ctext x='32' y='42' font-size='26' font-family='Arial' font-weight='800' fill='white' text-anchor='middle'%3ESS%3C/text%3E%3C/svg%3E">
   <script>try{var t=localStorage.getItem('theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))</script>
-  <link rel="stylesheet" href="../assets/css/theme.css?v=5">
+  <link rel="stylesheet" href="../assets/css/theme.css?v=6">
 </head>
 <body>
   <canvas id="bg" aria-hidden="true"></canvas>
@@ -59,6 +59,8 @@
 
     <section class="sec wrap">
       <div class="sec-head reveal"><h2>The <span class="grad">timeline</span></h2><p>Reconstructed from file dates, version history and training logs. Click any screenshot to enlarge it.</p></div>
+
+      <div class="card vz-block reveal" style="margin-bottom:34px"><h3>Nov 2025 to Jul 2026 at a glance</h3><p>From a proof of concept to two trained detectors.</p><div class="vz" data-chart="gantt"></div></div>
 
       <div class="tl">
         <div class="tl-fill"></div>
@@ -169,24 +171,25 @@
       </div>
     </section>
 
+    <section class="sec wrap" id="numbers">
+      <div class="sec-head reveal"><h2>By the <span class="grad">numbers</span></h2><p>Live charts drawn from the real label files and training logs. Hover or tap a bar for exact values.</p></div>
+      <div class="vz-grid2">
+        <div class="card vz-block reveal"><h3>Frames per route</h3><p>Train and validation: 23,551 in all.</p><div class="vz" data-chart="vbar" data-id="frames_per_site" data-series="train,validation" data-stacked style="--ph:270px"></div></div>
+        <div class="card vz-block reveal"><h3>133,245 labelled boxes</h3><p>Four classes; every box is a plain rectangle.</p><div class="vz" data-chart="hbar" data-id="boxes_per_class" data-series="train,validation" data-colors="class" data-stacked></div></div>
+        <div class="card vz-block reveal"><h3>Boxes per frame</h3><p>How many labelled boxes a frame holds (15 means 15 or more).</p><div class="vz" data-chart="vbar" data-id="per_frame" data-series="frames" data-compact style="--ph:230px"></div></div>
+        <div class="card vz-block reveal"><h3>Two kinds of camera</h3><p>A standard webcam, plus a ZED stereo camera tested as its replacement.</p><div class="vz" data-chart="donut" data-id="camera_mix" data-label="Share of frames from the webcam and the ZED camera"></div></div>
+      </div>
+      <div class="card vz-block reveal" style="margin-top:16px"><h3>Why contact points are hard</h3><p>Width against height of every box, as a share of the frame. Contact points are tiny: a few pixels of offset costs most of their overlap score.</p><div class="vz" data-chart="sizes"></div></div>
+      <div class="card vz-block reveal" style="margin-top:16px"><h3>Where things appear in the frame</h3><p>Density of box centres. Pantographs cluster on the centre line, contact points sit along it just above, and masts and arms fan out towards the edges.</p><div class="vz" data-chart="heat"></div></div>
+    </section>
+
     <section class="sec wrap">
       <div class="sec-head reveal"><h2>How the labels were <span class="grad">made</span></h2><p>Four steps, repeated task by task.</p></div>
-      <div class="flow">
-        <div class="card reveal"><h3>Film</h3><p>Cabin-camera footage from five routes, cut into short segments, frames extracted from each.</p></div>
-        <div class="card reveal"><h3>Pre-annotate</h3><p>A small pretrained detector proposes boxes, so I start from something instead of nothing.</p></div>
-        <div class="card reveal"><h3>Track</h3><p>Boxes are carried between frames from my manual keyframes.</p></div>
-        <div class="card reveal"><h3>Review</h3><p>Every frame is checked in CVAT: positions corrected, classes fixed, missing objects added.</p></div>
-      </div>
+      <div class="vz" data-chart="pipeline"></div>
       <div class="two" style="margin-top:16px">
         <div class="card reveal">
           <h3>Where the 119,972 shapes came from</h3>
-          <div class="bars">
-            <div class="bar" style="--w:100%"><label>Imported</label><div class="t"><i></i></div><b>107.8k</b></div>
-            <div class="bar" style="--w:12.3%"><label>Tracked</label><div class="t"><i></i></div><b>13.3k</b></div>
-            <div class="bar" style="--w:7.5%"><label>Model</label><div class="t"><i></i></div><b>8.1k</b></div>
-            <div class="bar" style="--w:2.5%"><label>Semi-auto</label><div class="t"><i></i></div><b>2.7k</b></div>
-            <div class="bar" style="--w:1.2%"><label>By hand</label><div class="t"><i></i></div><b>1.3k</b></div>
-          </div>
+          <div class="vz" data-chart="hbar" data-id="shape_sources" data-dec="0"></div>
           <p style="margin-top:14px">How each box entered CVAT, not how many I edited: CVAT doesn't log edits to imported boxes.</p>
         </div>
         <div class="card reveal">
@@ -195,6 +198,7 @@
           <figure data-zoom style="margin-top:12px"><img src="../assets/story/s10-manual-box.jpg" alt="A manually corrected pantograph box" loading="lazy"><figcaption>The reviewed result: a tight box on the pantograph.</figcaption></figure>
         </div>
       </div>
+      <div class="card vz-block reveal" style="margin-top:16px"><h3>How the data was split</h3><p>Whole video segments stay together, so no segment appears in both train and validation. A separate mast-focused set joins at training time.</p><div class="vz" data-chart="splits"></div></div>
     </section>
 
     <section class="sec wrap">
@@ -221,13 +225,22 @@
           <p style="margin-top:14px">Overall mAP@50:95 <b>0.679</b> on 3,941 validation images. 1120 px, about 19 hours on one H100.</p>
         </div>
       </div>
+
+      <div class="vz-grid2" style="margin-top:16px">
+        <div class="card vz-block reveal"><h3>YOLO26x: 200 epochs</h3><p>Validation mAP over the whole run; 1280 px, about 8 days.</p><div class="vz" data-chart="line" data-id="yolo" data-keys="map50,map95" data-names="mAP@50,mAP@50:95" data-best="map95" data-area data-label="YOLO26x validation mAP by epoch"></div></div>
+        <div class="card vz-block reveal"><h3>RF-DETR Large: 35 epochs</h3><p>Validation mAP (EMA weights); 1120 px, about 19 hours.</p><div class="vz" data-chart="line" data-id="rfdetr" data-keys="map50,map95" data-names="mAP@50,mAP@50:95" data-best="map95" data-area data-label="RF-DETR validation mAP by epoch"></div></div>
+        <div class="card vz-block reveal"><h3>Per-class accuracy</h3><p>AP@50:95 on each model's validation set.</p><div class="vz" data-chart="vbar" data-id="ap" data-series="YOLO26x,RF-DETR Large" data-dec="3" data-max="1" style="--ph:270px"></div></div>
+        <div class="card vz-block reveal"><h3>Headline scores</h3><p>Different validation sets, so not a ranking.</p><div class="vz" data-chart="vbar" data-id="headline" data-series="YOLO26x,RF-DETR Large" data-dec="3" data-max="1" style="--ph:270px"></div></div>
+        <div class="card vz-block reveal"><h3>YOLO26x losses</h3><p>Train and validation, box and class.</p><div class="vz" data-chart="line" data-id="yolo" data-keys="tbox,tcls,vbox,vcls" data-names="train box,train class,val box,val class" data-ymax="1.6" data-label="YOLO26x losses by epoch"></div></div>
+        <div class="card vz-block reveal"><h3>RF-DETR losses</h3><p>Per-epoch training and validation loss.</p><div class="vz" data-chart="line" data-id="rfdetr" data-keys="train_loss,val_loss" data-names="train loss,val loss" data-ymin="3.5" data-ymax="7" data-label="RF-DETR losses by epoch"></div></div>
+      </div>
       <p class="note reveal" style="margin-top:16px"><b>What holds across both:</b> the pantograph is detected well (about 0.90&ndash;0.92) and the contact point is the weak class (about 0.39) for both models. That points at the data (tiny boxes, and some frames with a missing pantograph) more than at the model choice.</p>
     </section>
 
     <section class="sec wrap">
       <div class="sec-head reveal"><h2>What's still <span class="grad">imperfect</span></h2><p>I'd rather you hear it from me.</p></div>
+      <div class="card vz-block reveal" style="margin-bottom:16px"><h3>Pantograph box missing</h3><p>Share of each route's frames that have a contact point but no pantograph box.</p><div class="vz" data-chart="hbar" data-id="label_gap" data-suffix="%" data-dec="1" data-max="20"></div></div>
       <ul class="issues">
-        <li class="reveal"><b>2,297 frames have no annotation at all</b> (9.8% of the dataset), all from the video-derived routes. Every one of 30 sampled shows a pantograph, so these are unlabelled frames, not true negatives; a tracked box most likely ended before its segment did.</li>
         <li class="reveal"><b>1,266 more frames have a contact point but no pantograph box,</b> about 14% of Mumbai, 8% of Mehsana and Palanpur, 3% of Ahmedabad and Lucknow.</li>
         <li class="reveal"><b>Validation sets differ.</b> YOLO and RF-DETR were scored on different image sets, and the RF-DETR validation and test splits share video segments.</li>
         <li class="reveal"><b>Neighbouring frames are near-duplicates,</b> so the number of distinct scenes is far smaller than the frame count.</li>
@@ -244,5 +257,6 @@
   <script src="../assets/js/site.js?v=3" defer></script>
   <script src="../assets/js/bg.js?v=5" defer></script>
   <script src="../assets/js/route-map.js?v=4" defer></script>
+  <script src="../assets/js/charts.js?v=3" data-json="../assets/data/charts.json?v=2" defer></script>
 </body>
 </html>
