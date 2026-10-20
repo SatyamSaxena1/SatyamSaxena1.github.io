@@ -185,6 +185,27 @@ knn.fit(csr_data)
         <article class="tl-item reveal">
           <i class="tl-dot"></i>
           <div class="tl-body">
+            <span class="when">Mar &ndash; Jul 2023 &middot; MSc AI begins</span>
+            <h3>Image processing, in MATLAB</h3>
+            <p>First semester of my MSc in AI at Asia Pacific University. For the image processing and computer vision module I wrote two pipelines by hand: one compares a banknote against a fake using SURF features, the other reads licence plates with Sauvola binarisation and connected components.</p>
+            <p>Both comments promise more than the code delivers.</p>
+          </div>
+          <div class="tl-fig">
+            <figure class="bug reveal"><div class="bar"><i></i><i></i><i></i>gandhifinal.m &middot; advanced.m</div>
+<pre><span class="dim">% Detect SIFT features in the original, processed, and fake images</span>
+original_features = <span class="err">detectSURFFeatures</span>(gray_img);
+
+<span class="dim">% Convert the resized image to grayscale</span>
+<span class="err">img_gray = resized_img;</span></pre>
+              <figcaption>Submitted Jun&ndash;Jul 2023. One says SIFT and calls SURF; the other never converts to grayscale.</figcaption></figure>
+            <figure data-zoom class="reveal"><img src="assets/timeline/ipcv_matching.jpg" alt="SURF feature matches drawn between a specimen banknote and a fake" loading="lazy"><figcaption>Its output: SURF matches between the RBI specimen note and the fake.</figcaption></figure>
+          </div>
+        </article>
+
+
+        <article class="tl-item reveal">
+          <i class="tl-dot"></i>
+          <div class="tl-body">
             <span class="when">Feb 2024 &middot; MSc AI</span>
             <h3>Teaching SDXL my face</h3>
             <p>My first real model training: a LoRA on Stable Diffusion XL from 34 portrait photos, 612 steps in 19 minutes on a laptop RTX 3080 Ti. Getting kohya_ss to install at all meant untangling two Python versions by hand.</p>
