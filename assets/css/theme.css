@@ -20,7 +20,7 @@
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--fg);transition:background-color .6s,color .4s;
-  font:16px/1.65 "Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI Variable Text","Segoe UI",system-ui,Roboto,Helvetica,Arial,sans-serif;
   -webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%}
@@ -497,3 +497,67 @@ figure.vz-heat{cursor:default}figure.vz-heat:hover{transform:none;border-color:t
 .lab .note{font-size:12.5px;color:var(--faint);line-height:1.5;margin:12px 0 0}
 @media(max-width:860px){.lab-main{grid-template-columns:1fr}.szgrid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.lab,.lab-inner,.lab::backdrop,.heat-card:after{transition:none}}
+
+/* Apple + WebKit layer: SwiftUI-style materials, springs and platform behaviour. Everything here is progressive; older browsers ignore it. */
+:root{
+  /* SwiftUI .smooth spring (no bounce) and .snappy spring (slight bounce), sampled into linear() */
+  --spring:linear(0,.006,.025 2.8%,.101 6.1%,.539 18.9%,.721 25.3%,.849 31.5%,.937 38.1%,.968 41.8%,.991 45.7%,1.006 50.1%,1.015 55%,1.017 63.9%,1.001);
+  --snappy:linear(0,.009,.035 2.1%,.141,.281 6.7%,.723 12.9%,.938 16.7%,1.017,1.077,1.121,1.149 24.3%,1.159,1.163,1.161,1.154 29.9%,1.129 32.8%,1.051 39.6%,1.017 43.1%,.991,.977 51%,.974 53.8%,.975 57.1%,.997 69.8%,1.003 76.9%,1);
+  --glass-edge:inset 0 1px 0 rgba(255,255,255,.14),inset 0 0 0 .5px rgba(255,255,255,.06);
+}
+:root[data-theme="dark"]{color-scheme:dark}
+:root[data-theme="light"]{color-scheme:light;--glass-edge:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(20,18,43,.04)}
+html{-webkit-tap-highlight-color:transparent}
+body{padding-bottom:env(safe-area-inset-bottom)}
+h1,h2,h3,h4{text-wrap:balance;font-optical-sizing:auto}
+p,li,figcaption{text-wrap:pretty}
+.wrap{width:min(1180px,calc(100% - 40px - env(safe-area-inset-left) - env(safe-area-inset-right)))}
+
+/* Materials: blur + vibrancy + a specular top edge, like SwiftUI .regularMaterial */
+.nav{top:max(14px,env(safe-area-inset-top));backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);box-shadow:var(--glass-edge),0 12px 34px -14px rgba(0,0,0,.55)}
+.card{box-shadow:var(--glass-edge),var(--shadow)}
+.btn:not(.primary),.stat,.theme-btn{box-shadow:var(--glass-edge)}
+@media(max-width:760px){.card{backdrop-filter:blur(12px) saturate(1.3);-webkit-backdrop-filter:blur(12px) saturate(1.3)}}
+
+/* Springs and press feedback (SwiftUI ButtonStyle scale-on-press) */
+.reveal{transition:opacity .8s ease,transform .9s var(--spring);transition-delay:var(--d,0s)}
+.card{transition:transform .5s var(--spring),border-color .3s,background .3s}
+.btn,.theme-btn{transition:transform .45s var(--snappy),box-shadow .25s,background .25s}
+.btn:active,.theme-btn:active,.vz-node[role=button]:active,.trk-tabs button:active{transform:scale(.96);transition-duration:.08s}
+
+/* Hit targets: 44 pt minimum, as in Apple's HIG */
+.theme-btn{width:44px;height:44px}
+.nav nav a{min-height:44px;display:inline-flex;align-items:center}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+/* Touch screens: no sticky hover lifts after a tap */
+@media(hover:none){.card:hover,.btn:hover,.theme-btn:hover{transform:none}.card:hover:before{opacity:0}}
+
+/* Reading progress on the nav, driven by scroll (no JS) */
+@supports(animation-timeline:scroll()){
+  .nav:after{content:"";position:absolute;left:22px;right:22px;bottom:0;height:2px;border-radius:2px;background:var(--grad);transform-origin:left;transform:scaleX(0);animation:readbar linear both;animation-timeline:scroll(root)}
+  @keyframes readbar{to{transform:scaleX(1)}}
+}
+
+/* Page-to-page transitions (cross-document View Transitions); the nav stays put while content cross-fades */
+@view-transition{navigation:auto}
+.nav{view-transition-name:site-nav}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.35s}
+
+/* Theme switch: circular reveal from the toggle (same-document View Transition, set up in site.js) */
+html.vt-theme body{transition:none}
+html.vt-theme .nav{view-transition-name:none}
+html.vt-theme::view-transition-old(root){animation:none}
+html.vt-theme::view-transition-new(root){animation:vt-reveal .6s var(--spring)}
+@keyframes vt-reveal{from{clip-path:circle(0 at var(--vx) var(--vy))}to{clip-path:circle(var(--vr) at var(--vx) var(--vy))}}
+
+/* Gallery viewer: fade in from display:none with @starting-style, blurred backdrop */
+.viewer{transition:opacity .3s var(--spring)}
+.viewer[open]{opacity:1}
+@starting-style{.viewer[open]{opacity:0}}
+.viewer::backdrop{backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+
+/* Accessibility settings from iOS and macOS */
+@media(prefers-contrast:more){:root[data-theme="dark"]{--line:rgba(255,255,255,.38);--muted:#d2d0ee}:root[data-theme="light"]{--line:rgba(20,18,43,.42);--muted:#2f2c50}}
+@media(prefers-reduced-transparency:reduce){.nav,.card,.btn,.stat,.theme-btn{backdrop-filter:none;-webkit-backdrop-filter:none;background:color-mix(in srgb,var(--bg) 90%,var(--fg))}}
+@media(prefers-reduced-motion:reduce){@view-transition{navigation:none}.nav:after{display:none}}

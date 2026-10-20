@@ -12,9 +12,20 @@
   document.querySelectorAll('.theme-btn').forEach(function (b) {
     b.addEventListener('click', function () {
       var next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-      root.setAttribute('data-theme', next);
-      try { localStorage.setItem('theme', next); } catch (e) {}
-      syncMeta(); window.dispatchEvent(new Event('themechange'));
+      function apply() {
+        root.setAttribute('data-theme', next);
+        try { localStorage.setItem('theme', next); } catch (e) {}
+        syncMeta(); window.dispatchEvent(new Event('themechange'));
+      }
+      // WebKit/Chromium View Transition: the new theme grows as a circle from the toggle
+      if (!document.startViewTransition || reduce || document.hidden) return apply();
+      var r = b.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+      root.style.setProperty('--vx', x + 'px'); root.style.setProperty('--vy', y + 'px');
+      root.style.setProperty('--vr', Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y)) + 'px');
+      root.classList.add('vt-theme');
+      var vt = document.startViewTransition(apply);
+      vt.ready.catch(function () {}); // an aborted transition still applies the theme; nothing to report
+      vt.finished.finally(function () { root.classList.remove('vt-theme'); });
     });
   });
 
