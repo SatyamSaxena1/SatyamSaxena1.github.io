@@ -1,85 +1,150 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Satyam Saxena builds computer vision, railway inspection, GPS, and applied AI systems.">
-  <meta name="theme-color" content="#8ac8c5">
-  <meta property="og:title" content="Satyam Saxena - Applied AI Engineer">
-  <meta property="og:description" content="Explore a tiny world of computer vision, railway AI, and practical engineering.">
   <title>Satyam Saxena - Applied AI Engineer</title>
+  <meta name="description" content="Satyam Saxena builds computer vision for railway infrastructure, local-first AI tools, and software for the real world.">
+  <meta name="theme-color" content="#05050b">
+  <meta property="og:title" content="Satyam Saxena - Applied AI Engineer">
+  <meta property="og:description" content="Computer vision for railway infrastructure, local-first AI, and software built for the real world.">
   <link rel="canonical" href="https://satyamsaxena1.github.io/">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238a6bff'/%3E%3Cstop offset='1' stop-color='%233d7bff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Ctext x='32' y='42' font-size='26' font-family='Arial' font-weight='800' fill='white' text-anchor='middle'%3ESS%3C/text%3E%3C/svg%3E">
+  <script>try{var t=localStorage.getItem('theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))</script>
+  <link rel="stylesheet" href="assets/css/theme.css">
 </head>
 <body>
-  <div class="loading" id="loading" aria-live="polite">
-    <div class="envelope" aria-hidden="true"><span></span></div>
-    <strong>BUILDING YOUR WORLD</strong>
-  </div>
+  <canvas id="bg" aria-hidden="true"></canvas>
 
-  <main class="experience" id="experience">
-    <canvas id="world" aria-label="Interactive illustrated planet representing Satyam Saxena's engineering projects"></canvas>
-    <div class="paper-grain" aria-hidden="true"></div>
+  <header class="nav">
+    <a class="logo" href="./"><i>SS</i><span>Satyam Saxena</span></a>
+    <nav aria-label="Primary">
+      <a href="#projects">Projects</a>
+      <a href="railway/" class="keep">Railway story</a>
+      <a href="#about">About</a>
+      <a href="https://www.kaggle.com/datasets/satyamsaxena12/railway-overhead-line-showcase">Kaggle</a>
+      <a href="https://github.com/SatyamSaxena1" class="keep">GitHub</a>
+    </nav>
+    <button class="theme-btn" type="button" aria-label="Toggle light and dark theme">
+      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+  </header>
 
-    <header class="topbar">
-      <a class="mini-logo" href="#" aria-label="Satyam Saxena home"><span>SS</span> WORLD</a>
-      <p>APPLIED AI ENGINEER<br><span>LUCKNOW, INDIA</span></p>
-      <a class="sound-button" href="https://github.com/SatyamSaxena1" aria-label="Open GitHub profile">GITHUB <b>&nearr;</b></a>
-    </header>
-
-    <section class="intro" id="intro" aria-labelledby="main-title">
-      <p class="eyebrow">A SMALL PLANET OF BIG SYSTEMS</p>
-      <h1 id="main-title" aria-label="Satyam Saxena"><span>SATYAM</span><span>SAXENA</span></h1>
-      <p class="intro-copy">Computer vision, railway inspection, GPS context,<br>and software built for the real world.</p>
-      <button class="enter-button" id="enter" type="button"><span>EXPLORE THE PLANET</span><b>&darr;</b></button>
+  <main>
+    <section class="hero wrap">
+      <p class="eyebrow reveal">Applied AI engineer &middot; Lucknow, India</p>
+      <h1 class="reveal" aria-label="Satyam Saxena"><span>Satyam</span><span class="grad">Saxena</span></h1>
+      <p class="lead reveal">Computer vision for railway infrastructure, local-first AI, and software built for the real world.</p>
+      <div class="cta reveal">
+        <a class="btn primary" href="railway/">Read the railway story <b class="ar">&rarr;</b></a>
+        <a class="btn" href="#projects">Landmark projects <b class="ar">&darr;</b></a>
+      </div>
+      <div class="stats reveal">
+        <div class="stat"><b data-count="23551">0</b><span>frames labelled and reviewed</span></div>
+        <div class="stat"><b data-count="5">0</b><span>Indian routes filmed</span></div>
+        <div class="stat"><b data-count="0.698" data-dec="3">0</b><span>YOLO26x mAP@50:95 (validation)</span></div>
+      </div>
+      <div class="scroll-cue reveal"><i></i>Scroll</div>
     </section>
 
-    <div class="project-markers" id="project-markers" aria-label="Projects">
-      <button class="marker" data-project="railway" style="--angle:0"><i>01</i><span>RAILWAY VISION</span></button>
-      <button class="marker" data-project="captions" style="--angle:1"><i>02</i><span>LIVE CAPTIONS</span></button>
-      <button class="marker" data-project="highway" style="--angle:2"><i>03</i><span>FUZZY HIGHWAY</span></button>
-      <button class="marker" data-project="mindmap" style="--angle:3"><i>04</i><span>MIND MAP</span></button>
-    </div>
-
-    <div class="zone-title" id="zone-title" aria-hidden="true">VISION DISTRICT</div>
-
-    <nav class="dock" aria-label="Portfolio sections">
-      <button type="button" data-panel="about"><span>?</span>ABOUT</button>
-      <button type="button" data-panel="stack"><span>#</span>TOOLBOX</button>
-      <button type="button" data-project="railway"><span>!</span>FEATURED</button>
-      <a href="https://github.com/SatyamSaxena1"><span>&nearr;</span>GITHUB</a>
-    </nav>
-
-    <div class="drag-hint" id="drag-hint"><span>&larr;</span> DRAG TO ROTATE <span>&rarr;</span></div>
-
-    <aside class="panel" id="panel" aria-live="polite" aria-hidden="true">
-      <button class="panel-close" id="panel-close" type="button" aria-label="Close panel">&times;</button>
-      <p class="panel-kicker" id="panel-kicker">PROJECT 01</p>
-      <h2 id="panel-title">Railway Vision</h2>
-      <p id="panel-copy"></p>
-      <div class="panel-tags" id="panel-tags"></div>
-      <div class="railway-map-card" id="railway-map-card" hidden>
-        <div class="railway-map-head">
-          <span>RAILWAY MAP LAYER</span>
-          <a href="https://satyamsaxena1.github.io/lucknow_running_railway/gps_files/map_gonda.html">OPEN FULL MAP &nearr;</a>
-        </div>
-        <div class="railway-map-frame">
-          <div id="railway-map" role="img" aria-label="Interactive railway GPS route map between Lucknow and Gonda"></div>
-          <div class="railway-map-loading" id="railway-map-loading">LOADING MAP DATA</div>
-        </div>
-        <div class="railway-map-controls" aria-label="Railway map controls">
-          <button type="button" data-map-layer="route" aria-pressed="true">ROUTE</button>
-          <button type="button" data-map-layer="points" aria-pressed="true">INSPECTION POINTS</button>
-          <button type="button" data-map-action="reset">RESET VIEW</button>
-        </div>
-        <p class="railway-map-caption">MapLibre layer with a no-key public basemap. Add <code>window.ARCGIS_API_KEY</code> later to switch the style hook to ArcGIS Location Platform basemaps.</p>
+    <section class="sec wrap" id="projects">
+      <div class="sec-head reveal">
+        <h2>Landmark <span class="grad">projects</span></h2>
+        <p>The work I'm proudest of, from a flagship vision system to the small tools I built because I needed them.</p>
       </div>
-      <div class="panel-links" id="panel-links"></div>
-      <p class="panel-note" id="panel-note"></p>
-    </aside>
 
-    <noscript><p class="noscript">This interactive portfolio needs JavaScript. Projects are available at <a href="https://github.com/SatyamSaxena1">github.com/SatyamSaxena1</a>.</p></noscript>
+      <div class="bento">
+        <article class="card c-lg reveal">
+          <div class="flag">
+            <div class="flag-img"><img src="assets/story/s05-detection-depth.jpg" alt="Detector output on a pantograph with a depth reading" loading="lazy"></div>
+            <div class="flag-body">
+              <span class="tag">Flagship &middot; Computer vision</span>
+              <h3>Railway Vision</h3>
+              <p>Detecting the pantograph, masts, arms and contact points on overhead lines from cabin-camera video, so heights can be measured from a detection. I labelled and reviewed all 23,551 frames across five routes, and trained two detectors on them.</p>
+              <div class="mini">
+                <div><b data-count="133245">0</b><span>labelled boxes</span></div>
+                <div><b data-count="2">0</b><span>detectors: YOLO26x, RF-DETR</span></div>
+                <div><b data-count="31">0</b><span>CVAT review tasks</span></div>
+              </div>
+              <div class="row-links">
+                <a class="p" href="railway/">Full story &rarr;</a>
+                <a href="https://www.kaggle.com/datasets/satyamsaxena12/railway-overhead-line-showcase">Kaggle write-up</a>
+                <a href="https://github.com/SatyamSaxena1/railway-overhead-line-detection">Project page</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card c-w reveal">
+          <span class="tag">Models</span>
+          <h3>Two detectors, same data</h3>
+          <div class="bars">
+            <div class="bar" style="--w:69.8%"><label>YOLO26x</label><div class="t"><i></i></div><b>0.698</b></div>
+            <div class="bar b2" style="--w:67.9%"><label>RF-DETR Large</label><div class="t"><i></i></div><b>0.679</b></div>
+          </div>
+          <p>mAP@50:95 on validation. The two used different validation sets, so this is not a ranking. The write-up has per-class scores and the caveats.</p>
+          <a class="more stretch" href="https://www.kaggle.com/datasets/satyamsaxena12/railway-overhead-line-showcase">Open the write-up <b class="ar">&rarr;</b></a>
+        </article>
+
+        <article class="card reveal">
+          <span class="tag">Accessibility</span>
+          <h3>Live Captions</h3>
+          <p>Local, lightweight live transcription with a fast highlighted mode and a long-context mode. Built after losing live captions in my browser.</p>
+          <a class="more stretch" href="https://github.com/SatyamSaxena1/Subtitles-for-Visual-Impairment-Assistance-">Repository <b class="ar">&rarr;</b></a>
+        </article>
+
+        <article class="card reveal">
+          <span class="tag">Transport</span>
+          <h3>Fuzzy Highway</h3>
+          <p>Merge-speed recommendations from lane state, traffic density and vehicle distance, using a fuzzy rule base.</p>
+          <a class="more stretch" href="https://github.com/SatyamSaxena1/fuzzy-logic-highway-proj">Repository <b class="ar">&rarr;</b></a>
+        </article>
+
+        <article class="card c-w reveal">
+          <span class="tag">Knowledge tools</span>
+          <h3>Mind Map from saved posts</h3>
+          <p>A Reddit scraper that turns saved posts into a connected, navigable personal knowledge base, so forgotten ideas resurface.</p>
+          <div class="tags"><span>Automation</span><span>Scraping</span><span>Knowledge tools</span></div>
+          <a class="more stretch" href="https://github.com/SatyamSaxena1/reddit-scraper-for-mind-map-project">Repository <b class="ar">&rarr;</b></a>
+        </article>
+
+        <article class="card reveal">
+          <span class="tag">Offline AI</span>
+          <h3>Handwriting OCR</h3>
+          <p>Offline OCR for handwritten planner pages: photo in, structured JSON out. CPU-only and deployable to Cloud Run.</p>
+          <a class="more stretch" href="https://github.com/SatyamSaxena1/form-reader-public">Repository <b class="ar">&rarr;</b></a>
+        </article>
+
+        <article class="card reveal">
+          <span class="tag">Offline AI</span>
+          <h3>Offline RAG</h3>
+          <p>A GPU-accelerated retrieval pipeline on Windows with llama.cpp and FAISS, a semantic cache and conversation persistence.</p>
+          <a class="more stretch" href="https://github.com/SatyamSaxena1/rag-system-offline">Repository <b class="ar">&rarr;</b></a>
+        </article>
+      </div>
+    </section>
+
+    <section class="sec wrap" id="about">
+      <div class="about">
+        <div class="card reveal">
+          <h3>About</h3>
+          <p>I build applied AI systems around computer vision and hardware-aware software. I care about the full path from camera feed and calibration to measurement, reporting and deployment, and about being honest about what a model can and can't do.</p>
+          <p style="margin-top:12px">Based in Lucknow, India. Curious about hard real-world systems.</p>
+        </div>
+        <div class="links reveal">
+          <a href="https://github.com/SatyamSaxena1"><span>GitHub</span><b>&nearr;</b></a>
+          <a href="https://www.kaggle.com/satyamsaxena12"><span>Kaggle</span><b>&nearr;</b></a>
+          <a href="https://www.linkedin.com/in/satyam-saxena-754155134"><span>LinkedIn</span><b>&nearr;</b></a>
+        </div>
+      </div>
+    </section>
   </main>
-  <script src="script.js"></script>
+
+  <footer class="wrap"><span>&copy; <span id="yr">2026</span> Satyam Saxena</span><span>Built with plain HTML, CSS and Three.js</span></footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+  <script src="assets/js/site.js" defer></script>
+  <script src="assets/js/bg.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Railway Vision - the story | Satyam Saxena</title>
+  <meta name="description" content="How I built a pantograph and overhead-line detector: the data, the labelling, the detours, the models and the honest limits.">
+  <meta name="theme-color" content="#05050b">
+  <meta property="og:title" content="Railway Vision - the story">
+  <meta property="og:description" content="Pantograph and overhead-line detection from cabin-camera video: data, labelling, models and what is still imperfect.">
+  <link rel="canonical" href="https://satyamsaxena1.github.io/railway/">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238a6bff'/%3E%3Cstop offset='1' stop-color='%233d7bff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Ctext x='32' y='42' font-size='26' font-family='Arial' font-weight='800' fill='white' text-anchor='middle'%3ESS%3C/text%3E%3C/svg%3E">
+  <script>try{var t=localStorage.getItem('theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))</script>
+  <link rel="stylesheet" href="../assets/css/theme.css">
+</head>
+<body>
+  <canvas id="bg" aria-hidden="true"></canvas>
+
+  <header class="nav">
+    <a class="logo" href="../"><i>SS</i><span>Satyam Saxena</span></a>
+    <nav aria-label="Primary">
+      <a href="../#projects">Projects</a>
+      <a href="./" class="keep" aria-current="page">Railway story</a>
+      <a href="https://www.kaggle.com/datasets/satyamsaxena12/railway-overhead-line-showcase">Kaggle</a>
+      <a href="https://github.com/SatyamSaxena1/railway-overhead-line-detection" class="keep">GitHub</a>
+    </nav>
+    <button class="theme-btn" type="button" aria-label="Toggle light and dark theme">
+      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+  </header>
+
+  <main>
+    <section class="story-hero wrap">
+      <p class="eyebrow reveal">Flagship project &middot; Computer vision</p>
+      <h1 class="reveal">Railway <span class="grad">Vision</span></h1>
+      <p class="lead reveal">How I built a pantograph and overhead-line detector, from the first plan in December 2025 to two trained models in June 2026, including the detours that didn't make it.</p>
+      <div class="stats reveal">
+        <div class="stat"><b data-count="23551">0</b><span>frames labelled and reviewed</span></div>
+        <div class="stat"><b data-count="133245">0</b><span>labelled boxes</span></div>
+        <div class="stat"><b data-count="5">0</b><span>Indian routes</span></div>
+        <div class="stat"><b data-count="119972">0</b><span>shapes reviewed in CVAT</span></div>
+      </div>
+      <div class="cta reveal">
+        <a class="btn primary" href="https://www.kaggle.com/datasets/satyamsaxena12/railway-overhead-line-showcase">Kaggle write-up <b class="ar">&rarr;</b></a>
+        <a class="btn" href="https://github.com/SatyamSaxena1/railway-overhead-line-detection">Project page on GitHub <b class="ar">&rarr;</b></a>
+      </div>
+    </section>
+
+    <section class="sec wrap">
+      <div class="sec-head reveal"><h2>The <span class="grad">goal</span></h2></div>
+      <div class="two">
+        <div class="card reveal"><h3>Measure height from a detection</h3><p>A camera in the cab looks up at the pantograph and the overhead line. If a model finds the pantograph, masts, arms and contact points reliably, the height of those elements can be measured from the detection.</p></div>
+        <div class="card reveal"><h3>Why plain boxes</h3><p>For that measurement the top edge of a box has to stay parallel to the bottom of the frame. I tried rotated boxes, then dropped them: they cost much more labelling effort and gave nothing back for the measurement.</p></div>
+      </div>
+    </section>
+
+    <section class="sec wrap">
+      <div class="sec-head reveal"><h2>The <span class="grad">timeline</span></h2><p>Reconstructed from file dates, version history and training logs. Click any screenshot to enlarge it.</p></div>
+
+      <div class="tl">
+        <div class="tl-fill"></div>
+
+        <article class="tl-item reveal">
+          <i class="tl-dot"></i>
+          <div class="tl-body">
+            <span class="when">Nov &ndash; Dec 2025</span>
+            <h3>Proof of concept and a big plan</h3>
+            <p>I used a public Roboflow contact-point dataset to check that contact points could be detected in video at all. None of those images are in my dataset.</p>
+            <p>The first plan was ambitious: a custom attention network with depth input, and a stack of measurements on top. It was the starting point, not the destination.</p>
+          </div>
+          <div class="tl-fig">
+            <figure data-zoom class="reveal"><img src="../assets/story/s01-isaac-sim.jpg" alt="Synthetic depth capture in Isaac Sim" loading="lazy"><figcaption>Synthetic stereo-depth scene in Isaac Sim, 1280 x 720.</figcaption></figure>
+          </div>
+        </article>
+
+        <article class="tl-item reveal">
+          <i class="tl-dot"></i>
+          <div class="tl-body">
+            <span class="when">Dec 2025 &ndash; Apr 2026</span>
+            <h3>Depth exploration</h3>
+            <p>I tried stereo and monocular depth (a ZED 2i camera, Isaac Sim synthetic scenes, Depth Anything) to see whether annotation and measurement could be automated. A real-time detection and measurement system was built and run on trains in Lucknow; that part isn't published here.</p>
+            <p>The depth work didn't end up in the final labelling method, but it taught me what the camera could and couldn't resolve.</p>
+          </div>
+          <div class="tl-fig">
+            <figure data-zoom class="reveal"><img src="../assets/story/s02-zed-depth.jpg" alt="ZED depth viewer showing live depth and a point cloud" loading="lazy"><figcaption>ZED 2i live depth and point cloud (camera view blurred for privacy).</figcaption></figure>
+            <figure data-zoom class="reveal"><img src="../assets/story/s03-tensorrt-benchmark.jpg" alt="TensorRT benchmark result of about 55 frames per second" loading="lazy"><figcaption>A TensorRT engine for one of the models: about 55 FPS, 18 ms per frame.</figcaption></figure>
+          </div>
+        </article>
+
+        <article class="tl-item reveal">
+          <i class="tl-dot"></i>
+          <div class="tl-body">
+            <span class="when">May 2026</span>
+            <h3>Measuring wire height with depth</h3>
+            <p>With the ZED mounted in Lucknow, I compared two ways of getting depth: the camera's own, and Fast-FoundationStereo, with a detector finding the wires in each frame. The overlay shows each tracked wire segment, its height from both sources, and the gaps where wires cross.</p>
+            <p>A detection with a depth reading, pantograph at 0.93 confidence, is the end of that chain.</p>
+          </div>
+          <div class="tl-fig">
+            <figure data-zoom class="reveal"><img src="../assets/story/s04-wire-height.jpg" alt="Wire height overlay comparing ZED depth with Fast-FoundationStereo" loading="lazy"><figcaption>Wire height from ZED depth vs Fast-FoundationStereo, with crossover gaps.</figcaption></figure>
+            <figure data-zoom class="reveal"><img src="../assets/story/s05-detection-depth.jpg" alt="Pantograph detected at 0.93 with a depth reading" loading="lazy"><figcaption>Pantograph 0.93, contact point 0.35, depth 3.85 m.</figcaption></figure>
+          </div>
+        </article>
+
+        <article class="tl-item reveal">
+          <i class="tl-dot"></i>
+          <div class="tl-body">
+            <span class="when">May 2026</span>
+            <h3>The rotated-box detour</h3>
+            <p>I tried oriented boxes, including a depth-assisted script that proposed rotated pantograph boxes, which I calibrated against my own corrections. It matched my edits well, but I decided rotation wasn't needed and went back to plain boxes.</p>
+            <p>Knowing when to drop an idea saved weeks of labelling.</p>
+          </div>
+          <div class="tl-fig">
+            <figure data-zoom class="reveal"><img src="../assets/story/s07-oriented-boxes.jpg" alt="Rotated box candidates over a pantograph in CVAT" loading="lazy"><figcaption>Rotated-box candidates in CVAT: the approach I dropped.</figcaption></figure>
+          </div>
+        </article>
+
+        <article class="tl-item reveal">
+          <i class="tl-dot"></i>
+          <div class="tl-body">
+            <span class="when">May &ndash; Jun 2026</span>
+            <h3>The labelling campaign</h3>
+            <p>A cheaper method won: a small pretrained detector pre-annotates, tracking carries boxes between frames, and I review every frame by hand in CVAT. 31 tasks covered all 23,551 frames from five routes.</p>
+            <p>Footage came from four of the five routes in this folder of raw videos, and the model-assisted tools sped up each pass without replacing the review.</p>
+          </div>
+          <div class="tl-fig">
+            <figure data-zoom class="reveal"><img src="../assets/story/s06-source-videos.jpg" alt="Folder of raw source videos by route" loading="lazy"><figcaption>Raw source videos, by route.</figcaption></figure>
+            <figure data-zoom class="reveal"><img src="../assets/story/s08-auto-annotate-dialog.jpg" alt="CVAT automatic annotation dialog mapping model labels" loading="lazy"><figcaption>Model-assisted pre-annotation in CVAT.</figcaption></figure>
+          </div>
+        </article>
+
+        <article class="tl-item reveal">
+          <i class="tl-dot"></i>
+          <div class="tl-body">
+            <span class="when">10 &ndash; 23 Jun 2026</span>
+            <h3>Training, and the NaN scare</h3>
+            <p>I built the YOLO dataset on 10 June and the RF-DETR set on 12 June from the same labels, then trained. The first YOLO epochs went to NaN loss; Ultralytics logged "recovering from last.pt" and I resumed the run. At about 57 minutes an epoch, 200 epochs took roughly 8 days.</p>
+            <p>RF-DETR Large trained on a rented H100 in about 19 hours, finishing 30 June.</p>
+          </div>
+          <div class="tl-fig">
+            <figure data-zoom class="reveal"><img src="../assets/story/s11-yolo-training.jpg" alt="YOLO training log with NaN loss warnings and recovery" loading="lazy"><figcaption>YOLO26x early epochs: NaN losses and automatic recovery.</figcaption></figure>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="sec wrap">
+      <div class="sec-head reveal"><h2>How the labels were <span class="grad">made</span></h2><p>Four steps, repeated task by task.</p></div>
+      <div class="flow">
+        <div class="card reveal"><h3>Film</h3><p>Cabin-camera footage from five routes, cut into short segments, frames extracted from each.</p></div>
+        <div class="card reveal"><h3>Pre-annotate</h3><p>A small pretrained detector proposes boxes, so I start from something instead of nothing.</p></div>
+        <div class="card reveal"><h3>Track</h3><p>Boxes are carried between frames from my manual keyframes.</p></div>
+        <div class="card reveal"><h3>Review</h3><p>Every frame is checked in CVAT: positions corrected, classes fixed, missing objects added.</p></div>
+      </div>
+      <div class="two" style="margin-top:16px">
+        <div class="card reveal">
+          <h3>Where the 119,972 shapes came from</h3>
+          <div class="bars">
+            <div class="bar" style="--w:100%"><label>Imported</label><div class="t"><i></i></div><b>107.8k</b></div>
+            <div class="bar" style="--w:12.3%"><label>Tracked</label><div class="t"><i></i></div><b>13.3k</b></div>
+            <div class="bar" style="--w:7.5%"><label>Model</label><div class="t"><i></i></div><b>8.1k</b></div>
+            <div class="bar" style="--w:2.5%"><label>Semi-auto</label><div class="t"><i></i></div><b>2.7k</b></div>
+            <div class="bar" style="--w:1.2%"><label>By hand</label><div class="t"><i></i></div><b>1.3k</b></div>
+          </div>
+          <p style="margin-top:14px">How each box entered CVAT, not how many I edited: CVAT doesn't log edits to imported boxes.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Model proposes, I decide</h3>
+          <figure data-zoom style="margin-top:6px"><img src="../assets/story/s09-auto-box.jpg" alt="An automatic pantograph proposal that is too tall" loading="lazy"><figcaption>An automatic proposal: the box runs too tall, so it gets corrected.</figcaption></figure>
+          <figure data-zoom style="margin-top:12px"><img src="../assets/story/s10-manual-box.jpg" alt="A manually corrected pantograph box" loading="lazy"><figcaption>The reviewed result: a tight box on the pantograph.</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec wrap">
+      <div class="sec-head reveal"><h2>Models and <span class="grad">results</span></h2><p>Validation scores per class (AP@50:95). Two models, two validation sets: read them side by side, not as a leaderboard.</p></div>
+      <div class="two">
+        <div class="card reveal">
+          <h3>YOLO26x</h3>
+          <div class="bars">
+            <div class="bar" style="--w:90.2%"><label>Pantograph</label><div class="t"><i></i></div><b>0.902</b></div>
+            <div class="bar" style="--w:79%"><label>Mast</label><div class="t"><i></i></div><b>0.790</b></div>
+            <div class="bar" style="--w:71.4%"><label>Arm</label><div class="t"><i></i></div><b>0.714</b></div>
+            <div class="bar" style="--w:38.6%"><label>Contact pt</label><div class="t"><i></i></div><b>0.386</b></div>
+          </div>
+          <p style="margin-top:14px">Overall mAP@50:95 <b>0.698</b> on 5,114 validation images. 1280 px, about 8 days on one RTX 4070.</p>
+        </div>
+        <div class="card reveal">
+          <h3>RF-DETR Large</h3>
+          <div class="bars">
+            <div class="bar b2" style="--w:92.3%"><label>Pantograph</label><div class="t"><i></i></div><b>0.923</b></div>
+            <div class="bar b2" style="--w:70.4%"><label>Mast</label><div class="t"><i></i></div><b>0.704</b></div>
+            <div class="bar b2" style="--w:68.6%"><label>Arm</label><div class="t"><i></i></div><b>0.686</b></div>
+            <div class="bar b2" style="--w:38.9%"><label>Contact pt</label><div class="t"><i></i></div><b>0.389</b></div>
+          </div>
+          <p style="margin-top:14px">Overall mAP@50:95 <b>0.679</b> on 3,941 validation images. 1120 px, about 19 hours on one H100.</p>
+        </div>
+      </div>
+      <p class="note reveal" style="margin-top:16px"><b>What holds across both:</b> the pantograph is detected well (about 0.90&ndash;0.92) and the contact point is the weak class (about 0.39) for both models. That points at the data (tiny boxes, and some frames with a missing pantograph) more than at the model choice.</p>
+    </section>
+
+    <section class="sec wrap">
+      <div class="sec-head reveal"><h2>What's still <span class="grad">imperfect</span></h2><p>I'd rather you hear it from me.</p></div>
+      <ul class="issues">
+        <li class="reveal"><b>Some pantographs are unlabelled.</b> About 5% of train and 6% of validation frames have a contact point but no pantograph box, mostly in the tracked and model-assisted video sets.</li>
+        <li class="reveal"><b>Validation sets differ.</b> YOLO and RF-DETR were scored on different image sets, and the RF-DETR validation and test splits share video segments.</li>
+        <li class="reveal"><b>Neighbouring frames are near-duplicates,</b> so the number of distinct scenes is far smaller than the frame count.</li>
+        <li class="reveal"><b>One annotator, five routes.</b> There is no inter-annotator agreement measure, and the domain is limited.</li>
+      </ul>
+      <p class="note reveal" style="margin-top:16px">The full dataset (23,551 frames, 8.13 GB) is private and not available for download. The <a href="https://www.kaggle.com/datasets/satyamsaxena12/railway-overhead-line-showcase" style="text-decoration:underline">Kaggle write-up</a> has sample frames, the full numbers, and the data-prep steps.</p>
+    </section>
+  </main>
+
+  <dialog id="lb" aria-label="Enlarged screenshot"><img alt=""><p></p></dialog>
+  <footer class="wrap"><span>&copy; <span id="yr">2026</span> Satyam Saxena</span><span><a href="../">&larr; Back to home</a></span></footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+  <script src="../assets/js/site.js" defer></script>
+  <script src="../assets/js/bg.js" defer></script>
+</body>
+</html>
