@@ -73,7 +73,7 @@
   var hk = document.getElementById('hw-hook');
   if (hk) hk.addEventListener('click', function () {
     var on = hk.getAttribute('aria-expanded') !== 'true', c = document.getElementById('hw-chapters');
-    hk.setAttribute('aria-expanded', on); c.classList.toggle('open', on); if (on) c.querySelector('.vz').classList.add('in'); hk.querySelector('.hook-label').textContent = on ? 'Hide the story' : 'See how it was made';
+    hk.setAttribute('aria-expanded', on); c.classList.toggle('open', on); hk.querySelector('.hook-label').textContent = on ? 'Hide the story' : 'See how it was made';
     if (on) setTimeout(function () { c.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' }); }, 120);
   });
   var y = document.getElementById('yr'); if (y) y.textContent = new Date().getFullYear();

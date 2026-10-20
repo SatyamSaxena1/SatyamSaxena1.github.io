@@ -381,18 +381,35 @@ figure.vz-heat{cursor:default}figure.vz-heat:hover{transform:none;border-color:t
 @media(max-width:760px){.hook{grid-template-columns:1fr;border-radius:28px}.hook-media{order:-1;width:min(100%,240px)}}
 @media(prefers-reduced-motion:reduce){.hook,.hook-media,.hw-chapters{transition:none}}
 
-/* fullscreen viewer */
-.hw-view{border:0;padding:0;margin:0;max-width:none;max-height:none;width:100vw;height:100vh;height:100dvh;background:#000;color:#fff;overflow:hidden}
-.hw-view::backdrop{background:#000}
-.hw-view[open]{display:grid;place-items:center;animation:hvin .35s cubic-bezier(.2,.8,.2,1)}
-@keyframes hvin{from{opacity:0;transform:scale(1.02)}to{opacity:1;transform:none}}
-.hw-view img{display:block;max-width:100vw;max-height:100vh;max-height:100dvh;width:auto;height:auto;object-fit:contain;cursor:zoom-out}
-.hv-bar{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;padding:48px clamp(16px,3vw,36px) clamp(16px,3vw,28px);background:linear-gradient(transparent,rgba(0,0,0,.78));pointer-events:none}
-.hv-txt{display:grid;gap:4px;max-width:46em}.hv-txt b{font-size:clamp(18px,2vw,24px);letter-spacing:-.02em}.hv-txt span{font-size:14px;color:rgba(255,255,255,.75);line-height:1.4}
-.hv-nav{display:flex;align-items:center;gap:10px;pointer-events:auto;white-space:nowrap}.hv-count{font-size:13px;color:rgba(255,255,255,.7);min-width:3.4em;text-align:center}
-.hv-nav button,.hv-x{width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.16);backdrop-filter:blur(14px);color:#fff;font-size:20px;cursor:pointer;transition:background .2s,transform .2s}
-.hv-nav button:hover,.hv-x:hover{background:rgba(255,255,255,.3);transform:scale(1.06)}
-.hv-nav button:focus-visible,.hv-x:focus-visible{outline:3px solid #fff;outline-offset:2px}
-.hv-x{position:fixed;top:clamp(12px,2vw,24px);right:clamp(12px,2vw,24px);font-size:26px;line-height:1}
-.vz-node[role=button]:focus-visible{box-shadow:0 0 0 3px var(--c)}
-@media(prefers-reduced-motion:reduce){.hw-view[open]{animation:none}}
+/* design language: two registers */
+:root,:root[data-theme="dark"]{--work:#7f9bff;--field:#ffb870}
+:root[data-theme="light"]{--work:#2f55e0;--field:#bf6a12}
+.kind{display:inline-flex;align-items:center;gap:7px;padding:5px 12px;border-radius:99px;font-size:13px;font-weight:600;letter-spacing:-.005em;border:1px solid color-mix(in srgb,var(--k) 45%,transparent);color:var(--k);background:color-mix(in srgb,var(--k) 12%,transparent)}
+.kind:before{content:"";width:8px;height:8px;background:var(--k)}
+.kind-work{--k:var(--work)}.kind-work:before{border-radius:2px}
+.kind-field{--k:var(--field)}.kind-field:before{border-radius:50%}
+.sec-head .kind{align-self:flex-start;flex-basis:100%;width:max-content;margin-bottom:-14px}
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:12px 28px;margin-bottom:8px}.legend p{margin:0;font-size:14px;color:var(--muted);display:flex;gap:12px;align-items:flex-start}.legend .kind{flex:none}
+.sec[data-kind=work] .card{border-color:color-mix(in srgb,var(--work) 22%,var(--line))}
+.sec[data-kind=field] .card,.sec[data-kind=field] figure img{border-color:color-mix(in srgb,var(--field) 30%,var(--line))}
+.sec[data-kind=field] .steps li:before,.sec[data-kind=field] .steps li b:before{background:linear-gradient(135deg,var(--field),var(--pink))}
+@media(max-width:760px){.legend{grid-template-columns:1fr}}
+/* hardware scroll */
+.rail{list-style:none;margin:0;padding:0;position:relative;display:grid;gap:clamp(18px,3vw,34px)}
+.rail:before{content:"";position:absolute;left:50%;top:10px;bottom:10px;width:2px;transform:translateX(-50%);background:linear-gradient(var(--field),color-mix(in srgb,var(--field) 10%,transparent))}
+.stop{position:relative}
+.stop summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;margin:0 auto 14px;width:max-content;max-width:100%;padding:10px 18px;border-radius:99px;border:1px solid color-mix(in srgb,var(--field) 45%,var(--line));background:var(--bg);position:relative;z-index:1;transition:background .25s}
+.stop summary::-webkit-details-marker{display:none}.stop summary:hover{background:color-mix(in srgb,var(--field) 14%,var(--bg))}.stop summary:focus-visible{outline:3px solid var(--field);outline-offset:3px}
+.stop summary h3{font-size:18px;margin:0;letter-spacing:-.02em}.stop .dot{width:11px;height:11px;border-radius:50%;background:var(--field);box-shadow:0 0 0 4px color-mix(in srgb,var(--field) 25%,transparent)}
+.stop .chev{width:10px;height:10px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg) translateY(-2px);transition:transform .35s}.stop[open] .chev{transform:rotate(-135deg) translateY(-2px)}
+.stop-body{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,4vw,56px);align-items:center}
+.stop-text p{margin:0 0 14px;color:var(--muted);font-size:16px;line-height:1.55;max-width:34em}
+.rail>li:nth-child(odd) .stop-text{text-align:right;justify-self:end}.rail>li:nth-child(odd) .stop-text p{margin-left:auto}
+.rail>li:nth-child(even) .stop-figs{order:-1}
+.stop-figs{display:grid;gap:12px}.stop-figs.n2{grid-template-columns:1fr 1fr}
+.stop-figs figure{margin:0}.stop-figs img{width:100%;display:block;border-radius:18px;border:1px solid color-mix(in srgb,var(--field) 30%,var(--line));box-shadow:0 20px 44px -22px rgba(0,0,0,.6)}
+.stop-figs.n1 img{max-height:520px;object-fit:cover}.stop-figs.n2 img{aspect-ratio:4/5;object-fit:cover}
+.stop-figs figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+.spec{border-collapse:collapse;margin:0 0 6px;font-size:14px;width:100%;max-width:30em}.rail>li:nth-child(odd) .spec{margin-left:auto}
+.spec caption{font-weight:650;margin-bottom:6px;text-align:inherit}.spec th,.spec td{padding:7px 10px;border-top:1px solid var(--line);text-align:left;font-variant-numeric:tabular-nums}.spec th{color:var(--muted);font-weight:500;width:42%}
+@media(max-width:760px){.rail:before{left:11px}.stop summary{margin-left:0;margin-right:0;width:auto}.stop-body{grid-template-columns:1fr;padding-left:26px}.rail>li:nth-child(odd) .stop-text{text-align:left;justify-self:start}.rail>li:nth-child(odd) .stop-text p,.rail>li:nth-child(odd) .spec{margin-left:0}.rail>li:nth-child(even) .stop-figs{order:0}}

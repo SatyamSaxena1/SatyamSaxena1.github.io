@@ -11,7 +11,7 @@
   <link rel="canonical" href="https://satyamsaxena1.github.io/railway/">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238a6bff'/%3E%3Cstop offset='1' stop-color='%233d7bff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Ctext x='32' y='42' font-size='26' font-family='Arial' font-weight='800' fill='white' text-anchor='middle'%3ESS%3C/text%3E%3C/svg%3E">
   <script>try{var t=localStorage.getItem('theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))</script>
-  <link rel="stylesheet" href="../assets/css/theme.css?v=11">
+  <link rel="stylesheet" href="../assets/css/theme.css?v=12">
 </head>
 <body>
   <canvas id="bg" aria-hidden="true"></canvas>
@@ -48,6 +48,11 @@
         <a class="btn" href="https://github.com/SatyamSaxena1/railway-overhead-line-detection">Project page on GitHub <b class="ar">&rarr;</b></a>
       </div>
     </section>
+
+    <aside class="wrap legend reveal" aria-label="How to read this page">
+      <p><span class="kind kind-work">Data work</span> Numbers measured on labelled data: charts, scores, how the labels were made.</p>
+      <p><span class="kind kind-field">In the field</span> Things built and run on a real train: the GPS run, the camera mount, the hardware.</p>
+    </aside>
 
     <section class="sec wrap">
       <div class="sec-head reveal"><h2>The <span class="grad">goal</span></h2></div>
@@ -148,8 +153,8 @@
       </div>
     </section>
 
-    <section class="sec wrap" id="route">
-      <div class="sec-head reveal"><h2>Where it <span class="grad">ran</span></h2><p>The system was built for a moving train, so every recording has a place as well as a picture.</p></div>
+    <section data-kind="field" class="sec wrap" id="route">
+      <div class="sec-head reveal"><span class="kind kind-field">In the field</span><h2>Where it <span class="grad">ran</span></h2><p>The system was built for a moving train, so every recording has a place as well as a picture.</p></div>
       <div class="route">
         <div class="route-copy">
           <div class="stats reveal">
@@ -171,8 +176,8 @@
       </div>
     </section>
 
-    <section class="sec wrap" id="hardware">
-      <div class="sec-head reveal"><h2>Built to <span class="grad">ride</span> a train</h2><p>A detector only matters if the cameras stay put on a moving locomotive, so I built the mount too. Open a chapter to follow it.</p></div>
+    <section data-kind="field" class="sec wrap" id="hardware">
+      <div class="sec-head reveal"><span class="kind kind-field">In the field</span><h2>Built to <span class="grad">ride</span> a train</h2><p>A detector only matters if the cameras stay put on a moving locomotive, so I built the mount too. Open a chapter to follow it.</p></div>
       <button class="hook reveal" id="hw-hook" type="button" aria-expanded="false" aria-controls="hw-chapters">
         <span class="hook-copy">
           <span class="hook-title">The mount that rides the cab.</span>
@@ -183,11 +188,32 @@
           <video src="../assets/hw/mount-on-loco.mp4" poster="../assets/hw/mount-on-loco.jpg" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1"></video>
         </span>
       </button>
-      <div class="hw-chapters" id="hw-chapters"><div><div class="vz" data-chart="story" data-key="hw"></div></div></div>
+      <div class="hw-chapters" id="hw-chapters"><div><ol class="rail">
+        <li><details class="stop" open>
+          <summary><span class="dot" aria-hidden="true"></span><h3>The problem</h3><span class="chev" aria-hidden="true"></span></summary>
+          <div class="stop-body"><div class="stop-text"><p>The detector runs on a webcam, but I was also testing a ZED 2i stereo camera as its possible replacement. Both had to see the same line from the same place, so they needed to sit side by side on the locomotive and stay put.</p><table class="spec"><caption>ZED 2i mounting and connection (datasheet)</caption><tr><th>Thread mount</th><td>1/4"-20 UNC</td></tr><tr><th>Bottom</th><td>2x M3 threads</td></tr><tr><th>Back</th><td>4x M3 threads</td></tr><tr><th>Other mounts</th><td>4x M2 thread mounts</td></tr><tr><th>Connector</th><td>USB 3.0 Type-C, dual locking screws</td></tr><tr><th>Power</th><td>USB 5 V, 380 mA</td></tr></table></div><div class="stop-figs n1"><figure><img src="../assets/hw/mount-side-by-side.jpg" alt="Test fit: the ZED 2i beside the webcam, taped to a bench." loading="lazy"><figcaption>Test fit: the ZED 2i beside the webcam, taped to a bench.</figcaption></figure></div></div>
+        </details></li>
+        <li><details class="stop" open>
+          <summary><span class="dot" aria-hidden="true"></span><h3>The design</h3><span class="chev" aria-hidden="true"></span></summary>
+          <div class="stop-body"><div class="stop-text"><p>I modelled the bracket in CAD: a base plate with hinge blocks, and a cradle that holds the camera body on a hinge so its angle can be adjusted. The red sketches mark what to change on each revision.</p></div><div class="stop-figs n2"><figure><img src="../assets/hw/design-iterations.jpg" alt="Printed trial parts and CAD views of the hinged cradle, with my notes sketched on them." loading="lazy"><figcaption>Printed trial parts and CAD views of the hinged cradle, with my notes sketched on them.</figcaption></figure><figure><img src="../assets/hw/slicer.jpg" alt="The hinge-block part in the slicer." loading="lazy"><figcaption>The hinge-block part in the slicer.</figcaption></figure></div></div>
+        </details></li>
+        <li><details class="stop" open>
+          <summary><span class="dot" aria-hidden="true"></span><h3>The prints</h3><span class="chev" aria-hidden="true"></span></summary>
+          <div class="stop-body"><div class="stop-text"><p>Every revision was printed and tried against the camera before the next one. These are the first prints: hinge blocks on a base plate.</p></div><div class="stop-figs n1"><figure><img src="../assets/hw/printed-parts.jpg" alt="Two black 3D-printed hinge parts." loading="lazy"><figcaption>Two black 3D-printed hinge parts.</figcaption></figure></div></div>
+        </details></li>
+        <li><details class="stop" open>
+          <summary><span class="dot" aria-hidden="true"></span><h3>The tool shop</h3><span class="chev" aria-hidden="true"></span></summary>
+          <div class="stop-body"><div class="stop-text"><p>The metal parts, screws and a threaded rod, were made at a tool shop in Lucknow. My dad came along to help with the hardware side, and the owner of the shop did the turning.</p></div><div class="stop-figs n2"><figure><img src="../assets/hw/tool-shop.jpg" alt="The tool shop in Lucknow where the parts were turned, with my dad and the shop owner." loading="lazy"><figcaption>The tool shop in Lucknow where the parts were turned, with my dad and the shop owner.</figcaption></figure><figure><img src="../assets/hw/threaded-rod.jpg" alt="The turned rod with its nuts." loading="lazy"><figcaption>The turned rod with its nuts.</figcaption></figure></div></div>
+        </details></li>
+        <li><details class="stop" open>
+          <summary><span class="dot" aria-hidden="true"></span><h3>The fit</h3><span class="chev" aria-hidden="true"></span></summary>
+          <div class="stop-body"><div class="stop-text"><p>Back at the bench, the machined screws went into the ZED's mounting holes.</p></div><div class="stop-figs n2"><figure><img src="../assets/hw/zed-back.jpg" alt="Machined screws in the ZED's mounting holes, with its USB-C port beside them." loading="lazy"><figcaption>Machined screws in the ZED's mounting holes, with its USB-C port beside them.</figcaption></figure><figure><img src="../assets/hw/zed-top.jpg" alt="The top plate and its threaded socket, with one of the people who helped make the mount." loading="lazy"><figcaption>The top plate and its threaded socket, with one of the people who helped make the mount.</figcaption></figure></div></div>
+        </details></li>
+      </ol></div></div>
     </section>
 
-    <section class="sec wrap" id="numbers">
-      <div class="sec-head reveal"><h2>By the <span class="grad">numbers</span></h2><p>Live charts drawn from the real label files and training logs. Hover or tap a bar for exact values.</p></div>
+    <section data-kind="work" class="sec wrap" id="numbers">
+      <div class="sec-head reveal"><span class="kind kind-work">Data work</span><h2>By the <span class="grad">numbers</span></h2><p>Live charts drawn from the real label files and training logs. Hover or tap a bar for exact values.</p></div>
       <div class="vz-grid2">
         <div class="card vz-block reveal"><h3>Frames per route</h3><p>Train and validation: 23,551 in all.</p><div class="vz" data-chart="vbar" data-id="frames_per_site" data-series="train,validation" data-stacked style="--ph:270px"></div></div>
         <div class="card vz-block reveal"><h3>133,245 labelled boxes</h3><p>Four classes; every box is a plain rectangle.</p><div class="vz" data-chart="hbar" data-id="boxes_per_class" data-series="train,validation" data-colors="class" data-stacked></div></div>
@@ -198,8 +224,8 @@
       <div class="card vz-block reveal" style="margin-top:16px"><h3>Where things appear in the frame</h3><p>Density of box centres. Pantographs cluster on the centre line, contact points sit along it just above, and masts and arms fan out towards the edges.</p><div class="vz" data-chart="heat"></div></div>
     </section>
 
-    <section class="sec wrap">
-      <div class="sec-head reveal"><h2>How the labels were <span class="grad">made</span></h2><p>Six steps, repeated task by task. Press any step to see the evidence.</p></div>
+    <section class="sec wrap" data-kind="work">
+      <div class="sec-head reveal"><span class="kind kind-work">Data work</span><h2>How the labels were <span class="grad">made</span></h2><p>Six steps, repeated task by task. Press any step to see the evidence.</p></div>
       <div class="vz" data-chart="pipeline" id="flow"></div>
       <div class="two" style="margin-top:16px">
         <div class="card reveal">
@@ -216,8 +242,8 @@
       <div class="card vz-block reveal" style="margin-top:16px"><h3>How the data was split</h3><p>Whole video segments stay together, so no segment appears in both train and validation. A separate mast-focused set joins at training time.</p><div class="vz" data-chart="splits"></div></div>
     </section>
 
-    <section class="sec wrap">
-      <div class="sec-head reveal"><h2>Models and <span class="grad">results</span></h2><p>Validation scores per class (AP@50:95). Two models, two validation sets: read them side by side, not as a leaderboard.</p></div>
+    <section class="sec wrap" data-kind="work">
+      <div class="sec-head reveal"><span class="kind kind-work">Data work</span><h2>Models and <span class="grad">results</span></h2><p>Validation scores per class (AP@50:95). Two models, two validation sets: read them side by side, not as a leaderboard.</p></div>
       <div class="two">
         <div class="card reveal">
           <h3>YOLO26x</h3>
@@ -252,8 +278,8 @@
       <p class="note reveal" style="margin-top:16px"><b>What holds across both:</b> the pantograph is detected well (about 0.90&ndash;0.92) and the contact point is the weak class (about 0.39) for both models. That points at the data (tiny boxes that are hard to place) more than at the model choice.</p>
     </section>
 
-    <section class="sec wrap">
-      <div class="sec-head reveal"><h2>What's still <span class="grad">imperfect</span></h2><p>I'd rather you hear it from me.</p></div>
+    <section class="sec wrap" data-kind="work">
+      <div class="sec-head reveal"><span class="kind kind-work">Data work</span><h2>What's still <span class="grad">imperfect</span></h2><p>I'd rather you hear it from me.</p></div>
       <ul class="issues">
         <li class="reveal"><b>Contact points are the weak spot.</b> Both models score only about 0.39 AP@50:95 on them, against 0.90 or more for the pantograph. The boxes are around 1% of the frame width, so a few pixels of offset costs most of the overlap, and they are hard to place consistently by hand.</li>
         <li class="reveal"><b>The two scores are not comparable.</b> YOLO and RF-DETR were scored on different image sets, and RF-DETR's validation and test splits share video segments, so its numbers are likely optimistic. There is no clean held-out test set.</li>
@@ -270,9 +296,9 @@
   <footer class="wrap"><span>&copy; <span id="yr">2026</span> Satyam Saxena</span><span><a href="../">&larr; Back to home</a></span></footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
-  <script src="../assets/js/site.js?v=6" defer></script>
+  <script src="../assets/js/site.js?v=7" defer></script>
   <script src="../assets/js/bg.js?v=5" defer></script>
   <script src="../assets/js/route-map.js?v=4" defer></script>
-  <script src="../assets/js/charts.js?v=7" data-json="../assets/data/charts.json?v=6" defer></script>
+  <script src="../assets/js/charts.js?v=8" data-json="../assets/data/charts.json?v=7" defer></script>
 </body>
 </html>
