@@ -71,6 +71,12 @@
     dlg.addEventListener('click', function () { dlg.close(); });
   }
   var hk = document.getElementById('hw-hook');
+  document.querySelectorAll('.hook video').forEach(function (v) {
+    v.muted = true; var go = function () { var p = v.play(); if (p && p.catch) p.catch(function () {}); };
+    go(); v.addEventListener('loadeddata', go); document.addEventListener('pointerdown', go, { once: true });
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) go(); else v.pause(); }); }).observe(v);
+  });
+  if (hk) hk.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); hk.click(); } });
   if (hk) hk.addEventListener('click', function () {
     var on = hk.getAttribute('aria-expanded') !== 'true', c = document.getElementById('hw-chapters');
     hk.setAttribute('aria-expanded', on); c.classList.toggle('open', on); hk.querySelector('.hook-label').textContent = on ? 'Hide the story' : 'See how it was made';
