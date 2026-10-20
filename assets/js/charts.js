@@ -157,6 +157,35 @@
       if (i < STEPS.length - 1) { var a = H('i', 'vz-arrow', null, w); a.style.setProperty('--i', i * .18 + .12 + 's'); }
     });
   }
+  function figs(list, cls, crop) {
+    return '<div class="' + cls + '">' + list.map(function (f) { return '<figure data-zoom tabindex="0" role="button"' + (crop ? ' class="ev-ph"' : '') + '><img src="' + BASE + f[0] + '" alt="' + esc(f[1]) + '" loading="lazy"><figcaption>' + esc(f[1]) + '</figcaption></figure>'; }).join('') + '</div>';
+  }
+  function blocks(bs) {
+    return bs.map(function (b) {
+      if (b.p) return '<p>' + esc(b.p) + '</p>';
+      if (b.imgs) return figs(b.imgs, 'ev' + (b.cols || b.imgs.length), b.crop);
+      if (b.spec) return '<table class="ev-spec"><caption>' + esc(b.title) + '</caption>' + b.spec.map(function (r) { return '<tr><th>' + esc(r[0]) + '</th><td>' + esc(r[1]) + '</td></tr>'; }).join('') + '</table>';
+      if (b.video) return '<figure class="ev-video"><video src="' + BASE + b.video[0] + '" poster="' + BASE + b.video[1] + '" autoplay muted loop playsinline aria-label="' + esc(b.video[2]) + '"></video><figcaption>' + esc(b.video[2]) + '</figcaption></figure>';
+      return '';
+    }).join('');
+  }
+  function story(el) {
+    var S = D.stories[el.getAttribute('data-key')], open = -1, nodes = [];
+    BASE = document.querySelector('script[src*="charts.js"]').getAttribute('data-json').replace(/data\/charts\.json.*/, '');
+    var w = H('div', 'vz-flow', null, el), pn = H('div', 'vz-panel', null, el);
+    S.forEach(function (s, i) {
+      var n = node(w, s.color, s.title, s.sub, i); n.setAttribute('role', 'button'); n.tabIndex = 0; n.setAttribute('aria-expanded', 'false'); H('em', 'vz-more', 'Open this chapter', n); nodes.push(n);
+      function tog() {
+        if (open === i) { open = -1; pn.classList.remove('open'); pn.innerHTML = ''; } else {
+          open = i; pn.innerHTML = '<h4>' + esc(s.title) + '</h4><div class="ev-body">' + blocks(s.blocks) + '</div>'; pn.classList.add('open'); pn.style.setProperty('--c', s.color);
+          pn.querySelectorAll('.ev-body > *').forEach(function (c, j) { c.style.setProperty('--k', j * .12 + 's'); });
+        }
+        nodes.forEach(function (x, j) { x.classList.toggle('on', j === open); x.setAttribute('aria-expanded', j === open); });
+      }
+      n.onclick = tog; n.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tog(); } };
+      if (i < S.length - 1) { var a = H('i', 'vz-arrow', null, w); a.style.setProperty('--i', i * .18 + .12 + 's'); }
+    });
+  }
   function roles(el) {
     var w = H('div', 'vz-splits', null, el);
     var c1 = H('div', 'col', null, w); node(c1, 'var(--accent)', 'CVAT on my PC', 'self-hosted in Docker,<br>31 tasks', 0);
@@ -179,7 +208,7 @@
     rows.forEach(function (r, i) { var row = H('div', 'grow', null, w); H('label', null, esc(r[0]), row); var tr = H('div', 'tr', null, row), b = H('div', 'gb', null, tr); b.style.left = (r[1] / 9 * 100) + '%'; b.style.width = ((r[2] - r[1]) / 9 * 100) + '%'; b.style.background = r[3]; b.style.setProperty('--i', i * .09 + 's'); bindTip(b, '<b>' + esc(r[0]) + '</b>'); });
   }
 
-  var B = { vbar: function (e) { bars(e, false); }, hbar: function (e) { bars(e, true); }, line: line, donut: donut, heat: function (e) { heat(e, 'positions'); }, sizes: function (e) { heat(e, 'sizes'); }, pipeline: pipeline, roles: roles, splits: splits, gantt: gantt };
+  var B = { vbar: function (e) { bars(e, false); }, hbar: function (e) { bars(e, true); }, line: line, donut: donut, heat: function (e) { heat(e, 'positions'); }, sizes: function (e) { heat(e, 'sizes'); }, pipeline: pipeline, roles: roles, story: story, splits: splits, gantt: gantt };
   function build(el) { var f = B[el.getAttribute('data-chart')]; if (!f || el.__built) return; el.__built = true; try { f(el); } catch (e) { el.textContent = 'This chart could not load.'; console.error(e); } }
   function start() {
     var els = [].slice.call(document.querySelectorAll('.vz[data-chart]')); els.forEach(build);

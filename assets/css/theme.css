@@ -349,3 +349,15 @@ figure.vz-heat{cursor:default}figure.vz-heat:hover{transform:none;border-color:t
 .hw-grid figure,.hw-wide{margin:0}.hw-grid img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:14px;display:block}
 .hw-wide{margin-top:14px!important;padding:12px}.hw-wide img{width:100%;border-radius:14px;display:block}
 @media(max-width:760px){.hw{grid-template-columns:1fr}.hw-grid{grid-template-columns:1fr 1fr}}
+
+/* story chapters */
+.ev-body>*{animation:evin .6s cubic-bezier(.2,.8,.2,1) both;animation-delay:var(--k,0s)}
+@keyframes evin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.vz-panel .ev1,.vz-panel .ev3{display:grid;gap:12px;margin-bottom:14px}.vz-panel .ev1{grid-template-columns:1fr}.vz-panel .ev3{grid-template-columns:repeat(3,1fr)}
+.vz-panel .ev2{margin-bottom:14px}
+.vz-panel .ev-ph img{aspect-ratio:4/5;object-fit:cover}
+.vz-panel figure[data-zoom]{cursor:zoom-in}
+.ev-video{max-width:340px;margin:0 auto 14px!important}.ev-video video{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:14px;display:block;background:#000}
+.ev-spec{width:100%;max-width:560px;border-collapse:collapse;margin:0 0 14px;font-size:14px}.ev-spec caption{text-align:left;font-weight:650;margin-bottom:6px}
+.ev-spec th,.ev-spec td{text-align:left;padding:8px 10px;border-top:1px solid var(--line)}.ev-spec th{color:var(--muted);font-weight:500;width:46%}
+@media(max-width:760px){.vz-panel .ev3{grid-template-columns:1fr 1fr}}
