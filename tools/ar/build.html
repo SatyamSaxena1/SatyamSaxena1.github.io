@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>AR diorama builder</title>
+  <!-- Builds the AR Quick Look models for /fuzzy/ (run tools/ar/build_ar.py). Not linked from the site. -->
+  <script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
+  <script src="../../assets/js/fuzzy-engine.js"></script>
+  <style>body{margin:0;background:#05050b}canvas{display:block}</style>
+</head>
+<body>
+<script type="module">
+import * as THREE from 'three';
+import { USDZExporter } from 'three/addons/exporters/USDZExporter.js';
+
+const E = window.FuzzyEngine;
+const COL = { low: 0xe23b3b, medium: 0xffb870, high: 0x59e0a5 }, ACCENT = 0x8a6bff, BLUE = 0x3d7bff;
+const std = (color, o = {}) => new THREE.MeshStandardMaterial(Object.assign({ color, roughness: 0.6, metalness: 0.05 }, o));
+function box(g, w, h, d, mat, x, y, z) { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.set(x, y, z); g.add(m); return m; }
+
+function signTexture(value, cut, ok) {
+  const c = document.createElement('canvas'); c.width = 512; c.height = 224; const x = c.getContext('2d');
+  x.fillStyle = '#06060c'; x.fillRect(0, 0, 512, 224); x.strokeStyle = '#2a2840'; x.lineWidth = 8; x.strokeRect(4, 4, 504, 216);
+  const col = !ok ? '#e23b3b' : value < 35 ? '#e23b3b' : value < 65 ? '#ffb870' : '#59e0a5';
+  x.fillStyle = col; x.textAlign = 'center';
+  x.font = '700 28px Menlo, Consolas, monospace'; x.fillText(ok ? 'SPEED LIMIT' : 'FUZZY SYSTEM', 196, 50);
+  x.font = '800 ' + (ok ? 120 : 84) + 'px Menlo, Consolas, monospace'; x.fillText(ok ? String(Math.round(value)) : 'NO RULE', 196, 178);
+  ['low', 'medium', 'high'].forEach((k, i) => {
+    const bx = 392 + i * 36, v = cut ? cut[k] : 0; x.fillStyle = '#16152a'; x.fillRect(bx, 50, 24, 130);
+    x.fillStyle = '#' + COL[k].toString(16).padStart(6, '0'); x.fillRect(bx, 180 - 130 * v, 24, 130 * v);
+    x.fillStyle = '#8f8bb3'; x.font = '700 18px Menlo, monospace'; x.fillText(k[0].toUpperCase(), bx + 12, 206);
+  });
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+function labelTexture(lines) {
+  const c = document.createElement('canvas'); c.width = 1024; c.height = 256; const x = c.getContext('2d');
+  x.fillStyle = '#0b0a14'; x.fillRect(0, 0, 1024, 256); x.fillStyle = '#ecebff'; x.textAlign = 'center';
+  x.font = '800 64px Helvetica, Arial, sans-serif'; x.fillText(lines[0], 512, 100);
+  x.fillStyle = '#a6a3c8'; x.font = '500 40px Helvetica, Arial, sans-serif'; x.fillText(lines[1], 512, 176);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+
+// one diorama: a 40-unit stretch of highway with the live sign and the rule lattice, scaled to ~60 cm
+function diorama(road, traffic, gap, setName) {
+  const rules = setName === 'v2' ? E.RULES_V2 : E.RULES, o = E.run(road, traffic, gap, rules);
+  const root = new THREE.Group(), g = new THREE.Group(); root.add(g);
+  const LANES = [-3.6, 0, 3.6], RAMP = 7.6, L = 40;
+  box(g, 24, 0.6, L + 4, std(0x1a1926), 1.8, -0.35, 0);                       // base slab
+  box(g, 10.8, 0.08, L, std(0x22222c, { roughness: 0.9 }), 0, 0, 0);          // road
+  box(g, 4, 0.08, L * 0.55, std(0x22222c, { roughness: 0.9 }), RAMP, 0, L * 0.225);   // slip road
+  const white = std(0xe8e6ff, { emissive: 0x77768a }), accent = std(ACCENT, { emissive: ACCENT, emissiveIntensity: 0.6 });
+  box(g, 0.18, 0.1, L, accent, -5.35, 0.06, 0); box(g, 0.18, 0.1, L * 0.55, std(BLUE, { emissive: BLUE, emissiveIntensity: 0.6 }), 9.55, 0.06, L * 0.225);
+  [-1.8, 1.8].forEach(x => { for (let z = -L / 2 + 2; z < L / 2; z += 6) box(g, 0.16, 0.1, 2.4, white, x, 0.06, z); });
+  // the gap window beside the ramp
+  const gapLen = 6 + gap * 3.2;
+  box(g, 3.3, 0.04, Math.min(gapLen, L - 6), std(0x59e0a5, { emissive: 0x59e0a5, emissiveIntensity: 0.5, transparent: true, opacity: 0.35 }), LANES[2], 0.08, 4);
+  // traffic, fewer and further apart when traffic is light
+  const per = Math.max(1, Math.round(1 + traffic * 0.7)), cols = [0x6b7280, 0x9aa3b5, 0x2d3a5c, 0xb9b6c8, 0x7c8aa5];
+  let k = 0;
+  LANES.forEach((x, li) => { for (let n = 0; n < per; n++) {
+    const z = -L / 2 + 3 + (n + li * 0.33) * (L - 6) / per;
+    if (li === 2 && Math.abs(z - 4) < gapLen / 2 + 2) continue;
+    box(g, 1.8, 0.7, 4.2, std(cols[k++ % cols.length], { roughness: 0.5 }), x, 0.45, z);
+    box(g, 1.5, 0.55, 2.1, std(0x0c0c16, { roughness: 0.2, metalness: 0.6 }), x, 1.05, z - 0.2);
+    box(g, 1.5, 0.16, 0.08, std(0xff3b4e, { emissive: 0xff3b4e }), x, 0.55, z + 2.12);
+  } });
+  // your car on the slip road
+  box(g, 1.8, 0.7, 4.2, std(ACCENT, { emissive: ACCENT, emissiveIntensity: 0.4 }), RAMP, 0.45, L * 0.32);
+  box(g, 1.5, 0.55, 2.1, std(0x0c0c16, { roughness: 0.2, metalness: 0.6 }), RAMP, 1.05, L * 0.32 - 0.2);
+  // gantry and the live sign
+  const pole = std(0x55546a); const GZ = -6;
+  box(g, 0.4, 9, 0.4, pole, -6.6, 4.5, GZ); box(g, 0.4, 9, 0.4, pole, 10.2, 4.5, GZ); box(g, 17.2, 0.5, 0.5, pole, 1.8, 9, GZ);
+  const sign = new THREE.Mesh(new THREE.PlaneGeometry(7.2, 3.15), new THREE.MeshStandardMaterial({ map: signTexture(o.value, o.cut, o.ok), emissiveMap: null, emissive: 0x000000, roughness: 1 }));
+  sign.position.set(1.8, 7.3, GZ + 0.3); g.add(sign);
+  // the rule lattice above the road: x = gap, y = road, z = traffic
+  const holo = new THREE.Group(); holo.position.set(-1.5, 17, -10); g.add(holo);
+  const SP = 2.1, T3 = ['poor', 'average', 'good'], cell = {};
+  T3.forEach((r, ri) => T3.forEach((t, ti) => T3.forEach((gp, gi) => { cell[r + '|' + t + '|' + gp] = new THREE.Vector3((gi - 1) * SP, (ri - 1) * SP, (1 - ti) * SP); })));
+  const used = {};
+  rules.forEach((r, i) => {
+    const a = o.activations[i], c = COL[r[2]];
+    if (r[0] === 'or') {   // the 2023 OR rule: a shell around everything
+      if (a > 0) holo.add(new THREE.Mesh(new THREE.BoxGeometry(SP * 3 + 1, SP * 3 + 1, SP * 3 + 1), std(c, { emissive: c, emissiveIntensity: 0.6, transparent: true, opacity: 0.14 + a * 0.2 })));
+      return;
+    }
+    const key = r[1].join('|'); used[key] = 1; const s = 0.55 + a * 0.5;
+    const m = new THREE.Mesh(new THREE.BoxGeometry(s, s, s), std(c, { emissive: c, emissiveIntensity: 0.2 + a * 0.9, transparent: true, opacity: 0.25 + a * 0.7 }));
+    m.position.copy(cell[key]); holo.add(m);
+  });
+  Object.keys(cell).forEach(key => { if (!used[key]) { const m = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.4, 0.4), std(0x6d6a8c, { transparent: true, opacity: 0.18 })); m.position.copy(cell[key]); holo.add(m); } });
+  // beams from firing rules to the sign
+  const signTop = new THREE.Vector3(1.8, 8.95, GZ + 0.3), up = new THREE.Vector3(0, 1, 0);
+  rules.forEach((r, i) => {
+    const a = o.activations[i]; if (a <= 0.01) return;
+    const src = (r[0] === 'or' ? new THREE.Vector3() : cell[r[1].join('|')].clone()).add(holo.position);
+    const d = new THREE.Vector3().subVectors(signTop, src), len = d.length(), rad = 0.05 + a * 0.1;
+    const beam = new THREE.Mesh(new THREE.CylinderGeometry(rad, rad, len, 8), std(COL[r[2]], { emissive: COL[r[2]], emissiveIntensity: 0.9, transparent: true, opacity: 0.6 }));
+    beam.position.copy(src).addScaledVector(d, 0.5); beam.quaternion.setFromUnitVectors(up, d.normalize()); g.add(beam);
+  });
+  // a title card at the front edge
+  const title = new THREE.Mesh(new THREE.PlaneGeometry(14, 3.5), new THREE.MeshStandardMaterial({ map: labelTexture(
+    [setName === 'v2' ? 'Fuzzy Highway · my 27-rule rewrite' : 'Fuzzy Highway · 2023 rules',
+     'road ' + road + ' · traffic ' + traffic + ' · gap ' + gap + ' → ' + (o.ok ? Math.round(o.value) + ' km/h' : 'no rule fires')]), roughness: 1 }));
+  title.position.set(1.8, 1.9, L / 2 + 2.1); title.rotation.x = -0.35; g.add(title);
+  g.position.set(-1.8, 0.35, 0);
+  root.scale.setScalar(0.014);   // 1 unit = 1.4 cm, so the diorama is about 60 cm long on a table
+  return { root, o };
+}
+
+window.buildAR = async function (road, traffic, gap, setName) {
+  const { root, o } = diorama(road, traffic, gap, setName);
+  const scene = new THREE.Scene(); scene.add(root);
+  // a preview render for the button thumbnail
+  const r = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true }); r.setSize(800, 560); r.setClearColor(0x0b0a14);
+  scene.add(new THREE.HemisphereLight(0xb8b0ff, 0x101018, 1.6)); const dl = new THREE.DirectionalLight(0xffffff, 1.5); dl.position.set(-3, 5, 4); scene.add(dl);
+  const cam = new THREE.PerspectiveCamera(32, 800 / 560, 0.01, 10); cam.position.set(0.55, 0.42, 0.62); cam.lookAt(0.0, 0.1, -0.03);
+  r.render(scene, cam); const png = r.domElement.toDataURL('image/png');
+  scene.remove(scene.children[1], scene.children[2]);   // lights aren't exported; Quick Look lights the model itself
+  const buf = await new USDZExporter().parse(scene);
+  let bin = ''; const u8 = new Uint8Array(buf); for (let i = 0; i < u8.length; i += 0x8000) bin += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000));
+  return { usdz: btoa(bin), png, value: o.ok ? o.value : null };
+};
+window.ready = true;
+</script>
+</body>
+</html>

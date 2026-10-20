@@ -77,6 +77,11 @@
     @supports not (color:color-mix(in srgb,red,red)){.fz-area{fill:var(--chip)}.fz-scene{background:linear-gradient(180deg,#0d0c1d,var(--bg))}}
     @media(max-width:760px){.fz-scene{aspect-ratio:4/3.4}.fz-hud.bl span{font-size:11px}}
     @media(max-width:560px){.fz-hud.bl{display:none}.fz-hud.tl{top:10px;right:10px;padding:4px 10px;font-size:11px}.fz-hud.tl .long{display:none}}
+    .fz-ar{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:12px;align-items:center;margin:0 0 16px}
+    .fz-ar-copy b{display:block;font-size:16px;margin-bottom:4px}.fz-ar-copy span{font-size:13.5px;color:var(--muted)}
+    .fz-ar a{display:block;border-radius:16px;overflow:hidden;border:1px solid var(--line)}.fz-ar img{width:100%;display:block}
+    .fz-ar .ar-no{display:none}.fz-ar.no-ar .ar-yes{display:none}.fz-ar.no-ar .ar-no{display:inline}.fz-ar.no-ar a{cursor:default;opacity:.85}
+    @media(max-width:760px){.fz-ar{grid-template-columns:1fr 1fr}.fz-ar-copy{grid-column:1/-1}}
     .fz-sets{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px}
     .fz-sets>span{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-right:4px}
     .fz-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -127,6 +132,11 @@
           <span><i style="background:var(--good)"></i>green window = gap</span>
           <span><i style="background:var(--accent)"></i>you, at the fuzzy speed</span>
         </div>
+      </div>
+      <div class="fz-ar reveal" id="fz-ar">
+        <div class="fz-ar-copy"><b>See it on your desk</b><span class="ar-yes">Two still models of the highway for AR on iPhone and iPad. Tap one, then place it on a table and walk around it.</span><span class="ar-no">Two still models of the highway in AR. Open this page on an iPhone or iPad to place one on your desk.</span></div>
+        <a rel="ar" href="../assets/fuzzy/ar/highway-2023-dense.usdz"><img src="../assets/fuzzy/ar/highway-2023-dense.jpg" alt="View in AR: the 2023 rules with dense traffic, where the OR rule's red shell forces a limit of 17" loading="lazy"></a>
+        <a rel="ar" href="../assets/fuzzy/ar/highway-rewrite.usdz"><img src="../assets/fuzzy/ar/highway-rewrite.jpg" alt="View in AR: the 27-rule rewrite with light traffic, several rules firing to a limit of 56" loading="lazy"></a>
       </div>
       <div class="fz-sets reveal" role="group" aria-label="Rule base">
         <span>Rule base</span>
@@ -214,5 +224,10 @@
   <script src="../assets/js/fuzzy-engine.js?v=2" defer></script>
   <script src="../assets/js/fuzzy-demo.js?v=6" defer></script>
   <script src="../assets/js/highway.js?v=11" defer></script>
+  <script>
+  // AR Quick Look links only work in Safari on iPhone and iPad; elsewhere keep the pictures but don't download the file
+  (function () { var a = document.createElement('a'), ua = navigator.userAgent, ok = (a.relList && a.relList.supports && a.relList.supports('ar')) || /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1), box = document.getElementById('fz-ar');
+    if (!box || ok) return; box.classList.add('no-ar'); [].forEach.call(box.querySelectorAll('a[rel=ar]'), function (l) { l.removeAttribute('href'); l.setAttribute('aria-disabled', 'true'); }); })();
+  </script>
 </body>
 </html>
