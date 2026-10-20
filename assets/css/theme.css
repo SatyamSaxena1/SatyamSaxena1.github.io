@@ -380,3 +380,19 @@ figure.vz-heat{cursor:default}figure.vz-heat:hover{transform:none;border-color:t
 .hw-chapters:not(.open){visibility:hidden;transition:grid-template-rows .6s cubic-bezier(.2,.8,.2,1),visibility 0s .6s}
 @media(max-width:760px){.hook{grid-template-columns:1fr;border-radius:28px}.hook-media{order:-1;width:min(100%,240px)}}
 @media(prefers-reduced-motion:reduce){.hook,.hook-media,.hw-chapters{transition:none}}
+
+/* fullscreen viewer */
+.hw-view{border:0;padding:0;margin:0;max-width:none;max-height:none;width:100vw;height:100vh;height:100dvh;background:#000;color:#fff;overflow:hidden}
+.hw-view::backdrop{background:#000}
+.hw-view[open]{display:grid;place-items:center;animation:hvin .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes hvin{from{opacity:0;transform:scale(1.02)}to{opacity:1;transform:none}}
+.hw-view img{display:block;max-width:100vw;max-height:100vh;max-height:100dvh;width:auto;height:auto;object-fit:contain;cursor:zoom-out}
+.hv-bar{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;padding:48px clamp(16px,3vw,36px) clamp(16px,3vw,28px);background:linear-gradient(transparent,rgba(0,0,0,.78));pointer-events:none}
+.hv-txt{display:grid;gap:4px;max-width:46em}.hv-txt b{font-size:clamp(18px,2vw,24px);letter-spacing:-.02em}.hv-txt span{font-size:14px;color:rgba(255,255,255,.75);line-height:1.4}
+.hv-nav{display:flex;align-items:center;gap:10px;pointer-events:auto;white-space:nowrap}.hv-count{font-size:13px;color:rgba(255,255,255,.7);min-width:3.4em;text-align:center}
+.hv-nav button,.hv-x{width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.16);backdrop-filter:blur(14px);color:#fff;font-size:20px;cursor:pointer;transition:background .2s,transform .2s}
+.hv-nav button:hover,.hv-x:hover{background:rgba(255,255,255,.3);transform:scale(1.06)}
+.hv-nav button:focus-visible,.hv-x:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.hv-x{position:fixed;top:clamp(12px,2vw,24px);right:clamp(12px,2vw,24px);font-size:26px;line-height:1}
+.vz-node[role=button]:focus-visible{box-shadow:0 0 0 3px var(--c)}
+@media(prefers-reduced-motion:reduce){.hw-view[open]{animation:none}}

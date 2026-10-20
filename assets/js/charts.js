@@ -157,34 +157,74 @@
       if (i < STEPS.length - 1) { var a = H('i', 'vz-arrow', null, w); a.style.setProperty('--i', i * .18 + .12 + 's'); }
     });
   }
-  function figs(list, cls, crop) {
-    return '<div class="' + cls + '">' + list.map(function (f) { return '<figure data-zoom tabindex="0" role="button"' + (crop ? ' class="ev-ph"' : '') + '><img src="' + BASE + f[0] + '" alt="' + esc(f[1]) + '" loading="lazy"><figcaption>' + esc(f[1]) + '</figcaption></figure>'; }).join('') + '</div>';
+  function full(p) { return p.replace('hw/', 'hw/full/'); }
+  var FLAT = [];
+  function figs(list, cls, crop, ci) {
+    return '<div class="' + cls + '">' + list.map(function (f) { return '<figure data-vi="' + f.vi + '" tabindex="0" role="button"' + (crop ? ' class="ev-ph"' : '') + '><img src="' + BASE + f[0] + '" alt="' + esc(f[1]) + '" loading="lazy"><figcaption>' + esc(f[1]) + '</figcaption></figure>'; }).join('') + '</div>';
   }
-  function blocks(bs) {
+  function blocks(bs, ci) {
     return bs.map(function (b) {
       if (b.p) return '<p>' + esc(b.p) + '</p>';
-      if (b.imgs) return figs(b.imgs, 'ev' + (b.cols || b.imgs.length), b.crop);
+      if (b.imgs) return figs(b.imgs, 'ev' + (b.cols || b.imgs.length), b.crop, ci);
       if (b.spec) return '<table class="ev-spec"><caption>' + esc(b.title) + '</caption>' + b.spec.map(function (r) { return '<tr><th>' + esc(r[0]) + '</th><td>' + esc(r[1]) + '</td></tr>'; }).join('') + '</table>';
-      if (b.video) return '<figure class="ev-video"><video src="' + BASE + b.video[0] + '" poster="' + BASE + b.video[1] + '" autoplay muted loop playsinline aria-label="' + esc(b.video[2]) + '"></video><figcaption>' + esc(b.video[2]) + '</figcaption></figure>';
       return '';
     }).join('');
   }
+  function viewer() {
+    var d = document.getElementById('hw-view');
+    if (d) return d;
+    d = H('dialog', 'hw-view', '<img alt=""><div class="hv-bar"><div class="hv-txt"><b></b><span></span></div><div class="hv-nav"><button class="hv-prev" aria-label="Previous picture">&#8592;</button><span class="hv-count"></span><button class="hv-next" aria-label="Next picture">&#8594;</button></div></div><button class="hv-x" aria-label="Close viewer">&times;</button>', document.body);
+    d.id = 'hw-view'; d.setAttribute('aria-label', 'Picture viewer');
+    return d;
+  }
   function story(el) {
-    var S = D.stories[el.getAttribute('data-key')], open = -1, nodes = [];
+    var S = D.stories[el.getAttribute('data-key')], open = -1, nodes = [], at = 0, view, titles = S.map(function (s) { return s.title; });
     BASE = document.querySelector('script[src*="charts.js"]').getAttribute('data-json').replace(/data\/charts\.json.*/, '');
     var w = H('div', 'vz-flow', null, el), pn = H('div', 'vz-panel', null, el);
+    w.setAttribute('role', 'toolbar'); w.setAttribute('aria-label', 'Chapters. Use the left and right arrow keys, then Enter.');
+    FLAT = []; S.forEach(function (s, ci) { s.blocks.forEach(function (b) { (b.imgs || []).forEach(function (f) { f.vi = FLAT.length; FLAT.push({ ci: ci, src: full(f[0]), cap: f[1] }); }); }); });
+    function firstOf(ci) { for (var k = 0; k < FLAT.length; k++) if (FLAT[k].ci === ci) return k; return -1; }
+    function render(ci) { return blocks(S[ci].blocks, ci); }
+    function show(k) {
+      view = view || viewer(); at = (k + FLAT.length) % FLAT.length; var f = FLAT[at];
+      var im = view.querySelector('img'); im.src = BASE + f.src; im.alt = f.cap;
+      view.querySelector('.hv-txt b').textContent = titles[f.ci]; view.querySelector('.hv-txt span').textContent = f.cap;
+      var same = FLAT.filter(function (x) { return x.ci === f.ci; }); view.querySelector('.hv-count').textContent = (same.indexOf(f) + 1) + ' / ' + same.length;
+    }
+    function bindView() {
+      view = viewer(); if (view.__bound) return; view.__bound = true;
+      view.querySelector('.hv-prev').onclick = function (e) { e.stopPropagation(); show(at - 1); };
+      view.querySelector('.hv-next').onclick = function (e) { e.stopPropagation(); show(at + 1); };
+      view.querySelector('.hv-x').onclick = function () { view.close(); };
+      view.addEventListener('click', function (e) { if (e.target === view || e.target.tagName === 'IMG') view.close(); });
+      view.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight') { e.preventDefault(); show(at + 1); } else if (e.key === 'ArrowLeft') { e.preventDefault(); show(at - 1); }
+        else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); var ci = (FLAT[at].ci + (e.key === 'ArrowDown' ? 1 : S.length - 1)) % S.length, k = firstOf(ci); if (k >= 0) show(k); }
+      });
+      view.addEventListener('close', function () { var n = nodes[open]; if (n) n.focus(); });
+    }
+    function launch(k) { bindView(); show(k); if (!view.open) view.showModal(); }
     S.forEach(function (s, i) {
-      var n = node(w, s.color, s.title, s.sub, i); n.setAttribute('role', 'button'); n.tabIndex = 0; n.setAttribute('aria-expanded', 'false'); H('em', 'vz-more', 'Open this chapter', n); nodes.push(n);
+      var n = node(w, s.color, s.title, s.sub, i); n.setAttribute('role', 'button'); n.tabIndex = i ? -1 : 0; n.setAttribute('aria-expanded', 'false'); H('em', 'vz-more', 'Open this chapter', n); nodes.push(n);
       function tog() {
         if (open === i) { open = -1; pn.classList.remove('open'); pn.innerHTML = ''; } else {
-          open = i; pn.innerHTML = '<h4>' + esc(s.title) + '</h4><div class="ev-body">' + blocks(s.blocks) + '</div>'; pn.classList.add('open'); pn.style.setProperty('--c', s.color);
+          open = i; pn.innerHTML = '<h4>' + esc(s.title) + '</h4><div class="ev-body">' + render(i) + '</div>'; pn.classList.add('open'); pn.style.setProperty('--c', s.color);
           pn.querySelectorAll('.ev-body > *').forEach(function (c, j) { c.style.setProperty('--k', j * .12 + 's'); });
+          var k = firstOf(i); if (k >= 0) launch(k);
         }
         nodes.forEach(function (x, j) { x.classList.toggle('on', j === open); x.setAttribute('aria-expanded', j === open); });
       }
-      n.onclick = tog; n.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tog(); } };
+      n.onclick = tog;
+      n.onkeydown = function (e) {
+        var j = i;
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tog(); return; }
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') j = (i + 1) % S.length; else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') j = (i + S.length - 1) % S.length; else if (e.key === 'Home') j = 0; else if (e.key === 'End') j = S.length - 1; else return;
+        e.preventDefault(); nodes[i].tabIndex = -1; nodes[j].tabIndex = 0; nodes[j].focus();
+      };
       if (i < S.length - 1) { var a = H('i', 'vz-arrow', null, w); a.style.setProperty('--i', i * .18 + .12 + 's'); }
     });
+    pn.addEventListener('click', function (e) { var f = e.target.closest('figure[data-vi]'); if (f) launch(+f.getAttribute('data-vi')); });
+    pn.addEventListener('keydown', function (e) { var f = e.target.closest && e.target.closest('figure[data-vi]'); if (f && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); launch(+f.getAttribute('data-vi')); } });
   }
   function roles(el) {
     var w = H('div', 'vz-splits', null, el);
