@@ -70,6 +70,12 @@
     document.addEventListener('keydown', function (e) { var f = e.target.closest && e.target.closest('figure[data-zoom]'); if (f && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); open(f); } });
     dlg.addEventListener('click', function () { dlg.close(); });
   }
+  document.querySelectorAll('button.yt').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var f = document.createElement('iframe'); f.src = 'https://www.youtube-nocookie.com/embed/' + b.getAttribute('data-yt') + '?autoplay=1&rel=0'; f.title = b.getAttribute('aria-label').replace('Play video: ', '');
+      f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen'; f.allowFullscreen = true; f.className = 'yt-frame'; b.replaceWith(f); f.focus();
+    });
+  });
   var hk = document.getElementById('hw-hook');
   document.querySelectorAll('.hook video').forEach(function (v) {
     v.muted = true; var go = function () { var p = v.play(); if (p && p.catch) p.catch(function () {}); };
