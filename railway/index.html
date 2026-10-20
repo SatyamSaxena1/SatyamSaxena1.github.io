@@ -234,17 +234,18 @@
         <div class="card vz-block reveal"><h3>YOLO26x losses</h3><p>Train and validation, box and class.</p><div class="vz" data-chart="line" data-id="yolo" data-keys="tbox,tcls,vbox,vcls" data-names="train box,train class,val box,val class" data-ymax="1.6" data-label="YOLO26x losses by epoch"></div></div>
         <div class="card vz-block reveal"><h3>RF-DETR losses</h3><p>Per-epoch training and validation loss.</p><div class="vz" data-chart="line" data-id="rfdetr" data-keys="train_loss,val_loss" data-names="train loss,val loss" data-ymin="3.5" data-ymax="7" data-label="RF-DETR losses by epoch"></div></div>
       </div>
-      <p class="note reveal" style="margin-top:16px"><b>What holds across both:</b> the pantograph is detected well (about 0.90&ndash;0.92) and the contact point is the weak class (about 0.39) for both models. That points at the data (tiny boxes, and some frames with a missing pantograph) more than at the model choice.</p>
+      <p class="note reveal" style="margin-top:16px"><b>What holds across both:</b> the pantograph is detected well (about 0.90&ndash;0.92) and the contact point is the weak class (about 0.39) for both models. That points at the data (tiny boxes that are hard to place) more than at the model choice.</p>
     </section>
 
     <section class="sec wrap">
       <div class="sec-head reveal"><h2>What's still <span class="grad">imperfect</span></h2><p>I'd rather you hear it from me.</p></div>
-      <div class="card vz-block reveal" style="margin-bottom:16px"><h3>Pantograph box missing</h3><p>Share of each route's frames that have a contact point but no pantograph box.</p><div class="vz" data-chart="hbar" data-id="label_gap" data-suffix="%" data-dec="1" data-max="20"></div></div>
       <ul class="issues">
-        <li class="reveal"><b>1,266 more frames have a contact point but no pantograph box,</b> about 14% of Mumbai, 8% of Mehsana and Palanpur, 3% of Ahmedabad and Lucknow.</li>
-        <li class="reveal"><b>Validation sets differ.</b> YOLO and RF-DETR were scored on different image sets, and the RF-DETR validation and test splits share video segments.</li>
-        <li class="reveal"><b>Neighbouring frames are near-duplicates,</b> so the number of distinct scenes is far smaller than the frame count.</li>
-        <li class="reveal"><b>Five routes, no agreement measure.</b> Review was a second pass in CVAT, not an independent labelling, so there is no inter-annotator agreement score, and the domain is limited.</li>
+        <li class="reveal"><b>Contact points are the weak spot.</b> Both models score only about 0.39 AP@50:95 on them, against 0.90 or more for the pantograph. The boxes are around 1% of the frame width, so a few pixels of offset costs most of the overlap, and they are hard to place consistently by hand.</li>
+        <li class="reveal"><b>The two scores are not comparable.</b> YOLO and RF-DETR were scored on different image sets, and RF-DETR's validation and test splits share video segments, so its numbers are likely optimistic. There is no clean held-out test set.</li>
+        <li class="reveal"><b>Neighbouring frames are near-duplicates,</b> so the number of distinct scenes is far smaller than the 23,551 frames. The no-shared-segment guarantee covers video-derived frames only, not the augmented sources.</li>
+        <li class="reveal"><b>A narrow domain.</b> Five routes, a webcam plus one ZED camera, and a limited range of weather and times of day. Expect a gap on other railways or camera mountings, and the ZED frames look quite different from the webcam ones.</li>
+        <li class="reveal"><b>Masts and arms are middling</b> (about 0.69 to 0.79), and the pantograph is the only class above 0.9.</li>
+        <li class="reveal"><b>No agreement measure.</b> Review was a second pass in CVAT, not an independent labelling, so there is no inter-annotator agreement score.</li>
       </ul>
       <p class="note reveal" style="margin-top:16px">The full dataset (23,551 frames, 8.13 GB) is private and not available for download. The <a href="https://www.kaggle.com/datasets/satyamsaxena12/railway-overhead-line-showcase" style="text-decoration:underline">Kaggle write-up</a> has sample frames, the full numbers, and the data-prep steps.</p>
     </section>
@@ -257,6 +258,6 @@
   <script src="../assets/js/site.js?v=3" defer></script>
   <script src="../assets/js/bg.js?v=5" defer></script>
   <script src="../assets/js/route-map.js?v=4" defer></script>
-  <script src="../assets/js/charts.js?v=4" data-json="../assets/data/charts.json?v=3" defer></script>
+  <script src="../assets/js/charts.js?v=4" data-json="../assets/data/charts.json?v=4" defer></script>
 </body>
 </html>

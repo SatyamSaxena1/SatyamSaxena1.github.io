@@ -499,27 +499,6 @@
    "n": 71
   },
   {
-   "file": "h_gap_1.jpg",
-   "group": "Label quality",
-   "title": "Known issue: pantograph not labelled (Mumbai)",
-   "caption": "A frame from Mumbai with contact-point boxes but no pantograph box, one of 1,266 such frames. Listed for review.",
-   "n": 72
-  },
-  {
-   "file": "h_gap_2.jpg",
-   "group": "Label quality",
-   "title": "Known issue: pantograph not labelled (Palanpur)",
-   "caption": "A frame from Palanpur with contact-point boxes but no pantograph box, one of 1,266 such frames. Listed for review.",
-   "n": 73
-  },
-  {
-   "file": "h_gap_3.jpg",
-   "group": "Label quality",
-   "title": "Known issue: pantograph not labelled (Mehsana)",
-   "caption": "A frame from Mehsana with contact-point boxes but no pantograph box, one of 1,266 such frames. Listed for review.",
-   "n": 74
-  },
-  {
    "file": "s01-isaac-sim.jpg",
    "group": "Behind the scenes",
    "title": "Synthetic depth in Isaac Sim",
@@ -700,6 +679,27 @@
    "title": "YOLO26x: NaN losses and recovery",
    "caption": "Early YOLO26x epochs went to NaN loss; training recovered automatically from the last checkpoint and was resumed.",
    "n": 100
+  },
+  {
+   "file": "f49_palanpur.jpg",
+   "group": "Labelled frames",
+   "title": "Palanpur",
+   "caption": "A labelled frame from Palanpur: 1 contact_point, 1 pantograph.",
+   "n": 101
+  },
+  {
+   "file": "f50_palanpur.jpg",
+   "group": "Labelled frames",
+   "title": "Palanpur",
+   "caption": "A labelled frame from Palanpur: 2 contact_point, 1 pantograph.",
+   "n": 102
+  },
+  {
+   "file": "f51_palanpur.jpg",
+   "group": "Labelled frames",
+   "title": "Palanpur",
+   "caption": "A labelled frame from Palanpur: 2 contact_point, 1 pantograph.",
+   "n": 103
   }
  ]
 }
