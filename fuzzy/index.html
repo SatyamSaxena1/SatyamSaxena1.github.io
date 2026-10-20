@@ -64,6 +64,8 @@
       background:radial-gradient(120% 90% at 70% 0%,color-mix(in srgb,var(--accent) 22%,transparent),transparent 60%),linear-gradient(180deg,color-mix(in srgb,var(--accent-2) 14%,var(--bg)),var(--bg));box-shadow:var(--glass-edge,none),var(--shadow)}
     .fz-scene canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
     .fz-scene.no3d{display:none}
+    .fz-ar-note{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:2;padding:8px 14px;border-radius:99px;background:var(--accent);color:#fff;font-size:13px;font-weight:650;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+    .fz-scene.ar-only .fz-hud{display:none}
     .fz-scene .fz-still{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
     .fz-scene[data-state=err]{border-color:var(--pink)}
     .fz-hud{position:absolute;z-index:1;font-size:12px;color:#ecebff;pointer-events:none}
@@ -223,7 +225,7 @@
   <script src="../assets/js/bg.js?v=10" defer></script>
   <script src="../assets/js/fuzzy-engine.js?v=2" defer></script>
   <script src="../assets/js/fuzzy-demo.js?v=6" defer></script>
-  <script src="../assets/js/highway.js?v=11" defer></script>
+  <script src="../assets/js/highway.js?v=12" defer></script>
   <script>
   // AR Quick Look links only work in Safari on iPhone and iPad; elsewhere keep the pictures but don't download the file
   (function () { var a = document.createElement('a'), ua = navigator.userAgent, ok = (a.relList && a.relList.supports && a.relList.supports('ar')) || /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1), box = document.getElementById('fz-ar');

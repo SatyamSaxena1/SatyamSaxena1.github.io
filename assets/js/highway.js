@@ -13,6 +13,17 @@
   var iosVer = isIOS ? +((/Version\/(\d+)/.exec(ua) || / OS (\d+)_/.exec(ua) || [0, 99])[1]) : 0;
   var iosMatch = isIOS ? [0, iosVer] : null;
   var glq = /[?&]gl=([12])/.exec(location.search), oldIOS = glq ? glq[1] === '1' : (isIOS && iosVer < 16), phone = window.matchMedia('(hover: none)').matches;
+  // Rule: iPhones/iPads below iOS 16 don't open the live 3D at all (their WebGL is unreliable); they get a still
+  // and the AR Quick Look models instead. ?gl=1 or ?gl=2 still forces 3D for testing.
+  if (isIOS && iosVer < 16 && !glq) {
+    var still0 = new Image(); still0.src = host.getAttribute('data-still'); still0.alt = 'The highway scene (a still; live 3D needs iOS 16 or later)';
+    still0.className = 'fz-still'; host.insertBefore(still0, host.firstChild); host.classList.add('still', 'ar-only');
+    var ar = document.getElementById('fz-ar'), note = document.createElement('a');
+    note.className = 'fz-ar-note'; note.href = '#fz-ar'; note.textContent = 'Live 3D needs iOS 16 or later. View it in AR instead ↓';
+    host.appendChild(note);
+    if (window.__fzDebug) window.__fzDebug('iOS ' + iosVer + ': live 3D skipped, showing still + AR');
+    return;
+  }
   var renderer;
   try {
     var opts = { antialias: !oldIOS, alpha: true, powerPreference: 'low-power' };
