@@ -76,14 +76,22 @@
   var GZ = -38;
   box(0.4, 9, 0.4, poleMat, -6.9, 4.5, GZ); box(0.4, 9, 0.4, poleMat, 10.5, 4.5, GZ); box(17.8, 0.5, 0.5, poleMat, 1.8, 9, GZ);
   var sign = new T.Mesh(new T.PlaneGeometry(7.2, 3.15), new T.MeshBasicMaterial({ map: signTex })); sign.position.set(1.8, 7.3, GZ + 0.3); scene.add(sign);
-  function drawSign(txt, sub, col, on) {
+  function drawSign(txt, sub, col, on, cut) {
     sctx.fillStyle = '#06060c'; sctx.fillRect(0, 0, 512, 224);
     sctx.strokeStyle = '#2a2840'; sctx.lineWidth = 8; sctx.strokeRect(4, 4, 504, 216);
     if (on) {
       sctx.fillStyle = col; sctx.shadowColor = col; sctx.shadowBlur = 24; sctx.textAlign = 'center';
-      sctx.font = '700 30px ui-monospace, Menlo, Consolas, monospace'; sctx.fillText(sub, 256, 52);
-      sctx.font = '800 120px ui-monospace, Menlo, Consolas, monospace'; sctx.fillText(txt, 256, 182); sctx.shadowBlur = 0;
+      sctx.font = '700 28px ui-monospace, Menlo, Consolas, monospace'; sctx.fillText(sub, 196, 50);
+      sctx.font = '800 ' + (txt.length > 3 ? 84 : 120) + 'px ui-monospace, Menlo, Consolas, monospace'; sctx.fillText(txt, 196, 178); sctx.shadowBlur = 0;
     }
+    // aggregation: how strongly each output set was cut
+    var keys = ['low', 'medium', 'high'], cols = ['#' + C.red.getHexString(), '#' + C.warm.getHexString(), '#' + C.good.getHexString()];
+    keys.forEach(function (k, i) {
+      var x = 392 + i * 36, v = cut ? cut[k] : 0, h = 130 * v;
+      sctx.fillStyle = '#16152a'; sctx.fillRect(x, 50, 24, 130);
+      sctx.fillStyle = cols[i]; sctx.shadowColor = cols[i]; sctx.shadowBlur = v > 0 ? 14 : 0; sctx.fillRect(x, 180 - h, 24, h); sctx.shadowBlur = 0;
+      sctx.fillStyle = '#8f8bb3'; sctx.font = '700 18px ui-monospace, Menlo, Consolas, monospace'; sctx.textAlign = 'center'; sctx.fillText(k[0].toUpperCase(), x + 12, 206);
+    });
     signTex.needsUpdate = true;
   }
 
@@ -139,16 +147,107 @@
   ego.position.set(RAMP_X, 0.4, Z0 - 48); scene.add(ego);
   var egoZ = Z0 - 48, egoSpeed = 8, egoTarget = 8, stopped = false;
 
+  // ---------- rule hologram: the active rule base, firing live ----------
+  // A 3x3x3 lattice (x = gap, y = road, z = traffic). Each AND rule lights the cell of its combination;
+  // the 2023 OR rule is a shell around the whole lattice. Firing rules send beams with pulses to the sign.
+  var holo = new T.Group(); holo.position.set(-6, 14.5, -34); holo.rotation.set(-0.15, 0.5, 0); scene.add(holo);
+  var SP = 2.1, cubeGeo = new T.BoxGeometry(1, 1, 1), edgeGeo = new T.EdgesGeometry(cubeGeo), GREY = new T.Color(0x6d6a8c);
+  var TERMS = ['poor', 'average', 'good'], cubes = [], cubeIdx = {};
+  TERMS.forEach(function (r, ri) { TERMS.forEach(function (tr, ti) { TERMS.forEach(function (g, gi) {
+    var grp = new T.Group();
+    var m = new T.Mesh(cubeGeo, new T.MeshBasicMaterial({ color: GREY, transparent: true, opacity: 0.02, depthWrite: false, blending: T.AdditiveBlending }));
+    var e = new T.LineSegments(edgeGeo, new T.LineBasicMaterial({ color: GREY, transparent: true, opacity: 0.1 }));
+    grp.add(m); grp.add(e); grp.position.set((gi - 1) * SP, (ri - 1) * SP, (1 - ti) * SP); holo.add(grp);
+    cubeIdx[r + '|' + tr + '|' + g] = cubes.length;
+    cubes.push({ g: grp, m: m, e: e, a: 0, ta: 0, col: new T.Color(), used: false });
+  }); }); });
+  var shellGeo = new T.BoxGeometry(SP * 3 + 1, SP * 3 + 1, SP * 3 + 1);
+  var shell = new T.Mesh(shellGeo, new T.MeshBasicMaterial({ color: C.red, transparent: true, opacity: 0, depthWrite: false, blending: T.AdditiveBlending, side: T.BackSide }));
+  var shellEdge = new T.LineSegments(new T.EdgesGeometry(shellGeo), new T.LineBasicMaterial({ color: C.red, transparent: true, opacity: 0 }));
+  holo.add(shell); holo.add(shellEdge);
+  var shellA = 0, shellTa = 0;
+
+  function makeLabel(w, h) {
+    var c = document.createElement('canvas'); c.width = w; c.height = h;
+    var tex = new T.CanvasTexture(c), sp = new T.Sprite(new T.SpriteMaterial({ map: tex, transparent: true, depthWrite: false }));
+    sp.userData = { c: c, x: c.getContext('2d'), tex: tex };
+    sp.draw = function (lines, col) {
+      var x = sp.userData.x; x.clearRect(0, 0, w, h); x.textAlign = 'center'; x.fillStyle = col || '#d9d6f5';
+      lines.forEach(function (l, i) { x.font = (i ? '600 ' + (h * 0.22 | 0) : '800 ' + (h * 0.34 | 0)) + 'px ui-monospace, Menlo, Consolas, monospace'; x.fillText(l, w / 2, h * (0.38 + i * 0.38)); });
+      sp.userData.tex.needsUpdate = true;
+    };
+    return sp;
+  }
+  var title = makeLabel(512, 128); title.scale.set(8, 2, 1); title.position.set(0, SP * 1.5 + 2.4, 0); holo.add(title);
+  var axes = [['road \u2191', -SP * 1.5 - 1.6, 0, 0], ['gap \u2192', 0, -SP * 1.5 - 1.2, SP * 1.5], ['traffic', SP * 1.5 + 1.4, -SP * 1.5 - 0.6, 0]].map(function (a) {
+    var l = makeLabel(256, 64); l.scale.set(3, 0.75, 1); l.position.set(a[1], a[2], a[3]); l.draw([a[0]], '#9c98c8'); holo.add(l); return l;
+  });
+
+  var beamGeo = new T.CylinderGeometry(1, 1, 1, 6, 1, true), pulseGeo = new T.SphereGeometry(1, 10, 8), beams = [];
+  for (var bi = 0; bi < 28; bi++) {
+    var bm = new T.Mesh(beamGeo, new T.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false, blending: T.AdditiveBlending }));
+    var pu = new T.Mesh(pulseGeo, new T.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false, blending: T.AdditiveBlending }));
+    bm.visible = pu.visible = false; scene.add(bm); scene.add(pu);
+    beams.push({ m: bm, p: pu, src: null, a: 0, ta: 0, ph: bi / 28 });
+  }
+  var SIGN_TOP = new T.Vector3(1.8, 8.95, GZ + 0.3), UP = new T.Vector3(0, 1, 0), vA = new T.Vector3(), vD = new T.Vector3();
+
+  function applyRules(d) {
+    var OUTC = { low: C.red, medium: C.warm, high: C.good }, rs = d.rules || [], acts = d.acts || [], b = 0;
+    cubes.forEach(function (c) { c.ta = 0; c.used = false; });
+    shellTa = 0;
+    rs.forEach(function (r, i) {
+      var a = acts[i] || 0, col = OUTC[r[2]];
+      if (r[0] === 'or') { shellTa = a; shell.material.color.copy(col); shellEdge.material.color.copy(col); beams[b].src = 'shell'; }
+      else { var c = cubes[cubeIdx[r[1].join('|')]]; c.used = true; c.ta = Math.max(c.ta, a); c.col.copy(col); beams[b].src = c; }
+      beams[b].ta = a; beams[b].m.material.color.copy(col); beams[b].p.material.color.copy(col); b++;
+    });
+    for (; b < beams.length; b++) { beams[b].ta = 0; }
+    var firing = acts.filter(function (a) { return a > 0; }).length;
+    title.draw(['RULE BASE \u00b7 ' + rs.length + ' RULES', d.ok ? firing + ' firing now' : 'none firing'], d.ok ? '#d9d6f5' : '#' + C.red.getHexString());
+  }
+
+  function animateRules(dt, t) {
+    var k = reduce ? 1 : Math.min(1, dt * 6);
+    if (!reduce) holo.rotation.y = 0.5 + Math.sin(t * 0.18) * 0.45;
+    holo.updateMatrixWorld();
+    cubes.forEach(function (c) {
+      c.a += (c.ta - c.a) * k;
+      var col = c.used ? c.col : GREY;
+      c.m.material.color.copy(col); c.e.material.color.copy(col);
+      c.m.material.opacity = (c.used ? 0.06 : 0.015) + c.a * 0.7;
+      c.e.material.opacity = c.used ? 0.3 + c.a * 0.7 : 0.09;
+      c.g.scale.setScalar(0.55 + c.a * 0.5 + (reduce ? 0 : c.a * 0.04 * Math.sin(t * 6 + c.g.position.x)));
+    });
+    shellA += (shellTa - shellA) * k;
+    shell.material.opacity = shellA * 0.16; shellEdge.material.opacity = shellA * 0.9;
+    beams.forEach(function (bm) {
+      bm.a += (bm.ta - bm.a) * k;
+      var show = bm.a > 0.01 && bm.src;
+      bm.m.visible = bm.p.visible = !!show; if (!show) return;
+      if (bm.src === 'shell') holo.getWorldPosition(vA); else bm.src.g.getWorldPosition(vA);
+      vD.subVectors(SIGN_TOP, vA); var len = vD.length();
+      bm.m.position.copy(vA).addScaledVector(vD, 0.5);
+      bm.m.quaternion.setFromUnitVectors(UP, vD.clone().normalize());
+      var r = 0.03 + bm.a * 0.09; bm.m.scale.set(r, len, r);
+      bm.m.material.opacity = 0.18 + bm.a * 0.55;
+      bm.ph = (bm.ph + dt * (0.35 + bm.a * 0.5)) % 1;
+      bm.p.position.copy(vA).addScaledVector(vD, reduce ? 0.5 : bm.ph);
+      bm.p.scale.setScalar(0.12 + bm.a * 0.2); bm.p.material.opacity = 0.4 + bm.a * 0.6;
+    });
+  }
+
   // ---------- state from the fuzzy demo ----------
   var S = null, blink = 0;
   function apply(d) {
     S = d; layoutDamage(d.road); layoutTraffic(d.traffic, d.gap);
     if (d.ok) {
       var col = d.value < 35 ? C.red : d.value < 65 ? C.warm : C.good, hex = '#' + col.getHexString();
-      drawSign(String(Math.round(d.value)), 'SPEED LIMIT', hex, true);
+      drawSign(String(Math.round(d.value)), 'SPEED LIMIT', hex, true, d.cut);
       egoTarget = 2.5 + d.value * 0.2; stopped = false; egoMat.emissive.copy(C.accent);
     } else { egoTarget = 0; stopped = true; }
     host.setAttribute('data-state', d.ok ? 'ok' : 'err');
+    applyRules(d);
     if (reduce) frame(0);
   }
 
@@ -195,8 +294,10 @@
     if (stopped) {
       var on = Math.floor(blink * 2.4) % 2 === 0;
       egoTail.material.color.set(on ? 0xffb020 : 0x3a2a10);
-      drawSign('NO RULE', 'FUZZY SYSTEM', '#' + C.red.getHexString(), on);
+      drawSign('NO RULE', 'FUZZY SYSTEM', '#' + C.red.getHexString(), on, null);
     } else egoTail.material.color.set(0xff3b4e);
+
+    animateRules(dt, t);
 
     // camera: three-quarter view behind the merge, gentle drift and pointer parallax
     px += (tpx - px) * 0.06; py += (tpy - py) * 0.06;

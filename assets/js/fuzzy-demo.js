@@ -117,7 +117,7 @@
     var mx = state.road / 10 * 100, my = (10 - state.gap) / 10 * 100; mapMark.style.left = mx + '%'; mapMark.style.top = my + '%';
     drawMap();
     // let the 3D highway (highway.js) follow along
-    root.__fz = { road: state.road, traffic: state.traffic, gap: state.gap, ok: o.ok, value: o.value, cut: o.cut };
+    root.__fz = { road: state.road, traffic: state.traffic, gap: state.gap, ok: o.ok, value: o.value, cut: o.cut, acts: o.activations, set: state.set, rules: rules() };
     root.dispatchEvent(new CustomEvent('fz:update', { detail: root.__fz }));
   }
 
