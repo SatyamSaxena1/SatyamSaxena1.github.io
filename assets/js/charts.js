@@ -61,7 +61,7 @@
     var ymin = +(el.getAttribute('data-ymin') || 0), ymax = +(el.getAttribute('data-ymax') || 1), best = el.getAttribute('data-best'), xs = d[el.getAttribute('data-x') || 'x'];
     var svg = S('svg', { viewBox: '0 0 ' + W + ' ' + Hh, role: 'img', 'aria-label': el.getAttribute('data-label') || 'Line chart', preserveAspectRatio: 'xMidYMid meet' }, el); svg.setAttribute('class', 'vz-svg');
     var x0 = xs[0], x1 = xs[xs.length - 1]; function X(v) { return m.l + (v - x0) / (x1 - x0 || 1) * (W - m.l - m.r); } function Y(v) { return Hh - m.b - (v - ymin) / (ymax - ymin) * (Hh - m.t - m.b); }
-    for (var i = 0; i <= 5; i++) { var yv = ymin + (ymax - ymin) * i / 5, yy = Y(yv); S('line', { x1: m.l, x2: W - m.r, y1: yy, y2: yy, class: 'vz-grid' }, svg); S('text', { x: m.l - 8, y: yy + 4, class: 'vz-tick', 'text-anchor': 'end' }, svg).textContent = yv.toFixed((ymax - ymin) / 5 < .1 ? 2 : ymax <= 1.5 ? 1 : 0); }
+    for (var i = 0; i <= 5; i++) { var yv = ymin + (ymax - ymin) * i / 5, yy = Y(yv); S('line', { x1: m.l, x2: W - m.r, y1: yy, y2: yy, class: 'vz-grid' }, svg); S('text', { x: m.l - 8, y: yy + 4, class: 'vz-tick', 'text-anchor': 'end' }, svg).textContent = yv.toFixed((ymax - ymin) / 5 < .1 ? 2 : (ymax - ymin) / 5 < 1 ? 1 : 0); }
     var step = Math.ceil(xs.length / 8 / 5) * 5 || 1; xs.forEach(function (v, k) { if (k % Math.max(1, Math.round(xs.length / 8)) === 0 || k === xs.length - 1) S('text', { x: X(v), y: Hh - 10, class: 'vz-tick', 'text-anchor': 'middle' }, svg).textContent = v; });
     var paths = [];
     keys.forEach(function (k, si) {

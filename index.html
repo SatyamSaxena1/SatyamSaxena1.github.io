@@ -104,6 +104,13 @@
         </article>
 
         <article class="card reveal">
+          <span class="tag">MSc thesis &middot; LLM</span>
+          <h3>Mistral 7B, in Shakespeare's voice</h3>
+          <p>QLoRA fine-tuning of a 7B language model on a laptop GPU: 859 steps, 3.8 hours, loss 2.37 to 1.15. Published on Zenodo.</p>
+          <a class="more stretch" href="thesis/">Read the project <b class="ar">&rarr;</b></a>
+        </article>
+
+        <article class="card reveal">
           <span class="tag">Accessibility</span>
           <h3>Live Captions</h3>
           <p>Local, lightweight live transcription with a fast highlighted mode and a long-context mode. Built after losing live captions in my browser.</p>
@@ -154,9 +161,9 @@
         <article class="tl-item reveal">
           <i class="tl-dot"></i>
           <div class="tl-body">
-            <span class="when">Aug 2021</span>
+            <span class="when">2021 &middot; B.Tech</span>
             <h3>A movie recommender, by hand</h3>
-            <p>My first public repository: item-based collaborative filtering on MovieLens. A ratings pivot table, a sparse matrix and cosine nearest neighbours in scikit-learn, in Python 3.9.</p>
+            <p>A B.Tech project and my first public repository: item-based collaborative filtering on MovieLens. A ratings pivot table, a sparse matrix and cosine nearest neighbours in scikit-learn, in Python 3.9. I also ran it as a Kaggle notebook that November.</p>
             <p>I named the notebook <code>This one works.ipynb</code>. Its last saved output says otherwise.</p>
             <div class="links"><a href="https://github.com/SatyamSaxena1/Recommender-works-">The notebook on GitHub</a></div>
           </div>
@@ -198,18 +205,21 @@ steps: 12%| 71/612 [02:43&lt;20:48, 2.31s/it, <span class="ok">avr_loss=0.124</s
         <article class="tl-item reveal">
           <i class="tl-dot"></i>
           <div class="tl-body">
-            <span class="when">Mar 2024</span>
-            <h3>The same trick on a language model</h3>
-            <p>Eleven days later: a LoRA on Mistral 7B, training only the attention (q, v) projections, on the same laptop. About 0.09% of the loaded parameters were trainable; everything else stayed frozen.</p>
-            <div class="links"><a href="lora/#mistral">Photos from the run</a></div>
+            <span class="when">Mar 2024 &middot; MSc thesis</span>
+            <h3>Mistral 7B, in Shakespeare's voice</h3>
+            <p>My thesis: QLoRA fine-tuning of a 7B language model on Shakespeare, on the same laptop. Four runs in one day; the one that worked took 859 steps and 3.8 hours, taking loss from 2.37 to 1.15. Published on Zenodo.</p>
+            <div class="links"><a href="thesis/">The thesis project</a><a href="https://doi.org/10.5281/zenodo.17305216">Zenodo</a></div>
           </div>
           <div class="tl-fig">
             <figure class="bug reveal"><div class="bar"><i></i><i></i><i></i>LoRA training &middot; 11 Mar 2024</div>
-<pre>Training 'mistral' model using (q, v) projections
-Trainable params: 3,407,872 (<span class="err">0.0907 %</span>), All params: 3,755,479,040
-<span class="dim">wandb: W&amp;B syncing is set to `offline`</span>
-Running... 315 / 1150 ... 12.17 s/it ... <span class="ok">Current Loss: 1.70</span></pre>
-              <figcaption>Copied from photos of the screen, 12:49 and 19:34.</figcaption></figure>
+<pre><span class="dim"># first attempt, rank 8</span>
+Training 'mistral' model using (q, v) projections
+Trainable params: 3,407,872 (0.0907 %)
+<span class="err">loss after 781 steps: ~2.2 (barely moved)</span>
+<span class="dim"># fourth attempt, rank 128</span>
+Running... 315 / 1150 ... 12.17 s/it ... Current Loss: 1.70
+<span class="ok">859 steps, 7.02 epochs, loss 1.1486</span></pre>
+              <figcaption>From photos of the screen and the saved training logs.</figcaption></figure>
           </div>
         </article>
 
