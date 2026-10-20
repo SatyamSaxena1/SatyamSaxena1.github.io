@@ -24,7 +24,7 @@
     var W = 300, H = 110, m = { l: 8, r: 8, t: 8, b: 20 };
     var svg = S('svg', { viewBox: '0 0 ' + W + ' ' + H, class: 'fz-plot', role: 'img', 'aria-label': NAMES[idx] + ' membership functions' }, card);
     var X = function (v) { return m.l + v / 10 * (W - m.l - m.r); }, Y = function (v) { return H - m.b - v * (H - m.t - m.b); };
-    ['poor', 'average', 'good'].forEach(function (t) { S('path', { d: path(E.IN, E.MF_IN[t], X, Y), stroke: TERM_COL[t], 'stroke-width': 2, fill: 'none' }, svg); });
+    ['poor', 'average', 'good'].forEach(function (t) { S('path', { d: path(E.IN, E.MF_IN[t], X, Y), style: 'stroke:' + TERM_COL[t], 'stroke-width': 2, fill: 'none' }, svg); });
     [0, 5, 10].forEach(function (v) { var tx = S('text', { x: X(v), y: H - 4, class: 'fz-tick', 'text-anchor': 'middle' }, svg); tx.textContent = v; });
     var line = S('line', { y1: m.t, y2: H - m.b, class: 'fz-mark' }, svg);
     var chips = document.createElement('div'); chips.className = 'fz-chips'; card.appendChild(chips);
@@ -68,7 +68,7 @@
   var OW = 620, OH = 200, om = { l: 30, r: 10, t: 10, b: 24 };
   var OX = function (v) { return om.l + v / 100 * (OW - om.l - om.r); }, OY = function (v) { return OH - om.b - v * (OH - om.t - om.b); };
   outSvg.setAttribute('viewBox', '0 0 ' + OW + ' ' + OH);
-  ['low', 'medium', 'high'].forEach(function (t) { S('path', { d: path(E.OUT, E.MF_OUT[t], OX, OY), stroke: TERM_COL[t], 'stroke-width': 1.5, fill: 'none', 'stroke-dasharray': '4 4', opacity: .7 }, outSvg); });
+  ['low', 'medium', 'high'].forEach(function (t) { S('path', { d: path(E.OUT, E.MF_OUT[t], OX, OY), style: 'stroke:' + TERM_COL[t], 'stroke-width': 1.5, fill: 'none', 'stroke-dasharray': '4 4', opacity: .7 }, outSvg); });
   [0, 25, 50, 75, 100].forEach(function (v) { var tx = S('text', { x: OX(v), y: OH - 6, class: 'fz-tick', 'text-anchor': 'middle' }, outSvg); tx.textContent = v; });
   var area = S('path', { class: 'fz-area' }, outSvg), cLine = S('line', { y1: om.t, y2: OH - om.b, class: 'fz-centroid' }, outSvg);
   var big = root.querySelector('.fz-value'), err = root.querySelector('.fz-error');

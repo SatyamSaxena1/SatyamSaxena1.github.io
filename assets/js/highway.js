@@ -6,10 +6,24 @@
   var host = document.getElementById('fz-scene'), fz = document.getElementById('fz');
   if (!host || !fz || !window.THREE) return;
   var T = THREE, reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // iOS 15 moved WebGL onto a new Metal backend and its WebGL2 path had rendering bugs; older iPhones are
+  // also the slowest GPUs here. On iOS <= 15 use the mature WebGL1 path, no antialiasing and 1x pixels.
+  // Safari's Version/NN tracks the iOS release (iOS 26+ freezes the "OS 18_6" field), so prefer it; Chrome/Firefox on iOS only give OS NN_
+  var ua = navigator.userAgent, isIOS = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  var iosVer = isIOS ? +((/Version\/(\d+)/.exec(ua) || / OS (\d+)_/.exec(ua) || [0, 99])[1]) : 0;
+  var iosMatch = isIOS ? [0, iosVer] : null;
+  var oldIOS = isIOS && iosVer < 16, phone = window.matchMedia('(hover: none)').matches;
   var renderer;
-  try { renderer = new T.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' }); }
-  catch (e) { host.classList.add('no3d'); return; }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, window.innerWidth < 600 ? 1.25 : 1.5));
+  try {
+    var opts = { antialias: !oldIOS, alpha: true, powerPreference: 'low-power' };
+    if (oldIOS) { var cnv = document.createElement('canvas'), ctx1 = cnv.getContext('webgl', { antialias: false, alpha: true, powerPreference: 'low-power' }); if (!ctx1) throw new Error('no webgl'); opts.canvas = cnv; opts.context = ctx1; }
+    renderer = new T.WebGLRenderer(opts);
+  } catch (e) { host.classList.add('no3d'); if (window.__fzDebug) window.__fzDebug('3D off: ' + e.message); return; }
+  renderer.setPixelRatio(oldIOS ? 1 : Math.min(window.devicePixelRatio || 1, window.innerWidth < 600 ? 1.25 : 1.5));
+  if (window.__fzDebug) {
+    var gl = renderer.getContext(), dbg = gl.getExtension('WEBGL_debug_renderer_info');
+    window.__fzDebug('WebGL' + (renderer.capabilities.isWebGL2 ? '2' : '1') + ' | ' + (dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER)) + ' | iOS ' + (iosMatch ? iosMatch[1] : '-') + (oldIOS ? ' (compat mode)' : '') + ' | dpr ' + renderer.getPixelRatio());
+  }
   host.insertBefore(renderer.domElement, host.firstChild);
   renderer.domElement.setAttribute('aria-hidden', 'true');
 
@@ -318,7 +332,10 @@
     var dt = Math.min(0.05, (now - last) / 1000); last = now; frame(dt);
     requestAnimationFrame(loop);
   }
-  function setRun(on) { if (on === running || reduce) return; running = on; if (on) { last = performance.now(); requestAnimationFrame(loop); } }
+  function setRun(on) {
+    if (phone) window.dispatchEvent(new CustomEvent('lava:pause', { detail: on }));   // one animated WebGL scene at a time on phones
+    if (on === running || reduce) return; running = on; if (on) { last = performance.now(); requestAnimationFrame(loop); }
+  }
   if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { visible = e[0].isIntersecting; setRun(visible && !document.hidden); }).observe(host);
   document.addEventListener('visibilitychange', function () { setRun(visible && !document.hidden); });
 

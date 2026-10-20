@@ -14,6 +14,10 @@
   <meta property="og:description" content="A fuzzy speed advisor from my MSc coursework, running live in the browser, bugs and all.">
   <link rel="canonical" href="https://satyamsaxena1.github.io/fuzzy/">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238a6bff'/%3E%3Cstop offset='1' stop-color='%233d7bff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Ctext x='32' y='42' font-size='26' font-family='Arial' font-weight='800' fill='white' text-anchor='middle'%3ESS%3C/text%3E%3C/svg%3E">
+  <script>/* add ?debug to the URL to see errors and WebGL details on screen (for testing on phones) */
+  (function(){if(!/[?&]debug/.test(location.search))return;var q=[];function out(m){q.push(m);var p=document.getElementById('fz-debug');if(!p&&document.body){p=document.createElement('pre');p.id='fz-debug';p.style.cssText='position:fixed;left:6px;right:6px;bottom:6px;z-index:9999;max-height:40vh;overflow:auto;margin:0;padding:8px 10px;border-radius:10px;background:rgba(0,0,0,.85);color:#9f9;font:11px/1.4 ui-monospace,Menlo,monospace;white-space:pre-wrap';document.body.appendChild(p)}if(p)p.textContent=q.join('\n')}
+  window.__fzDebug=out;window.addEventListener('error',function(e){out('ERROR '+(e.message||e)+(e.filename?' @'+e.filename.split('/').pop()+':'+e.lineno:''))});window.addEventListener('unhandledrejection',function(e){out('PROMISE '+(e.reason&&e.reason.message||e.reason))});
+  document.addEventListener('DOMContentLoaded',function(){out(navigator.userAgent);out('viewport '+innerWidth+'x'+innerHeight+' dpr '+devicePixelRatio+' | color-mix '+(window.CSS&&CSS.supports('color','color-mix(in srgb,red,red)'))+' | aspect-ratio '+(window.CSS&&CSS.supports('aspect-ratio','1')))});window.addEventListener('load',function(){setTimeout(function(){var v=document.querySelector('.fz-value');out('page ready | value '+(v&&v.textContent)+' | scene '+(document.getElementById('fz-scene')||{}).className)},800)})})();</script>
   <script>try{var t=localStorage.getItem('theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))</script>
   <link rel="stylesheet" href="../assets/css/theme.css?v=24">
   <link rel="stylesheet" href="../assets/css/timeline.css?v=2">
@@ -200,9 +204,9 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
   <script src="../assets/js/site.js?v=11" defer></script>
-  <script src="../assets/js/bg.js?v=5" defer></script>
+  <script src="../assets/js/bg.js?v=8" defer></script>
   <script src="../assets/js/fuzzy-engine.js?v=2" defer></script>
-  <script src="../assets/js/fuzzy-demo.js?v=5" defer></script>
-  <script src="../assets/js/highway.js?v=6" defer></script>
+  <script src="../assets/js/fuzzy-demo.js?v=6" defer></script>
+  <script src="../assets/js/highway.js?v=7" defer></script>
 </body>
 </html>

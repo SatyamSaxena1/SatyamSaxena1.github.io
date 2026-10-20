@@ -211,9 +211,15 @@
   window.addEventListener('themechange', function () { targetDark = isDark() ? 1 : 0; if (reduce) { U.uDark.value = targetDark; draw(); } });
   window.addEventListener('resize', resize);
   document.addEventListener('visibilitychange', function () { running = !document.hidden; last = performance.now(); if (running && !reduce) requestAnimationFrame(frame); });
+  // another WebGL scene on the page can ask for the GPU: phones struggle with two animating at once,
+  // so drop to a few frames a second instead of stopping (a stopped canvas can be left blank)
+  var throttled = false, lastDraw = 0;
+  window.addEventListener('lava:pause', function (e) { throttled = !!e.detail; });
 
   function frame(now) {
     if (!running || reduce) return;
+    if (throttled && now - lastDraw < 160) { requestAnimationFrame(frame); return; }
+    lastDraw = now;
     var dt = Math.min((now - last) / 1000, .05); last = now;
     step(dt);
     U.uDark.value += (targetDark - U.uDark.value) * (1 - Math.exp(-dt * 4));
