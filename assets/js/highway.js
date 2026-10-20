@@ -9,7 +9,7 @@
   var renderer;
   try { renderer = new T.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' }); }
   catch (e) { host.classList.add('no3d'); return; }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, window.innerWidth < 600 ? 1.25 : 1.5));
   host.insertBefore(renderer.domElement, host.firstChild);
   renderer.domElement.setAttribute('aria-hidden', 'true');
 
@@ -253,7 +253,14 @@
 
   // ---------- render loop ----------
   var W = 0, H = 0;
-  function resize() { var r = host.getBoundingClientRect(); W = Math.max(1, r.width | 0); H = Math.max(1, r.height | 0); renderer.setSize(W, H, false); cam.aspect = W / H; cam.updateProjectionMatrix(); if (reduce) frame(0); }
+  function resize() {
+    var r = host.getBoundingClientRect(); W = Math.max(1, r.width | 0); H = Math.max(1, r.height | 0);
+    renderer.setSize(W, H, false); cam.aspect = W / H; cam.updateProjectionMatrix();
+    // narrow screens crop the sides: bring the rule lattice inward and enlarge it
+    var narrow = cam.aspect < 1.5;
+    holo.position.set(narrow ? -2.5 : -6, narrow ? 15.5 : 14.5, narrow ? -40 : -34); holo.scale.setScalar(narrow ? 1.3 : 1);
+    if (reduce) frame(0);
+  }
   if ('ResizeObserver' in window) new ResizeObserver(resize).observe(host); else window.addEventListener('resize', resize);
   var px = 0, py = 0, tpx = 0, tpy = 0;
   host.addEventListener('pointermove', function (e) { var r = host.getBoundingClientRect(); tpx = (e.clientX - r.left) / r.width - 0.5; tpy = (e.clientY - r.top) / r.height - 0.5; });
@@ -321,6 +328,10 @@
     hemi.intensity = C.light ? 1.0 : 0.75; crackMat.color.set(C.light ? 0x2b2830 : 0x6a6474); poolMat.opacity = C.light ? 0.06 : 0.12;
     if (S) apply(S);
   });
+
+  // iOS can drop WebGL contexts under memory pressure; pause, then pick up again when it is restored
+  renderer.domElement.addEventListener('webglcontextlost', function (e) { e.preventDefault(); setRun(false); });
+  renderer.domElement.addEventListener('webglcontextrestored', function () { signTex.needsUpdate = true; if (S) apply(S); setRun(visible && !document.hidden); if (reduce) frame(0); });
 
   fz.addEventListener('fz:update', function (e) { apply(e.detail); });
   resize();
