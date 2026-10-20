@@ -2,6 +2,16 @@
 (function () {
   var root = document.documentElement;
 
+  // <dialog> shim for iOS before 15.4: just enough of showModal/close/open for the viewer and the heat lab
+  if (!('showModal' in document.createElement('dialog'))) {
+    root.classList.add('no-dialog');
+    var P = HTMLElement.prototype;
+    Object.defineProperty(P, 'open', { configurable: true, get: function () { return this.hasAttribute('open'); }, set: function (v) { if (v) this.setAttribute('open', ''); else this.removeAttribute('open'); } });
+    P.showModal = P.show = function () { this.setAttribute('open', ''); };
+    P.close = function () { if (!this.hasAttribute('open')) return; this.removeAttribute('open'); this.dispatchEvent(new Event('close')); };
+    document.addEventListener('keydown', function (e) { if (e.key !== 'Escape') return; var d = document.querySelectorAll('dialog[open]'); if (d.length) d[d.length - 1].close(); });
+  }
+
   // theme: saved choice > system preference > dark
   var saved = null; try { saved = localStorage.getItem('theme'); } catch (e) {}
   var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;

@@ -505,8 +505,8 @@ figure.vz-heat{cursor:default}figure.vz-heat:hover{transform:none;border-color:t
   --snappy:linear(0,.009,.035 2.1%,.141,.281 6.7%,.723 12.9%,.938 16.7%,1.017,1.077,1.121,1.149 24.3%,1.159,1.163,1.161,1.154 29.9%,1.129 32.8%,1.051 39.6%,1.017 43.1%,.991,.977 51%,.974 53.8%,.975 57.1%,.997 69.8%,1.003 76.9%,1);
   --glass-edge:inset 0 1px 0 rgba(255,255,255,.14),inset 0 0 0 .5px rgba(255,255,255,.06);
 }
-:root[data-theme="dark"]{color-scheme:dark}
-:root[data-theme="light"]{color-scheme:light;--glass-edge:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(20,18,43,.04)}
+:root[data-theme="dark"]{color-scheme:dark;--solid:#15141f;--fill:rgba(255,255,255,.1)}
+:root[data-theme="light"]{color-scheme:light;--solid:#ffffff;--fill:rgba(20,18,43,.08);--glass-edge:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(20,18,43,.04)}
 html{-webkit-tap-highlight-color:transparent}
 body{padding-bottom:env(safe-area-inset-bottom)}
 h1,h2,h3,h4{text-wrap:balance;font-optical-sizing:auto}
@@ -520,9 +520,12 @@ p,li,figcaption{text-wrap:pretty}
 @media(max-width:760px){.card{backdrop-filter:blur(12px) saturate(1.3);-webkit-backdrop-filter:blur(12px) saturate(1.3)}}
 
 /* Springs and press feedback (SwiftUI ButtonStyle scale-on-press) */
+@supports(transition-timing-function:linear(0,1)){
 .reveal{transition:opacity .8s ease,transform .9s var(--spring);transition-delay:var(--d,0s)}
 .card{transition:transform .5s var(--spring),border-color .3s,background .3s}
 .btn,.theme-btn{transition:transform .45s var(--snappy),box-shadow .25s,background .25s}
+.viewer{transition:opacity .3s var(--spring)}
+}
 .btn:active,.theme-btn:active,.vz-node[role=button]:active,.trk-tabs button:active{transform:scale(.96);transition-duration:.08s}
 
 /* Hit targets: 44 pt minimum, as in Apple's HIG */
@@ -552,12 +555,25 @@ html.vt-theme::view-transition-new(root){animation:vt-reveal .6s var(--spring)}
 @keyframes vt-reveal{from{clip-path:circle(0 at var(--vx) var(--vy))}to{clip-path:circle(var(--vr) at var(--vx) var(--vy))}}
 
 /* Gallery viewer: fade in from display:none with @starting-style, blurred backdrop */
-.viewer{transition:opacity .3s var(--spring)}
 .viewer[open]{opacity:1}
 @starting-style{.viewer[open]{opacity:0}}
 .viewer::backdrop{backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
 
 /* Accessibility settings from iOS and macOS */
 @media(prefers-contrast:more){:root[data-theme="dark"]{--line:rgba(255,255,255,.38);--muted:#d2d0ee}:root[data-theme="light"]{--line:rgba(20,18,43,.42);--muted:#2f2c50}}
-@media(prefers-reduced-transparency:reduce){.nav,.card,.btn,.stat,.theme-btn{backdrop-filter:none;-webkit-backdrop-filter:none;background:color-mix(in srgb,var(--bg) 90%,var(--fg))}}
+@media(prefers-reduced-transparency:reduce){.nav,.card,.btn:not(.primary),.stat,.theme-btn{backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--solid)}}
 @media(prefers-reduced-motion:reduce){@view-transition{navigation:none}.nav:after{display:none}}
+
+/* Compatibility layer for older iPhones (iOS 15 / 16.0-16.1) and other engines without color-mix() or small-viewport units */
+@supports not (height:100svh){.hero{min-height:calc(100vh - 80px)}}
+@supports not (color:color-mix(in srgb,red,red)){
+  .lab{background:var(--solid)}
+  .vz-panel.open{background:var(--card-hi)}
+  .vz-node{background:var(--card)}.in .vz-node[role=button]:hover,.vz-node.on{background:var(--card-hi)}
+  .ev-code,.lab-tabs,.lab-x,.lab .chips button[aria-pressed=true],.mbar,.iou .trk,.ill,.steps3 li:before,.try button:hover{background:var(--fill)}
+  .kind{background:var(--chip)}
+  .stop summary:hover{background:var(--card-hi)}
+}
+/* <dialog> shim (site.js adds .no-dialog where showModal is missing, iOS before 15.4) */
+.no-dialog dialog:not([open]){display:none}
+.no-dialog dialog[open]{position:fixed;inset:0;z-index:1000;margin:auto}
