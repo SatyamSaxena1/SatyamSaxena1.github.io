@@ -134,36 +134,51 @@
   }
 
   // ---------- traffic ----------
-  var MAXCARS = 3 * 26;
+  // Each lane has fixed slots that all move together, so cars in a lane never touch. The density slider picks
+  // which slots hold a car, and cars fade in and out rather than jumping. Lane 3 carries the gap: a moving slot
+  // in that lane's traffic, so the gap travels with the cars and nothing pops in or out at its edges.
+  var SLOTS = 26, MAXCARS = 3 * SLOTS, LANE_SPEED = [1.12, 1.05, 1];
   var bodyGeo = new T.BoxGeometry(1.8, 0.7, 4.2), cabGeo = new T.BoxGeometry(1.5, 0.55, 2.1), tailGeo = new T.BoxGeometry(1.5, 0.16, 0.08);
   var bodies = new T.InstancedMesh(bodyGeo, new T.MeshStandardMaterial({ roughness: 0.55, metalness: 0.1 }), MAXCARS);
   var cabs = new T.InstancedMesh(cabGeo, new T.MeshStandardMaterial({ color: 0x0c0c16, roughness: 0.15, metalness: 0.8 }), MAXCARS);
   var tails = new T.InstancedMesh(tailGeo, new T.MeshBasicMaterial({ color: 0xff3b4e }), MAXCARS);
   [bodies, cabs, tails].forEach(function (m) { m.instanceMatrix.setUsage(T.DynamicDrawUsage); scene.add(m); });
-  var CAR_COLS = [0x6b7280, 0x9aa3b5, 0x2d3a5c, 0xb9b6c8, 0x3b3550, 0x7c8aa5, 0x4a4f63, 0xd4d2de];
-  for (var ci = 0; ci < MAXCARS; ci++) bodies.setColorAt(ci, new T.Color(CAR_COLS[ci % CAR_COLS.length]));
-  bodies.instanceColor.needsUpdate = true;
-  var cars = []; // {lane, z}
-  var gapLen = 10, gapZ = -10, trafficSpeed = 10;
+  var CAR_COLS = [0x6b7280, 0x9aa3b5, 0x2d3a5c, 0xb9b6c8, 0x3b3550, 0x7c8aa5, 0x4a4f63, 0xd4d2de], carCol = new T.Color();
+  var slots = [];
+  LANES.forEach(function (x, li) { for (var n = 0; n < SLOTS; n++) slots.push({ lane: li, i: n, off: (n + li / 3) * LEN / SLOTS, on: false, vis: 0, col: CAR_COLS[(n * 3 + li) % CAR_COLS.length] }); });
+  var scrolls = [0, 0, 0], vt = 6, vtTarget = 6, gapLen = 10, gapOff = 0, gapZ = 0, CAR_HALF = 2.1;
+  function wrapOff(o) { return ((o % LEN) + LEN) % LEN; }
+  function inGap(s) { var d = wrapOff(s.off - gapOff), cd = Math.min(d, LEN - d); return s.lane === 2 && cd < gapLen / 2 + CAR_HALF; }
+  function layoutTraffic(traffic, gap) {
+    var per = Math.min(SLOTS, Math.round(2 + traffic * (oldIOS ? 1.4 : 2.2)));   // fewer cars on older iPhones
+    slots.forEach(function (s) { s.on = Math.floor((s.i + 1) * per / SLOTS) > Math.floor(s.i * per / SLOTS); });
+    gapLen = 6 + gap * 3.2;
+  }
   var gapMat = new T.MeshBasicMaterial({ color: C.good, transparent: true, opacity: 0.18, depthWrite: false, blending: T.AdditiveBlending });
   var gapBox = box(3.3, 0.04, 1, gapMat, LANES[2], 0.05, 0);
   var gapEdges = [box(3.3, 0.08, 0.14, new T.MeshBasicMaterial({ color: C.good }), LANES[2], 0.06, 0), box(3.3, 0.08, 0.14, new T.MeshBasicMaterial({ color: C.good }), LANES[2], 0.06, 0)];
-  function layoutTraffic(traffic, gap) {
-    var per = Math.round(2 + traffic * (oldIOS ? 1.4 : 2.2)), spacing = LEN / per;   // fewer cars on older iPhones
-    gapLen = 6 + gap * 3.2; trafficSpeed = 15 - traffic * 1.1;
-    cars = [];
-    LANES.forEach(function (x, li) { for (var n = 0; n < per; n++) cars.push({ lane: li, off: n * spacing + (li * spacing / 3) }); });
-  }
-  function wrap(z) { var span = LEN; return Z1 + ((((z - Z1) % span) + span) % span); }
 
   // ---------- your car ----------
+  // One cycle: a gap comes up lane 3 from behind the camera; your car runs alongside it on the slip road,
+  // closes in until it is level with the gap at the merge point, slides into the middle of the gap, and rides
+  // in it. When the gap is deep in the fog a new one starts behind the camera. No rule firing = wait at the
+  // end of the slip road with hazards on, and let the gap go by.
   var ego = new T.Group(), egoMat = new T.MeshStandardMaterial({ color: C.accent, emissive: C.accent, emissiveIntensity: 0.35, roughness: 0.3, metalness: 0.5 });
   ego.add(new T.Mesh(bodyGeo, egoMat)); var ec = new T.Mesh(cabGeo, cabs.material); ec.position.set(0, 0.6, -0.2); ego.add(ec);
   var egoTail = new T.Mesh(tailGeo, new T.MeshBasicMaterial({ color: 0xff3b4e })); egoTail.position.set(0, 0.1, 2.12); ego.add(egoTail);
   var glow = new T.Mesh(new T.PlaneGeometry(3.2, 6), new T.MeshBasicMaterial({ color: C.accent, transparent: true, opacity: 0.35, depthWrite: false, blending: T.AdditiveBlending }));
   glow.rotation.x = -Math.PI / 2; glow.position.y = -0.3; ego.add(glow);
-  ego.position.set(RAMP_X, 0.4, Z0 - 48); scene.add(ego);
-  var egoZ = Z0 - 48, egoSpeed = 8, egoTarget = 8, stopped = false;
+  scene.add(ego);
+  var MERGE_Z = -18, WAIT_Z = -14, GAP_START = 34, GAP_END = -165, SPAWN_EGO_Z = 52;
+  var phase = 'approach', egoZ = SPAWN_EGO_Z, mergeT = 0, stopped = false;
+  function newGap() { gapOff = Z0 - GAP_START - scrolls[2]; }
+  function startCycle(keepEgo) { newGap(); if (!keepEgo) egoZ = SPAWN_EGO_Z; phase = 'approach'; mergeT = 0; }
+  startCycle(false);
+  // ?test: expose positions so an automated check can confirm nothing overlaps
+  if (/[?&]test/.test(location.search)) host.__hw = function () {
+    return { phase: phase, ego: [ego.position.x, ego.position.z], gapZ: gapZ, gapLen: gapLen,
+      cars: slots.filter(function (s) { return s.vis > 0.5; }).map(function (s) { return [LANES[s.lane], Z0 - wrapOff(s.off + scrolls[s.lane]), s.lane]; }) };
+  };
 
   // ---------- rule hologram: the active rule base, firing live ----------
   // A 3x3x3 lattice (x = gap, y = road, z = traffic). Each AND rule lights the cell of its combination;
@@ -262,8 +277,8 @@
     if (d.ok) {
       var col = d.value < 35 ? C.red : d.value < 65 ? C.warm : C.good, hex = '#' + col.getHexString();
       drawSign(String(Math.round(d.value)), 'SPEED LIMIT', hex, true, d.cut);
-      egoTarget = 2.5 + d.value * 0.2; stopped = false; egoMat.emissive.copy(C.accent);
-    } else { egoTarget = 0; stopped = true; }
+      vtTarget = 2.5 + d.value * 0.17; stopped = false; egoMat.emissive.copy(C.accent);   // everyone drives at the limit on the sign
+    } else { vtTarget = 1.2; stopped = true; }                                              // no answer: traffic crawls
     host.setAttribute('data-state', d.ok ? 'ok' : 'err');
     applyRules(d);
     if (reduce) frame(0);
@@ -292,33 +307,53 @@
   function frameBody(dt) {
     if (!S) return;
     var t = (performance.now() - t0) / 1000;
-    // traffic flows away from the camera; the gap window moves with lane 3
-    scroll += trafficSpeed * dt * (stopped ? 0.35 : 1);
-    gapZ = -10 + Math.sin(t * 0.25) * 6;
-    var n = 0;
-    for (var i = 0; i < cars.length && n < MAXCARS; i++) {
-      var car = cars[i], z = wrap(Z0 - car.off - scroll);
-      if (car.lane === 2 && Math.abs(z - gapZ) < gapLen / 2 + 2.2) continue;  // keep the gap clear
-      dummy.rotation.set(0, 0, 0); dummy.scale.set(1, 1, 1);
-      dummy.position.set(LANES[car.lane], 0.4, z); dummy.updateMatrix(); bodies.setMatrixAt(n, dummy.matrix);
-      dummy.position.set(LANES[car.lane], 1.0, z - 0.2); dummy.updateMatrix(); cabs.setMatrixAt(n, dummy.matrix);
-      dummy.position.set(LANES[car.lane], 0.5, z + 2.12); dummy.updateMatrix(); tails.setMatrixAt(n, dummy.matrix);
+    // traffic flows away from the camera at the limit on the sign; lanes differ slightly so the road looks alive
+    vt += (vtTarget - vt) * Math.min(1, dt * 1.5);
+    for (var li = 0; li < 3; li++) scrolls[li] += vt * LANE_SPEED[li] * dt;
+    gapZ = Z0 - gapOff - scrolls[2];
+    var n = 0, k = Math.min(1, dt * 3);
+    for (var i = 0; i < slots.length; i++) {
+      var s = slots[i];
+      s.vis += ((s.on && !inGap(s) ? 1 : 0) - s.vis) * (reduce ? 1 : k);
+      if (s.vis < 0.02) continue;
+      var z = Z0 - wrapOff(s.off + scrolls[s.lane]), x = LANES[s.lane];
+      dummy.rotation.set(0, 0, 0); dummy.scale.set(s.vis, s.vis, s.vis);
+      dummy.position.set(x, 0.4 * s.vis, z); dummy.updateMatrix(); bodies.setMatrixAt(n, dummy.matrix);
+      dummy.position.set(x, 1.0 * s.vis, z - 0.2 * s.vis); dummy.updateMatrix(); cabs.setMatrixAt(n, dummy.matrix);
+      dummy.position.set(x, 0.5 * s.vis, z + 2.12 * s.vis); dummy.updateMatrix(); tails.setMatrixAt(n, dummy.matrix);
+      bodies.setColorAt(n, carCol.set(s.col));
       n++;
     }
     bodies.count = cabs.count = tails.count = n;
     bodies.instanceMatrix.needsUpdate = cabs.instanceMatrix.needsUpdate = tails.instanceMatrix.needsUpdate = true;
+    if (bodies.instanceColor) bodies.instanceColor.needsUpdate = true;
     gapBox.position.z = gapZ; gapBox.scale.z = gapLen;
     gapEdges[0].position.z = gapZ - gapLen / 2; gapEdges[1].position.z = gapZ + gapLen / 2;
 
-    // your car: drive the slip road at the fuzzy speed, merge, loop
-    egoSpeed += (egoTarget - egoSpeed) * Math.min(1, dt * 2);
-    var stopAt = Z0 - 70;
-    if (!(stopped && egoZ <= stopAt + 0.5)) egoZ -= egoSpeed * dt;
-    if (stopped && egoZ < stopAt) egoZ = stopAt;
-    if (egoZ < Z1 + 40) egoZ = Z0 - 48;
-    var mz = Z0 - 78, mt = Math.min(1, Math.max(0, (mz - egoZ) / 22));
-    ego.position.set(RAMP_X + (LANES[2] - RAMP_X) * (mt * mt * (3 - 2 * mt)), 0.4, egoZ);
-    ego.rotation.y = mt > 0 && mt < 1 ? 0.12 : 0;
+    // your car
+    var v3 = vt * LANE_SPEED[2], ex = RAMP_X, ez;
+    if (phase === 'approach' || phase === 'wait') {
+      if (stopped) {
+        // no rule fires: roll to the end of the slip road and wait there
+        phase = 'wait'; egoZ = Math.max(WAIT_Z, egoZ - Math.max(2, Math.min(12, (egoZ - WAIT_Z) * 0.9)) * dt);   // drive up and ease to a stop
+      } else {
+        if (phase === 'wait') { phase = 'approach'; if (gapZ < MERGE_Z + 2) startCycle(true); }     // missed this gap: wait for the next
+        var d = egoZ - gapZ, remain = Math.max(0.35, (gapZ - MERGE_Z) / Math.max(v3, 0.5));
+        d -= d / remain * dt;                                   // close the gap so you are level with it at the merge point
+        egoZ = gapZ + d;
+        if (gapZ <= MERGE_Z) { phase = 'merge'; mergeT = 0; egoZ = gapZ; }
+      }
+      ez = egoZ;
+    } else if (phase === 'merge') {
+      mergeT = Math.min(1, mergeT + dt / 1.6); var m = mergeT * mergeT * (3 - 2 * mergeT);
+      ex = RAMP_X + (LANES[2] - RAMP_X) * m; ez = egoZ = gapZ;
+      if (mergeT >= 1) phase = 'ride';
+    } else {   // ride in the middle of the gap, then start over once it is deep in the fog
+      ex = LANES[2]; ez = egoZ = gapZ;
+      if (gapZ < GAP_END) startCycle(false);
+    }
+    ego.position.set(ex, 0.4, ez);
+    ego.rotation.y = phase === 'merge' ? 0.14 * Math.sin(mergeT * Math.PI) : 0;
     blink += dt;
     if (stopped) {
       var on = Math.floor(blink * 2.4) % 2 === 0;
