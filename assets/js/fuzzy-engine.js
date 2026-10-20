@@ -59,16 +59,28 @@
     ['and', ['good', 'poor', 'good'], 'high']
   ];
 
+  // ---- my 2026 rewrite: one AND rule for each of the 27 combinations, so something always fires ----
+  // Each input counts 0/1/2 (traffic counts in reverse: light traffic helps). Score = road + gap + (2 - traffic).
+  // 0-2 low, 3-4 medium, 5-6 high; a poor road stays low unless traffic is light and the gap is large.
+  var T3 = ['poor', 'average', 'good'];
+  var RULES_V2 = [];
+  T3.forEach(function (r, ri) { T3.forEach(function (tr, ti) { T3.forEach(function (g, gi) {
+    var s = ri + gi + (2 - ti), out = s <= 2 ? 'low' : s <= 4 ? 'medium' : 'high';
+    if (ri === 0) out = (ti === 0 && gi === 2) ? 'medium' : 'low';
+    RULES_V2.push(['and', [r, tr, g], out]);
+  }); }); });
+
   function fuzzify(v) { var o = {}; for (var k in MF_IN) o[k] = interp(IN, MF_IN[k], v); return o; }
 
-  function run(road, traffic, gap) {
+  function run(road, traffic, gap, rules) {
+    rules = rules || RULES;
     var f = [fuzzify(road), fuzzify(traffic), fuzzify(gap)];
-    var acts = RULES.map(function (r) {
+    var acts = rules.map(function (r) {
       var vals = r[1].map(function (t, i) { return f[i][t]; });
       return r[0] === 'or' ? Math.max.apply(null, vals) : Math.min.apply(null, vals);
     });
     var cut = { low: 0, medium: 0, high: 0 };
-    RULES.forEach(function (r, i) { cut[r[2]] = Math.max(cut[r[2]], acts[i]); });
+    rules.forEach(function (r, i) { cut[r[2]] = Math.max(cut[r[2]], acts[i]); });
     // upsampled universe: original points plus each cut-level crossing
     var pts = OUT.slice();
     Object.keys(cut).forEach(function (k) { if (cut[k] > 0 && cut[k] < 1) pts = pts.concat(crossings(OUT, MF_OUT[k], cut[k])); });
@@ -81,6 +93,6 @@
     return { fuzzified: f, activations: acts, cut: cut, x: pts, agg: agg, ok: any, value: any ? centroid(pts, agg) : null };
   }
 
-  var api = { run: run, IN: IN, OUT: OUT, MF_IN: MF_IN, MF_OUT: MF_OUT, RULES: RULES, interp: interp };
+  var api = { run: run, IN: IN, OUT: OUT, MF_IN: MF_IN, MF_OUT: MF_OUT, RULES: RULES, RULES_V2: RULES_V2, interp: interp };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.FuzzyEngine = api;
 })(this);

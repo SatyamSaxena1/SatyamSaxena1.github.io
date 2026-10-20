@@ -9,3 +9,13 @@ for (const [r, t, g, v] of REF) {
   else assert.ok(Math.abs(o.value - v) < 1e-3, [r, t, g] + ": " + o.value + " vs " + v);
 }
 console.log("fuzzy parity ok:", REF.length, "cases");
+
+// The 2026 rewrite: 27 AND rules must cover every input, and fix the two 2023 failures.
+assert.strictEqual(E.RULES_V2.length, 27);
+for (let r = 0; r <= 10; r += 0.5) for (let t = 0; t <= 10; t += 0.5) for (let g = 0; g <= 10; g += 0.5)
+  assert.ok(E.run(r, t, g, E.RULES_V2).ok, "rewrite has a hole at " + [r, t, g]);
+const v2 = (r, t, g) => E.run(r, t, g, E.RULES_V2).value;
+assert.ok(Math.abs(v2(10, 0, 5) - 83.3333) < 1e-3, "crash input");                // 2023: no rule fires
+assert.ok(Math.abs(v2(10, 10, 10) - 50) < 1e-3, "dense traffic no longer forces low"); // 2023: 16.7
+assert.ok(v2(0, 10, 0) < 20 && v2(10, 0, 10) > 80, "extremes still sensible");
+console.log("rewrite ok: 27 rules, no holes");

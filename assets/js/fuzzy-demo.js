@@ -5,7 +5,11 @@
   var root = document.getElementById('fz'); if (!root || !E) return;
   var NAMES = ['Road condition', 'Traffic density', 'Gap in traffic'], KEYS = ['road', 'traffic', 'gap'];
   var TERM_COL = { poor: 'var(--c-cp)', average: 'var(--warm)', good: 'var(--good)', low: 'var(--c-cp)', medium: 'var(--warm)', high: 'var(--good)' };
-  var state = { road: 7.5, traffic: 2.5, gap: 9 };
+  var state = { road: 7.5, traffic: 2.5, gap: 9, set: 'v1' };
+  // the rewrite renames terms so they read as what they mean; the triangles are unchanged
+  var LBL = { v1: [null, null, null], v2: [null, { poor: 'light', average: 'moderate', good: 'heavy' }, { poor: 'small', average: 'medium', good: 'large' }] };
+  function lbl(i, term) { var m = LBL[state.set][i]; return m ? m[term] : term; }
+  function rules() { return state.set === 'v2' ? E.RULES_V2 : E.RULES; }
   var ICONS = {"road": "<svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"><path d=\"M7 21 10 3M17 21 14 3M12 6v2M12 11v2M12 16v2\"/></svg>", "traffic": "<svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linejoin=\"round\"><path d=\"M5 16V11l2-5h10l2 5v5H5z\"/><path d=\"M5 11h14\"/><circle cx=\"8\" cy=\"16\" r=\"1.6\"/><circle cx=\"16\" cy=\"16\" r=\"1.6\"/></svg>", "gap": "<svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"><path d=\"M3 12h4M17 12h4M9 8l-2 4 2 4M15 8l2 4-2 4\"/></svg>"};
 
   function S(tag, a, p) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
@@ -39,6 +43,26 @@
     rulesEl.appendChild(row);
   });
 
+  var grid = document.createElement('div'); grid.className = 'fz-grid'; grid.hidden = true; rulesEl.parentNode.insertBefore(grid, rulesEl.nextSibling);
+  var gridCells = [];
+  ['poor', 'average', 'good'].forEach(function (tr) {
+    var blk = document.createElement('div'); blk.className = 'fz-blk';
+    blk.innerHTML = '<b>Traffic ' + LBL.v2[1][tr] + '</b><div class="fz-cells"><span></span><span>gap small</span><span>medium</span><span>large</span></div>';
+    var cells = blk.querySelector('.fz-cells');
+    ['good', 'average', 'poor'].forEach(function (rd) {
+      var h = document.createElement('span'); h.className = 'rh'; h.textContent = 'road ' + rd; cells.appendChild(h);
+      ['poor', 'average', 'good'].forEach(function (gp) {
+        var idx = -1; E.RULES_V2.forEach(function (r, i) { if (r[1][0] === rd && r[1][1] === tr && r[1][2] === gp) idx = i; });
+        var out = E.RULES_V2[idx][2], c = document.createElement('span'); c.className = 'cell';
+        c.style.setProperty('--c', TERM_COL[out]); c.innerHTML = '<i>' + out + '</i><em></em>';
+        c.title = 'IF road is ' + rd + ' AND traffic is ' + LBL.v2[1][tr] + ' AND gap is ' + LBL.v2[2][gp] + ' THEN speed is ' + out;
+        cells.appendChild(c); gridCells[idx] = c;
+      });
+    });
+    grid.appendChild(blk);
+  });
+  var rulesTitle = root.querySelector('.fz-rules-title'), rulesNote = root.querySelector('.fz-rules-note');
+
   // ---- output ----
   var outSvg = root.querySelector('.fz-out-plot');
   var OW = 620, OH = 200, om = { l: 30, r: 10, t: 10, b: 24 };
@@ -59,10 +83,10 @@
   }
   var lastT = null;
   function drawMap() {
-    if (lastT === state.traffic) return; lastT = state.traffic;
+    var key = state.set + state.traffic; if (lastT === key) return; lastT = key;
     var img = ctx.createImageData(N, N), holes = 0;
     for (var gy = 0; gy < N; gy++) for (var rx = 0; rx < N; rx++) {
-      var o = E.run(rx / 4, state.traffic, 10 - gy / 4), c = o.ok ? col(o.value) : [40, 40, 52], j = (gy * N + rx) * 4;
+      var o = E.run(rx / 4, state.traffic, 10 - gy / 4, rules()), c = o.ok ? col(o.value) : [40, 40, 52], j = (gy * N + rx) * 4;
       if (!o.ok) holes++;
       img.data[j] = c[0]; img.data[j + 1] = c[1]; img.data[j + 2] = c[2]; img.data[j + 3] = 255;
     }
@@ -71,12 +95,18 @@
   }
 
   function update() {
-    var o = E.run(state.road, state.traffic, state.gap);
+    var o = E.run(state.road, state.traffic, state.gap, rules());
     panels.forEach(function (p, i) {
       var v = state[KEYS[i]]; p.out.textContent = v.toFixed(1); p.line.setAttribute('x1', p.X(v)); p.line.setAttribute('x2', p.X(v));
-      var f = o.fuzzified[i]; p.chips.innerHTML = ['poor', 'average', 'good'].map(function (t) { return '<span style="--c:' + TERM_COL[t] + ';opacity:' + (f[t] > 0 ? 1 : .35) + '">' + t + ' ' + f[t].toFixed(2) + '</span>'; }).join('');
+      var f = o.fuzzified[i]; p.chips.innerHTML = ['poor', 'average', 'good'].map(function (t) { return '<span style="--c:' + TERM_COL[t] + ';opacity:' + (f[t] > 0 ? 1 : .35) + '">' + lbl(i, t) + ' ' + f[t].toFixed(2) + '</span>'; }).join('');
     });
-    [].forEach.call(rulesEl.children, function (row, i) { var a = o.activations[i]; row.querySelector('.bar i').style.width = (a * 100) + '%'; row.querySelector('.val').textContent = a.toFixed(2); row.classList.toggle('on', a > 0); });
+    var v2 = state.set === 'v2';
+    rulesEl.hidden = v2; grid.hidden = !v2;
+    rulesTitle.textContent = v2 ? '27 rules, one per combination, firing live' : 'The seven rules, firing live';
+    rulesNote.textContent = v2 ? 'Every cell is an AND rule. Score = road + gap + (2 - traffic), each counted 0 to 2: 0-2 low, 3-4 medium, 5-6 high; a poor road stays low unless traffic is light and the gap large. Brighter cells are firing harder.'
+                               : 'AND takes the smaller membership, OR the larger. Each rule cuts its output set at that strength.';
+    if (v2) gridCells.forEach(function (c, i) { var a = o.activations[i]; c.style.setProperty('--a', a); c.classList.toggle('on', a > 0); c.querySelector('em').textContent = a > 0 ? a.toFixed(2) : ''; });
+    else [].forEach.call(rulesEl.children, function (row, i) { var a = o.activations[i]; row.querySelector('.bar i').style.width = (a * 100) + '%'; row.querySelector('.val').textContent = a.toFixed(2); row.classList.toggle('on', a > 0); });
     if (o.ok) {
       var d = o.x.map(function (x, i) { return (i ? 'L' : 'M') + OX(x).toFixed(1) + ' ' + OY(o.agg[i]).toFixed(1); }).join('') + 'L' + OX(100) + ' ' + OY(0) + 'L' + OX(0) + ' ' + OY(0) + 'Z';
       area.setAttribute('d', d); cLine.setAttribute('x1', OX(o.value)); cLine.setAttribute('x2', OX(o.value)); cLine.style.opacity = 1;
@@ -91,6 +121,13 @@
     root.dispatchEvent(new CustomEvent('fz:update', { detail: root.__fz }));
   }
 
+  root.querySelectorAll('[data-set]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.set = b.getAttribute('data-set');
+      root.querySelectorAll('[data-set]').forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
+      root.setAttribute('data-set', state.set); update();
+    });
+  });
   root.querySelectorAll('[data-preset]').forEach(function (b) {
     b.addEventListener('click', function () {
       var v = b.getAttribute('data-preset').split(',').map(Number);

@@ -67,6 +67,19 @@
     @supports not (color:color-mix(in srgb,red,red)){.fz-area{fill:var(--chip)}.fz-scene{background:linear-gradient(180deg,#0d0c1d,var(--bg))}}
     @media(max-width:760px){.fz-scene{aspect-ratio:4/3.4}.fz-hud.bl span{font-size:11px}}
     @media(max-width:560px){.fz-hud.bl{display:none}}
+    .fz-sets{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px}
+    .fz-sets>span{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+    .fz-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .fz-grid[hidden],.fz-rules[hidden]{display:none}
+    .fz-blk>b{display:block;font-size:13px;margin-bottom:8px}
+    .fz-cells{display:grid;grid-template-columns:auto repeat(3,1fr);gap:5px;font-size:11.5px;color:var(--muted);align-items:center}
+    .fz-cells .rh{white-space:nowrap;padding-right:4px}
+    .fz-cells .cell{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:46px;border-radius:10px;border:1px solid var(--c);
+      background:color-mix(in srgb,var(--c) calc(8% + var(--a,0) * 50%),transparent);opacity:.55;transition:opacity .2s,background .2s,box-shadow .2s}
+    .fz-cells .cell.on{opacity:1;box-shadow:0 0 calc(var(--a,0) * 18px) color-mix(in srgb,var(--c) 70%,transparent)}
+    .fz-cells .cell i{font-style:normal;font-weight:700;color:var(--fg);font-size:12px}.fz-cells .cell em{font-style:normal;font-size:11px;color:var(--fg);font-variant-numeric:tabular-nums}
+    @supports not (color:color-mix(in srgb,red,red)){.fz-cells .cell{background:var(--card)}.fz-cells .cell.on{background:var(--card-hi)}}
+    @media(max-width:860px){.fz-grid{grid-template-columns:1fr}}
     @media(prefers-reduced-motion:reduce){.fz-hud .dot{animation:none}}
     @media(max-width:860px){.fz-inputs,.fz-out,.fz-two{grid-template-columns:1fr}.fz-rule{grid-template-columns:22px 1fr 60px 38px;font-size:12.5px}}
   </style>
@@ -105,18 +118,23 @@
           <span><i style="background:var(--accent)"></i>you, at the fuzzy speed</span>
         </div>
       </div>
+      <div class="fz-sets reveal" role="group" aria-label="Rule base">
+        <span>Rule base</span>
+        <button class="chip" data-set="v1" aria-pressed="true">2023 notebook &middot; 7 rules</button>
+        <button class="chip" data-set="v2" aria-pressed="false">My rewrite &middot; 27 rules</button>
+      </div>
       <div class="fz-presets reveal">
         <button class="chip" data-preset="7.5,2.5,9">Good road, light traffic</button>
         <button class="chip" data-preset="5,5,5">Everything average</button>
         <button class="chip" data-preset="10,10,10">Perfect road, dense traffic, big gap</button>
-        <button class="chip" data-preset="10,0,5">The input that crashes it</button>
+        <button class="chip" data-preset="10,0,5">The input that crashed the 2023 rules</button>
       </div>
       <div class="fz-inputs reveal"></div>
 
       <div class="card reveal" style="margin-top:16px;padding:22px">
-        <h3 style="font-size:19px;margin-bottom:10px">The seven rules, firing live</h3>
+        <h3 class="fz-rules-title" style="font-size:19px;margin-bottom:10px">The seven rules, firing live</h3>
         <div class="fz-rules"></div>
-        <p style="margin-top:12px;font-size:13px;color:var(--muted)">AND takes the smaller membership, OR the larger. Each rule cuts its output set at that strength.</p>
+        <p class="fz-rules-note" style="margin-top:12px;font-size:13px;color:var(--muted)">AND takes the smaller membership, OR the larger. Each rule cuts its output set at that strength.</p>
       </div>
 
       <div class="card reveal" style="margin-top:16px;padding:22px">
@@ -151,7 +169,7 @@
         <li class="reveal"><b>One OR swallows the rest.</b> Rule 1 says road poor <i>or</i> traffic dense <i>or</i> gap poor means a low limit. Any one of the three is enough, so a perfect road with a big gap still gets 16.7 when traffic is dense, and the careful AND rules hardly matter.</li>
         <li class="reveal"><b>Holes in the rule base.</b> Seven rules don't cover every combination. A perfect road with no traffic and a middling gap fires nothing, and the program errors out. The decision map shows where the holes are.</li>
         <li class="reveal"><b>"Good" traffic means heavy traffic.</b> <code>automf(3)</code> names every input's terms poor, average and good by value, so for traffic density "good" just means a high number. Rule 7 reads oddly for the same reason.</li>
-        <li class="reveal"><b>What I'd change:</b> write rules for all 27 combinations, split rule 1 into three separate rules, and give each input labels that match its meaning.</li>
+        <li class="reveal"><b>What I changed:</b> switch the rule base above to <i>My rewrite</i>. It has one AND rule for each of the 27 combinations, so every input fires something; no OR to let one input drown the rest; and labels that read as what they mean (light, moderate or heavy traffic; a small, medium or large gap). Same membership functions, same maths.</li>
       </ul>
     </section>
 
@@ -183,8 +201,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
   <script src="../assets/js/site.js?v=11" defer></script>
   <script src="../assets/js/bg.js?v=5" defer></script>
-  <script src="../assets/js/fuzzy-engine.js?v=1" defer></script>
-  <script src="../assets/js/fuzzy-demo.js?v=3" defer></script>
+  <script src="../assets/js/fuzzy-engine.js?v=2" defer></script>
+  <script src="../assets/js/fuzzy-demo.js?v=4" defer></script>
   <script src="../assets/js/highway.js?v=3" defer></script>
 </body>
 </html>
