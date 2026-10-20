@@ -1,0 +1,20 @@
+name: Tests
+
+# Runs the browser fuzzy engine's tests: parity with scikit-fuzzy for the 2023 rules,
+# and full coverage for the 27-rule rewrite. No dependencies beyond Node.
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  fuzzy-engine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node assets/js/fuzzy-engine.test.js
