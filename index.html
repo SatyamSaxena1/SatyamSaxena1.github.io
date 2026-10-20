@@ -212,14 +212,13 @@ steps: 12%| 71/612 [02:43&lt;20:48, 2.31s/it, <span class="ok">avr_loss=0.124</s
           </div>
           <div class="tl-fig">
             <figure class="bug reveal"><div class="bar"><i></i><i></i><i></i>LoRA training &middot; 11 Mar 2024</div>
-<pre><span class="dim"># first attempt, rank 8</span>
-Training 'mistral' model using (q, v) projections
-Trainable params: 3,407,872 (0.0907 %)
-<span class="err">loss after 781 steps: ~2.2 (barely moved)</span>
-<span class="dim"># fourth attempt, rank 128</span>
-Running... 315 / 1150 ... 12.17 s/it ... Current Loss: 1.70
-<span class="ok">859 steps, 7.02 epochs, loss 1.1486</span></pre>
-              <figcaption>From photos of the screen and the saved training logs.</figcaption></figure>
+<pre><span class="dim"># loras/lorad/training_log.json (rank 8)</span>
+"current_steps": 781, "epoch": 0.2,
+<span class="err">"train_loss": 2.2125</span>   <span class="dim"># barely moved</span>
+<span class="dim"># loras/glutenberg2/training_log.json (rank 128)</span>
+"current_steps_adjusted": 859, "epoch_adjusted": 7.02,
+"train_runtime": 13592.04, <span class="ok">"loss": 1.1486</span></pre>
+              <figcaption>Copied from the training logs the tool saved.</figcaption></figure>
           </div>
         </article>
 

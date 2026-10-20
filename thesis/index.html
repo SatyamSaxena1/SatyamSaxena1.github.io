@@ -74,7 +74,7 @@
           <h3>What was trained</h3>
           <dl class="kv" style="margin-top:12px">
             <dt>Base model</dt><dd>Mistral-7B-v0.1, loaded in 4-bit (QLoRA)</dd>
-            <dt>Adapter</dt><dd>LoRA rank 128, alpha 256, dropout 0.05, on the attention q and v projections</dd>
+            <dt>Adapter</dt><dd>LoRA rank 128, alpha 256, dropout 0.05, on the attention q and v projections: about 54.5 million trainable parameters (a 218 MB adapter file at 32-bit)</dd>
             <dt>Data</dt><dd>Shakespeare as raw text, 375 KB, cut into 320-token blocks</dd>
             <dt>Optimiser</dt><dd>AdamW, learning rate 3&times;10<sup>-5</sup>, linear decay after 100 warm-up steps</dd>
             <dt>Batch</dt><dd>7 per step &times; 5 accumulated = 35</dd>
@@ -110,8 +110,8 @@
       </div>
       <p class="reveal" style="margin-top:12px;color:var(--muted);font-size:14px">My thesis reads this pair as an ablation showing rank 8 can't learn. Looking at the logs again, that's too strong: the rank-8 run used a different learning rate, batch and block size, and saw only 0.2 of an epoch before it was stopped. It shows rank 8 at those settings wasn't working, not that rank 8 never could.</p>
       <div class="two" style="margin-top:16px">
-        <figure class="reveal" data-zoom><img src="../assets/lora/live/mistral_console.jpg" alt="Console: training mistral model using q and v projections, trainable params 3,407,872, 0.0907 percent" loading="lazy"><figcaption>The rank-8 run starting: <b>3,407,872 trainable parameters</b>. Its first logged loss, 2.3792, is the first point in the lorad log. Rank 128 trains 16&times; more, about 54.5 million.</figcaption></figure>
-        <figure class="reveal" data-zoom><img src="../assets/lora/live/mistral_graph.jpg" alt="Training UI: loss graph falling over 2.6 epochs, 315 of 1150 steps, current loss 1.70" loading="lazy"><figcaption>The thesis run, early evening: about step 315, loss 1.70. A checkpoint was saved soon after at step 319, loss 1.76.</figcaption></figure>
+        <figure class="reveal" data-zoom><img src="../assets/lora/live/mistral_console.jpg" alt="A training console on the laptop screen" loading="lazy"><figcaption>An earlier training attempt on 11 Mar 2024, photographed on the laptop screen.</figcaption></figure>
+        <figure class="reveal" data-zoom><img src="../assets/lora/live/mistral_graph.jpg" alt="The training UI's loss graph on the laptop screen" loading="lazy"><figcaption>Another earlier attempt the same day, with the training UI's loss graph. The numbers on this page come from the saved logs, not these photos.</figcaption></figure>
       </div>
     </section>
 
