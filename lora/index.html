@@ -43,7 +43,19 @@
     #lgrid .g-item{margin:0}#lgrid .g-item img{aspect-ratio:1;object-fit:cover}
     .vs img{max-height:560px;object-fit:cover}
     @supports not (color:color-mix(in srgb,red,red)){.g-item .badge.t{background:var(--accent)}}
-    @media(max-width:860px){.lh-hero,.vs{grid-template-columns:1fr}}
+    .dv-stage{position:relative;aspect-ratio:3/4;border-radius:18px;overflow:hidden;background:#000;touch-action:pan-y}
+    .dv-stage canvas,.dv-stage img{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover}
+    .dv-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-top:12px}
+    .dv-modes{display:flex;flex-wrap:wrap;gap:6px}
+    .dv-tilt{padding:8px 14px;border-radius:99px;border:1px solid var(--accent);background:transparent;color:var(--fg);font:inherit;font-size:13px;cursor:pointer;min-height:44px}
+    .dv-cap{margin:10px 0 0;font-size:13.5px;color:var(--muted);min-height:2.6em}
+    .dv-thumbs{display:flex;gap:8px;margin-top:6px}
+    .dv-thumbs button{padding:0;border:2px solid transparent;border-radius:10px;overflow:hidden;width:56px;background:none;cursor:pointer}
+    .dv-thumbs button[aria-pressed=true]{border-color:var(--accent)}.dv-thumbs img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block}
+    .unused{display:grid;grid-template-columns:repeat(11,1fr);gap:4px}
+    .unused img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:5px;opacity:.75}
+    .dv-two{align-items:start}
+    @media(max-width:860px){.lh-hero,.vs{grid-template-columns:1fr}.unused{grid-template-columns:repeat(7,1fr)}}
   </style>
 </head>
 <body>
@@ -68,7 +80,7 @@
       <div>
         <p class="eyebrow reveal">MSc AI &middot; Deep Learning &middot; Feb 2024</p>
         <h1 class="reveal">Teaching SDXL <span class="grad">my face</span></h1>
-        <p class="lead reveal">Stable Diffusion XL has never seen me. I taught it with a LoRA: a few small extra weight matrices trained on 34 photos, in 19 minutes on a consumer GPU, with the 6.9 GB base model left untouched. Then I compared it against Textual Inversion and kept a record of everything that broke.</p>
+        <p class="lead reveal">Stable Diffusion XL has never seen me. I taught it with a LoRA: a few small extra weight matrices trained on 34 photos, in 19 minutes on a laptop GPU, with the 6.9 GB base model left untouched. Then I compared it against Textual Inversion and kept a record of everything that broke.</p>
         <div class="stats reveal">
           <div class="stat"><b data-count="34">0</b><span>training photos</span></div>
           <div class="stat"><b data-count="612">0</b><span>training steps</span></div>
@@ -96,7 +108,7 @@
         </div>
         <div class="card reveal">
           <h3>The question</h3>
-          <p style="margin-top:10px">Can mixed-precision (bf16) training on a consumer RTX 30-series card make this fast enough to be practical? And how does it compare with Textual Inversion, which only learns a new word embedding and leaves the image model's weights alone?</p>
+          <p style="margin-top:10px">Can mixed-precision (bf16) training on a laptop RTX 3080 Ti make this fast enough to be practical? And how does it compare with Textual Inversion, which only learns a new word embedding and leaves the image model's weights alone?</p>
         </div>
       </div>
     </section>
@@ -127,6 +139,21 @@ log/  models/</div>
       </div>
     </section>
 
+    <section class="sec wrap" id="depth">
+      <div class="sec-head reveal"><h2>What the <span class="grad">iPhone saw</span></h2><p>I shot the set in Portrait mode on an iPhone 13 Pro Max, so every photo carries a depth map and Apple's segmentation mattes. Move your pointer over the photo, or tilt your phone.</p></div>
+      <div class="two dv-two">
+        <div class="card reveal"><div class="dv" data-base="../assets/lora/depth/" data-ids="5757,5769,5782"></div></div>
+        <div class="card reveal">
+          <h3>Why this mattered for training</h3>
+          <p style="margin-top:10px">The background looks black, but switch to <b>Depth</b> and the room is still there: the wall behind me, just unlit. That dark falloff is what made the subject so easy to separate, and also why the LoRA later painted dark walls behind me.</p>
+          <p style="margin-top:10px">The <b>Subject</b>, <b>Hair</b> and <b>Skin</b> layers are Apple's own mattes, saved alongside the photo. They show the separation my report relied on: the subject is cleanly cut out, hair included.</p>
+          <h3 style="margin-top:20px;font-size:19px">56 shots, 34 kept</h3>
+          <div class="unused" id="unused" style="margin-top:10px"></div>
+          <p style="margin-top:10px;font-size:13px">All shot on 28 Feb 2024 between 18:01 and 18:07. The first takes above are warmer and framed tighter; the 34 used for training came from a cooler, wider pass a few minutes later. Location data was removed from every photo published here.</p>
+        </div>
+      </div>
+    </section>
+
     <section class="sec wrap">
       <div class="sec-head reveal"><h2>The <span class="grad">training run</span></h2><p>Straight from the TensorBoard log: 29 Feb 2024, 04:51, 612 steps in about 19 minutes.</p></div>
       <div class="card vz-block reveal">
@@ -134,6 +161,11 @@ log/  models/</div>
         <p>Per-step loss in diffusion training jumps around (from 0.001 to 0.48 here), because each step picks a random noise level. So this shows a 25-step rolling mean alongside the trainer's running average, which ends at 0.0996. Hover for exact values.</p>
         <div class="vz" data-chart="line" data-id="lora" data-keys="roll,avg" data-names="25-step rolling mean,running average" data-ymax="0.25" data-xlabel="step" data-label="LoRA training loss by step"></div>
       </div>
+      <div class="two" style="margin-top:16px">
+        <figure class="reveal" data-zoom><img src="../assets/lora/live/console.jpg" alt="kohya_ss console: 204 images times repeats, 3 epochs, batch size 1, 612 total steps, then repeated Triton errors" loading="lazy"><figcaption>29 Feb 2024, 04:54. kohya confirms 204 &times; 3 epochs = 612 steps, then complains on every step: <code>No module named 'triton'</code>. It trained anyway.</figcaption></figure>
+        <figure class="reveal" data-zoom><img src="../assets/lora/live/taskmgr.jpg" alt="Task Manager: RTX 3080 Ti Laptop GPU at 100 percent, 85 degrees, 13.9 of 16 GB memory; progress 71 of 612 at 2.31 seconds per step" loading="lazy"><figcaption>Same minute: the laptop's RTX 3080 Ti at 100% and 85 &deg;C, 13.9 of 16 GB used. Step 71/612 at 2.31 s/it, average loss 0.124.</figcaption></figure>
+      </div>
+      <p class="reveal" style="margin-top:12px;color:var(--muted);font-size:14px">Photos of the screen, taken while it trained. Getting this far took a fight with the installer: two Python versions (3.10 and 3.12) side by side broke kohya_ss until one was removed. This was early 2024, before any of this was one click.</p>
       <div class="two" style="margin-top:16px">
         <div class="card reveal">
           <h3>Settings that mattered</h3>
@@ -143,7 +175,8 @@ log/  models/</div>
             <dt>Steps</dt><dd>34 photos &times; 6 repeats &times; 3 epochs = 612</dd>
             <dt>Precision</dt><dd>bf16 mixed precision</dd>
             <dt>Optimizer</dt><dd>Adafactor</dd>
-            <dt>Learning rate</dt><dd>about 2.1&times;10<sup>-4</sup> text encoder, 2.3&times;10<sup>-4</sup> U-Net (logged)</dd>
+            <dt>Learning rate</dt><dd>about 2.1&times;10<sup>-4</sup> text encoder, 2.3&times;10<sup>-4</sup> U-Net, as logged. The console warned <code>unet_lr and text_encoder_lr are ignored</code>: with the Adafactor scheduler, the optimiser picked its own rates.</dd>
+            <dt>GPU</dt><dd>RTX 3080 Ti Laptop GPU, 16 GB</dd>
             <dt>Resolution</dt><dd>512 px training, to fit memory</dd>
             <dt>Output</dt><dd>.safetensors, loaded in Automatic1111 v1.7.0</dd>
           </dl>
@@ -173,7 +206,7 @@ log/  models/</div>
             <thead><tr><th></th><th>LoRA</th><th>Textual Inversion</th></tr></thead>
             <tbody>
               <tr><td>Base model</td><td class="n" style="font-size:15px">SDXL 1.0</td><td class="n" style="font-size:15px">SD 2</td></tr>
-              <tr><td>GPU</td><td class="n" style="font-size:15px">RTX 30-series, bf16</td><td class="n" style="font-size:15px">T4, fp16</td></tr>
+              <tr><td>GPU</td><td class="n" style="font-size:15px">RTX 3080 Ti Laptop, bf16</td><td class="n" style="font-size:15px">T4, fp16</td></tr>
               <tr><td>Seconds per step</td><td class="n win">1.95</td><td class="n">4.43</td></tr>
               <tr><td>Final loss</td><td class="n win">0.0996</td><td class="n">0.475</td></tr>
               <tr><td>Steps</td><td class="n" style="font-size:15px">612</td><td class="n" style="font-size:15px">2,000 (batch 4)</td></tr>
@@ -186,6 +219,14 @@ log/  models/</div>
           <figure data-zoom style="margin-top:10px"><img src="../assets/lora/ti_balcony.jpg" alt="Textual Inversion outputs on SD 2: a small, unrecognisable figure on a balcony" loading="lazy"><figcaption>Textual Inversion on SD 2, <code>satyam guy on a balcony</code>, 30 steps. It got my skin tone and facial structure right, and little else.</figcaption></figure>
           <p style="margin-top:12px">Textual Inversion only gets a new word to point at things the model already knows. It got my facial structure and skin tone, but not a likeness. The LoRA can change what the model draws, and it produced my actual face.</p>
         </div>
+      </div>
+    </section>
+
+    <section class="sec wrap" id="mistral">
+      <div class="sec-head reveal"><h2>Eleven days later: <span class="grad">a language model</span></h2><p>11 Mar 2024. The same low-rank idea, applied to Mistral, a 7B-parameter LLM, on the same laptop.</p></div>
+      <div class="two">
+        <figure class="reveal" data-zoom><img src="../assets/lora/live/mistral_console.jpg" alt="Console: training mistral model using q and v projections, trainable params 3,407,872, 0.0907 percent" loading="lazy"><figcaption>12:49. LoRA on Mistral's attention (q, v) projections: <b>3,407,872 trainable parameters, 0.0907%</b> of the loaded model. Everything else stays frozen.</figcaption></figure>
+        <figure class="reveal" data-zoom><img src="../assets/lora/live/mistral_graph.jpg" alt="Training UI loss graph falling from about 2.4 to 1.7 over 2.6 epochs; 315 of 1150 steps at 12.17 seconds per step" loading="lazy"><figcaption>19:34. A later run: loss down from about 2.4 to 1.70 by step 315 of 1,150, at 12.17 s per step, with about 3 hours to go.</figcaption></figure>
       </div>
     </section>
 
@@ -223,6 +264,7 @@ log/  models/</div>
   (function () {
     function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
     fetch('../assets/lora/manifest.json').then(function (r) { return r.json(); }).then(function (m) {
+      var un = document.getElementById('unused'); for (var n = 5734; n <= 5754; n++) { var u = document.createElement('img'); u.src = '../assets/lora/unused/' + n + '.jpg'; u.alt = 'Unused shot ' + n; u.loading = 'lazy'; un.appendChild(u); }
       var tg = document.getElementById('tgrid');
       Object.keys(m.train).forEach(function (f) { var i = document.createElement('img'); i.src = '../assets/lora/train/' + f; i.alt = m.train[f]; i.title = m.train[f]; i.loading = 'lazy'; tg.appendChild(i); });
       var g = document.getElementById('lgrid'), items = m.generated;
@@ -251,5 +293,6 @@ log/  models/</div>
   <script src="../assets/js/site.js?v=11" defer></script>
   <script src="../assets/js/bg.js?v=5" defer></script>
   <script src="../assets/js/charts.js?v=12" data-json="../assets/data/lora.json?v=2" defer></script>
+  <script src="../assets/js/depth.js?v=2" defer></script>
 </body>
 </html>
