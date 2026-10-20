@@ -12,13 +12,17 @@
   var ua = navigator.userAgent, isIOS = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
   var iosVer = isIOS ? +((/Version\/(\d+)/.exec(ua) || / OS (\d+)_/.exec(ua) || [0, 99])[1]) : 0;
   var iosMatch = isIOS ? [0, iosVer] : null;
-  var oldIOS = isIOS && iosVer < 16, phone = window.matchMedia('(hover: none)').matches;
+  var glq = /[?&]gl=([12])/.exec(location.search), oldIOS = glq ? glq[1] === '1' : (isIOS && iosVer < 16), phone = window.matchMedia('(hover: none)').matches;
   var renderer;
   try {
     var opts = { antialias: !oldIOS, alpha: true, powerPreference: 'low-power' };
     if (oldIOS) { var cnv = document.createElement('canvas'), ctx1 = cnv.getContext('webgl', { antialias: false, alpha: true, powerPreference: 'low-power' }); if (!ctx1) throw new Error('no webgl'); opts.canvas = cnv; opts.context = ctx1; }
     renderer = new T.WebGLRenderer(opts);
-  } catch (e) { host.classList.add('no3d'); if (window.__fzDebug) window.__fzDebug('3D off: ' + e.message); return; }
+  } catch (e) {
+    if (window.__fzDebug) window.__fzDebug('3D off: ' + e.message);
+    var still = new Image(); still.src = host.getAttribute('data-still'); still.alt = 'The highway scene (a still, because 3D is not available here)';
+    still.className = 'fz-still'; host.insertBefore(still, host.firstChild); host.classList.add('still'); return;
+  }
   renderer.setPixelRatio(oldIOS ? 1 : Math.min(window.devicePixelRatio || 1, window.innerWidth < 600 ? 1.25 : 1.5));
   if (window.__fzDebug) {
     var gl = renderer.getContext(), dbg = gl.getExtension('WEBGL_debug_renderer_info');
@@ -325,16 +329,25 @@
     var drift = reduce ? 0 : Math.sin(t * 0.12) * 2.5;
     cam.position.set(18 + drift + px * 6, 10.5 - py * 3, Z0 - 40 + px * 3);
     cam.lookAt(1.5 + px * 3, 0.5, Z0 - 110);
-    renderer.render(scene, cam);
+    try { renderer.render(scene, cam); } catch (err) { fail(err); }
+  }
+  var failed = false;
+  function fail(err) {
+    if (failed) return; failed = true; running = false;
+    if (window.__fzDebug) window.__fzDebug('3D render error: ' + (err && err.message) + (err && err.stack ? ' | ' + String(err.stack).split('\n').slice(0, 3).join(' / ') : ''));
+    if (phone) window.dispatchEvent(new CustomEvent('lava:pause', { detail: false }));
+    renderer.domElement.style.display = 'none';
+    var img = new Image(); img.src = host.getAttribute('data-still'); img.alt = 'The highway scene (a still, because 3D could not run on this device)';
+    img.className = 'fz-still'; host.insertBefore(img, host.firstChild); host.classList.add('still');
   }
   function loop(now) {
-    if (!running) return;
+    if (!running || failed) return;
     var dt = Math.min(0.05, (now - last) / 1000); last = now; frame(dt);
     requestAnimationFrame(loop);
   }
   function setRun(on) {
     if (phone) window.dispatchEvent(new CustomEvent('lava:pause', { detail: on }));   // one animated WebGL scene at a time on phones
-    if (on === running || reduce) return; running = on; if (on) { last = performance.now(); requestAnimationFrame(loop); }
+    if (on === running || reduce || failed) return; running = on; if (on) { last = performance.now(); requestAnimationFrame(loop); }
   }
   if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { visible = e[0].isIntersecting; setRun(visible && !document.hidden); }).observe(host);
   document.addEventListener('visibilitychange', function () { setRun(visible && !document.hidden); });

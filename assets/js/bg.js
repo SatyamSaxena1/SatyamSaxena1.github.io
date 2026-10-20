@@ -184,7 +184,12 @@
     U.uTime.value = t;
     for (var i = 0; i < N; i++) { var b = B[i]; U.uBlob.value[i].set(b.x, b.y, b.r, b.s); U.uShape.value[i].set(b.ux, b.uy, b.st, 0); }
   }
-  function draw() { upload(); renderer.render(scene, cam); }
+  var broken = false;
+  function draw() {
+    if (broken) return;
+    try { upload(); renderer.render(scene, cam); }
+    catch (err) { broken = true; running = false; document.documentElement.classList.add('no-webgl'); canvas.style.display = 'none'; if (window.__fzDebug) window.__fzDebug('background render error: ' + (err && err.message)); }
+  }
 
   function resize() {
     var w = window.innerWidth, h = window.innerHeight;

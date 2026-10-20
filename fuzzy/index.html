@@ -59,6 +59,7 @@
       background:radial-gradient(120% 90% at 70% 0%,color-mix(in srgb,var(--accent) 22%,transparent),transparent 60%),linear-gradient(180deg,color-mix(in srgb,var(--accent-2) 14%,var(--bg)),var(--bg));box-shadow:var(--glass-edge,none),var(--shadow)}
     .fz-scene canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
     .fz-scene.no3d{display:none}
+    .fz-scene .fz-still{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
     .fz-scene[data-state=err]{border-color:var(--pink)}
     .fz-hud{position:absolute;z-index:1;font-size:12px;color:#ecebff;pointer-events:none}
     .fz-hud.tl{top:14px;right:16px;display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:99px;background:rgba(6,6,14,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-weight:650;letter-spacing:.04em}
@@ -113,7 +114,7 @@
     </section>
 
     <section class="wrap" id="fz" style="padding-top:10px">
-      <div class="fz-scene reveal" id="fz-scene">
+      <div class="fz-scene reveal" id="fz-scene" data-still="../assets/fuzzy/highway_still.jpg">
         <div class="fz-hud tl"><span class="dot"></span>Live<span class="long">&nbsp;&middot; your car is on the slip road</span></div>
         <div class="fz-hud bl">
           <span><i style="background:var(--c-cp)"></i>cracks &amp; puddles = poor road</span>
@@ -202,11 +203,11 @@
   <dialog id="lb" aria-label="Enlarged image"><img alt=""><p></p></dialog>
   <footer class="wrap"><span>&copy; <span id="yr">2026</span> Satyam Saxena</span><span><a href="../">&larr; Back to home</a></span></footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous" defer></script>
   <script src="../assets/js/site.js?v=11" defer></script>
-  <script src="../assets/js/bg.js?v=8" defer></script>
+  <script src="../assets/js/bg.js?v=9" defer></script>
   <script src="../assets/js/fuzzy-engine.js?v=2" defer></script>
   <script src="../assets/js/fuzzy-demo.js?v=6" defer></script>
-  <script src="../assets/js/highway.js?v=7" defer></script>
+  <script src="../assets/js/highway.js?v=8" defer></script>
 </body>
 </html>
