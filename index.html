@@ -17,6 +17,12 @@
   <script>try{var t=localStorage.getItem('theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))</script>
   <link rel="stylesheet" href="assets/css/theme.css?v=24">
   <link rel="stylesheet" href="assets/css/timeline.css?v=2">
+<style>
+  .zk-live{border:1px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden}
+  .zk-live canvas{display:block;width:100%;background:#17161f;touch-action:none;cursor:grab}
+  .zk-info{margin:0;padding:10px 14px;border-top:1px solid var(--line);font-size:13px;min-height:58px}
+  .zk-info b{display:block;color:var(--fg)}.zk-info span{color:var(--muted)}
+</style>
 </head>
 <body>
   <canvas id="bg" aria-hidden="true"></canvas>
@@ -262,7 +268,11 @@ steps: 12%| 71/612 [02:43&lt;20:48, 2.31s/it, <span class="ok">avr_loss=0.124</s
             <div class="links"><a href="https://www.linkedin.com/pulse/revolutionizing-accessibility-my-journey-building-locally-saxena-4d5hc">Live captions write-up</a><a href="https://www.linkedin.com/pulse/from-reddit-knowledge-graph-building-zettelkasten-system-saxena-ptl9c">Zettelkasten write-up</a></div>
           </div>
           <div class="tl-fig">
-            <figure data-zoom class="reveal"><img src="assets/projects/zk_graph.webp" alt="Obsidian graph of notes made from saved Reddit posts, with the huggingface concept note highlighted and linked to the posts that mention it" loading="lazy" width="1000" height="718"><figcaption>The graph from about 1,000 saves: one concept note (huggingface) and every post linked to it.</figcaption></figure>
+            <div class="zk-live reveal" id="zk-live" data-src="assets/zk/graph.json">
+              <canvas aria-label="Interactive graph of ten notes from my Zettelkasten vault and the concepts they share"></canvas>
+              <p class="zk-info" aria-live="polite" data-hint="<b>Live: ten real notes from my vault</b><span>Grey dots are saved posts, purple ones the concepts they share. Drag a node, or hover or tap one to read it.</span>"></p>
+            </div>
+            <figure data-zoom class="reveal" style="margin-top:12px"><img src="assets/projects/zk_graph.webp" alt="Obsidian graph of notes made from saved Reddit posts, with the huggingface concept note highlighted and linked to the posts that mention it" loading="lazy" width="1000" height="718"><figcaption>The graph from about 1,000 saves: one concept note (huggingface) and every post linked to it.</figcaption></figure>
             <figure data-zoom class="reveal" style="margin-top:12px"><img src="assets/projects/zk_note.webp" alt="One generated note: title, source link, tags and keyword weights, then the post and its top comments" loading="lazy" width="853" height="720"><figcaption>One generated note, with its tags and keyword weights.</figcaption></figure>
           </div>
         </article>
@@ -299,6 +309,7 @@ steps: 12%| 71/612 [02:43&lt;20:48, 2.31s/it, <span class="ok">avr_loss=0.124</s
   <footer class="wrap"><span>&copy; <span id="yr">2026</span> Satyam Saxena</span><span>Built with plain HTML, CSS and Three.js</span></footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous" defer></script>
+  <script src="assets/js/zk-graph.js?v=1" defer></script>
   <script src="assets/js/site.js?v=11" defer></script>
   <script src="assets/js/bg.js?v=10" defer></script>
 </body>
