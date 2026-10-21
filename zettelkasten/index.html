@@ -18,10 +18,22 @@
   <link rel="stylesheet" href="../assets/css/theme.css?v=24">
   <link rel="stylesheet" href="../assets/css/timeline.css?v=2">
   <style>
-    .zk-live{border:1px solid var(--line);border-radius:18px;background:var(--card);overflow:hidden}
-    .zk-live canvas{display:block;width:100%;background:#17161f;touch-action:none;cursor:grab}
-    .zk-info{margin:0;padding:12px 16px;border-top:1px solid var(--line);font-size:14px;min-height:64px}
-    .zk-info b{display:block;color:var(--fg)}.zk-info span{color:var(--muted)}
+    .zk-live{position:relative;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#0d0c14;box-shadow:0 30px 80px -40px rgba(138,107,255,.45)}
+    .zk-live canvas{display:block;width:100%;touch-action:pan-y;cursor:grab;-webkit-user-select:none;user-select:none}
+    .zk-bar{position:absolute;left:12px;right:12px;top:12px;display:flex;justify-content:space-between;gap:10px;pointer-events:none;flex-wrap:wrap}
+    .zk-legend,.zk-zoom{display:flex;gap:6px;flex-wrap:wrap;pointer-events:auto}
+    .zk-bar button{display:inline-flex;align-items:center;gap:7px;min-height:32px;padding:6px 11px;border-radius:99px;border:1px solid rgba(255,255,255,.1);background:rgba(20,18,32,.72);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:#d9d6f5;font-family:inherit;font-weight:600;font-size:12.5px;line-height:1;cursor:pointer;transition:background .2s,border-color .2s,opacity .2s}
+    .zk-bar button:hover{background:rgba(40,36,62,.85)}
+    .zk-legend button i{width:9px;height:9px;border-radius:50%;flex:none}
+    .zk-legend button em{font-style:normal;color:#8f8bb3;font-variant-numeric:tabular-nums}
+    .zk-legend button[aria-pressed=true]{border-color:rgba(255,255,255,.45);background:rgba(60,52,96,.9)}
+    .zk-zoom button{width:32px;justify-content:center;padding:0;font-size:16px}
+    .zk-tip{position:absolute;left:0;top:0;max-width:min(320px,80%);padding:10px 12px;border-radius:12px;background:rgba(18,16,30,.92);border:1px solid rgba(255,255,255,.12);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);color:#ecebff;font-size:13px;line-height:1.4;pointer-events:none;opacity:0;transition:opacity .18s;box-shadow:0 12px 30px rgba(0,0,0,.45)}
+    .zk-tip.on{opacity:1}.zk-tip b{display:block;font-weight:650}.zk-tip span{display:block;margin-top:3px;color:#9c98c8;font-size:12px}
+    .zk-info{margin:0;padding:11px 16px;border-top:1px solid rgba(255,255,255,.08);font-size:13px;color:#9c98c8;background:#121120}
+    .zk-info b{color:#ecebff;font-weight:650}
+    @media(max-width:600px){.zk-legend button span{display:none}.zk-legend button{padding:6px 9px}}
+    @media(prefers-reduced-transparency:reduce){.zk-bar button,.zk-tip{background:#1a1828;-webkit-backdrop-filter:none;backdrop-filter:none}}
     .steps{counter-reset:s;display:grid;gap:12px;margin:0;padding:0;list-style:none}
     .steps li{counter-increment:s;position:relative;padding:18px 20px 18px 58px;border:1px solid var(--line);border-radius:16px;background:var(--card)}
     .steps li::before{content:counter(s);position:absolute;left:18px;top:16px;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;display:grid;place-items:center;font-size:14px}
@@ -67,7 +79,10 @@
       <div class="sec-head reveal"><h2>The vault, <span class="grad">live</span></h2><p>333 real notes from the August 2025 export, with the 45 concepts they share most. Drag a node; hover or tap one to read it.</p></div>
       <div class="zk-live reveal" id="zk-live" data-src="../assets/zk/graph.json">
         <canvas aria-label="Interactive graph of 333 notes from my Zettelkasten vault and the concepts they share"></canvas>
-        <p class="zk-info" aria-live="polite" data-hint="<b>Grey dots are saved posts, purple ones are concepts</b><span>A post links to every concept among its keywords. Bigger grey dots carry more weight in the pipeline's graph metrics.</span>"></p>
+        <div class="zk-bar"><div class="zk-legend" role="group" aria-label="Highlight a topic"></div>
+          <div class="zk-zoom"><button type="button" data-zoom="out" aria-label="Zoom out">&minus;</button><button type="button" data-zoom="reset" aria-label="Reset view">&#8634;</button><button type="button" data-zoom="in" aria-label="Zoom in">+</button></div></div>
+        <div class="zk-tip" aria-hidden="true"></div>
+        <p class="zk-info" aria-live="polite" data-hint="<b>Hover or tap a node</b> to see its links. Drag nodes, drag the background to pan, pinch or Ctrl/&#8984; + scroll to zoom. Tap a topic to highlight it."></p>
       </div>
       <p class="note reveal" style="margin-top:12px">My saves weren't all work-related, so this shows the 333 from tech, study, career, film and iOS subreddits, with titles checked by hand. Only titles, subreddits and keywords are published; no post text, comments or usernames.</p>
     </section>
@@ -114,6 +129,6 @@
   <script src="https://cdn.jsdelivr.net/npm/d3-quadtree@3.0.1/dist/d3-quadtree.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/d3-timer@3.0.1/dist/d3-timer.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/d3-force@3.0.0/dist/d3-force.min.js" defer></script>
-  <script src="../assets/js/zk-graph.js?v=10" defer></script>
+  <script src="../assets/js/zk-graph.js?v=14" defer></script>
 </body>
 </html>
