@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Mistral 7B, in Shakespeare's voice - MSc thesis | Satyam Saxena</title>
-  <meta name="description" content="My MSc thesis: QLoRA fine-tuning of Mistral 7B on Shakespeare, on a laptop GPU. The real training logs, four runs in one day, the outputs and the honest limits.">
+  <meta name="description" content="My MSc thesis: QLoRA fine-tuning of Mistral 7B on Shakespeare, on a laptop GPU. The real training logs, six runs in one day, the outputs and the honest limits.">
   <meta name="theme-color" content="#05050b">
   <meta name="color-scheme" content="dark light">
   <meta name="format-detection" content="telephone=no">
@@ -62,7 +62,7 @@
       </div>
       <div class="cta reveal">
         <a class="btn primary" href="https://doi.org/10.5281/zenodo.17305216">Read the thesis on Zenodo <b class="ar">&rarr;</b></a>
-        <a class="btn" href="#runs">The four runs <b class="ar">&rarr;</b></a>
+        <a class="btn" href="#runs">The six runs <b class="ar">&rarr;</b></a>
         <a class="btn" href="../lora/">The SDXL LoRA before it <b class="ar">&rarr;</b></a>
       </div>
     </section>
@@ -92,15 +92,17 @@
     </section>
 
     <section class="sec wrap" id="runs">
-      <div class="sec-head reveal"><h2>One day, <span class="grad">four runs</span></h2><p>11 March 2024. Each run left its own folder of logs and settings behind.</p></div>
+      <div class="sec-head reveal"><h2>One day, <span class="grad">six runs</span></h2><p>11 March 2024. Four runs left a folder of logs and settings behind; the offline Weights &amp; Biases logs show two more that crashed at step 2. Times are local (Malaysia).</p></div>
       <div class="card reveal scroll-x">
         <table class="runs">
-          <thead><tr><th>Run</th><th>Rank</th><th>Settings</th><th>What happened</th></tr></thead>
+          <thead><tr><th>Start</th><th>Run</th><th>Rank</th><th>Settings</th><th>What happened</th></tr></thead>
           <tbody>
-            <tr><td><b>lorad</b></td><td>8</td><td>lr 3&times;10<sup>-4</sup>, batch 4, 256-token blocks</td><td><span class="lost">Stopped.</span> 781 steps in 1.45 h, only 0.2 of an epoch; loss hovered around 2.2.</td></tr>
-            <tr><td><b>glutenberg</b></td><td>128</td><td>lr 3&times;10<sup>-5</sup>, batch 7&times;5, 256-token blocks</td><td>Stopped after 39 steps (8.6 min). Its 39 steps were carried into the final run.</td></tr>
-            <tr><td><b>glutenberg1</b></td><td>128</td><td>same, 448-token blocks</td><td>Stopped after 4 steps; the next run used 320-token blocks instead.</td></tr>
-            <tr><td><b>glutenberg2</b></td><td>128</td><td>same, 320-token blocks</td><td><span class="won">The thesis run.</span> Resumed at step 39, ran to 859 steps over 7.02 epochs in 3.78 h; loss 1.15. Checkpoints saved at loss 1.76, 1.55 and 1.40.</td></tr>
+            <tr><td>12:49</td><td><b>lorad</b></td><td>8</td><td>lr 3&times;10<sup>-4</sup>, batch 4, 256-token blocks</td><td><span class="lost">Stopped.</span> 781 steps in 1.45 h, only 0.2 of an epoch; loss hovered around 2.2.</td></tr>
+            <tr><td>16:40</td><td><b>glutenberg</b></td><td>128</td><td>lr 3&times;10<sup>-5</sup>, batch 7&times;5, 256-token blocks</td><td>Stopped after 39 steps (8.6 min). Its 39 steps were carried into the final run.</td></tr>
+            <tr><td>16:52</td><td><b>glutenberg1</b></td><td>128</td><td>same, 448-token blocks</td><td>Stopped after 4 steps; the next run used 320-token blocks instead.</td></tr>
+            <tr><td>18:13</td><td><i>no folder</i></td><td>&mdash;</td><td>&mdash;</td><td><span class="lost">Crashed at step 2</span>, before any loss was logged. No adapter saved.</td></tr>
+            <tr><td>18:25</td><td><i>no folder</i></td><td>&mdash;</td><td>&mdash;</td><td><span class="lost">Crashed at step 2</span> again. Five minutes later the next attempt held.</td></tr>
+            <tr><td>18:30</td><td><b>glutenberg2</b></td><td>128</td><td>same, 320-token blocks</td><td><span class="won">The thesis run.</span> Resumed at step 39, ran to 859 steps over 7.02 epochs in 3.78 h; loss 1.15. Checkpoints saved at loss 1.76, 1.55 and 1.40.</td></tr>
           </tbody>
         </table>
       </div>
@@ -149,6 +151,31 @@ And yet I know a gentle spirit lies</p>
         <li class="reveal"><b>Slower at inference.</b> With the adapter loaded the model ran at about 0.81&times; the base model's speed in my benchmark, for about 205 MB of extra memory.</li>
         <li class="reveal"><b>What I'd change:</b> keep a slice of the text aside for evaluation, compare ranks at matched settings, and test factual questions separately from style.</li>
       </ul>
+      <h3 class="reveal" style="font-size:19px;margin:24px 0 10px">What the chat logs kept</h3>
+      <p class="reveal" style="color:var(--muted)">The chat UI saved every conversation. They don't record which adapter was loaded, so these are dated, not labelled.</p>
+      <div class="two" style="margin-top:12px">
+        <figure class="bug reveal"><div class="bar"><i></i><i></i><i></i>19 Feb 2024 &middot; before any fine-tuning</div>
+<pre><span class="dim">&gt; help me with creating loras using the alpaca format</span>
+Of course! To create LORAs using the Alpaca format, follow these steps:
+1. ... <span class="err">pip install alpaca-tradeapi</span>
+2. Create an Alpaca API client ... your API key, secret, and base URL
+   (e.g., production or <span class="err">paper trading</span>).</pre>
+          <figcaption>I asked about the Alpaca instruction format for training data. It explained a stock-trading API instead. This is the day I started reading about LoRAs.</figcaption></figure>
+        <figure class="bug reveal"><div class="bar"><i></i><i></i><i></i>29 Mar 2024 &middot; asked for new sonnets</div>
+<pre><span class="dim">&gt; write a sonnet about india in the style of shakespeare</span>
+<span class="err">Sonnet 18 by William Shakespeare</span>
+Shall I compare thee to a summer's day? ...
+<span class="dim">&gt; write a sonnet about birds ... and explain it</span>
+<span class="err">Sonnet 29 by William Shakespeare</span>
+When in disgrace with fortune and men's eyes, ...
+<span class="dim">&gt; write a sonnet on kids in the style of shakepeare</span>
+<span class="err">Sonnet 30 by William Shakespeare</span></pre>
+          <figcaption>Three requests for new poems, three of Shakespeare's own sonnets, word for word, ignoring the subject. Memorising the training text, not writing in its style.</figcaption></figure>
+      </div>
+      <figure class="bug reveal" style="margin-top:16px"><div class="bar"><i></i><i></i><i></i>24 Mar 2024 &middot; the template</div>
+<pre><span class="dim">&gt; write a sonnet on cars in the style of shakespeare</span>
+O, cars! Sweet conveyances! <span class="err">Thou art my undoing, And mine love's delight. I burn for thee With such a fire That even heaven itself doth quake In fear</span> Of thy swiftness and power. ...</pre>
+        <figcaption>The highlighted words are copied from its answer to the previous prompt in the same chat, with only the subject swapped. Unrhymed and fourteen lines in name only. It also wrote <i>Shrek</i> as a Shakespeare play, which was the best thing it did all month.</figcaption></figure>
       <p class="note reveal" style="margin-top:16px">Thesis: <i>Finetuning Open-Source LLMs for Teaching Purpose</i>, Satyam Saxena, Asia Pacific University of Technology &amp; Innovation, 2024. <a class="doi" href="https://doi.org/10.5281/zenodo.17305216" style="text-decoration:underline">doi:10.5281/zenodo.17305216</a> (CC BY 4.0).</p>
     </section>
   </main>
