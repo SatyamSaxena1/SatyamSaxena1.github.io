@@ -18,10 +18,6 @@
   <link rel="stylesheet" href="assets/css/theme.css?v=24">
   <link rel="stylesheet" href="assets/css/timeline.css?v=2">
 <style>
-  .zk-live{border:1px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden}
-  .zk-live canvas{display:block;width:100%;background:#17161f;touch-action:none;cursor:grab}
-  .zk-info{margin:0;padding:10px 14px;border-top:1px solid var(--line);font-size:13px;min-height:58px}
-  .zk-info b{display:block;color:var(--fg)}.zk-info span{color:var(--muted)}
 </style>
 </head>
 <body>
@@ -136,7 +132,7 @@
           <h3>Reddit saves to a Zettelkasten</h3>
           <p>600+ saved posts I never reopened, turned into an Obsidian Zettelkasten that runs locally. Each post becomes one note with its top comments and media. TF-IDF keywords become linked concept notes, cosine similarity fills each note's "related" list, and PageRank plus centrality give every node a weight. Community detection groups concepts into "syndicates", so the graph reads as themes, not a hairball. Content hashing means a re-run never overwrites my own edits.</p>
           <div class="tags"><span>PRAW</span><span>scikit-learn</span><span>NetworkX</span><span>Obsidian</span></div>
-          <a class="more stretch" href="https://github.com/SatyamSaxena1/Reddit-scrape-to-zettelkasten-obsidian-workflow">Repository <b class="ar">&rarr;</b></a>
+          <a class="more stretch" href="zettelkasten/">See the live graph <b class="ar">&rarr;</b></a>
         </article>
 
         <article class="card reveal">
@@ -268,11 +264,7 @@ steps: 12%| 71/612 [02:43&lt;20:48, 2.31s/it, <span class="ok">avr_loss=0.124</s
             <div class="links"><a href="https://www.linkedin.com/pulse/revolutionizing-accessibility-my-journey-building-locally-saxena-4d5hc">Live captions write-up</a><a href="https://www.linkedin.com/pulse/from-reddit-knowledge-graph-building-zettelkasten-system-saxena-ptl9c">Zettelkasten write-up</a></div>
           </div>
           <div class="tl-fig">
-            <div class="zk-live reveal" id="zk-live" data-src="assets/zk/graph.json">
-              <canvas aria-label="Interactive graph of 333 notes from my Zettelkasten vault and the concepts they share"></canvas>
-              <p class="zk-info" aria-live="polite" data-hint="<b>Live: 333 notes from my vault</b><span>The safe-for-work saves from the 667-note export (1,065 saves processed). Grey dots are posts, purple the concepts they share. Drag a node, or hover or tap one to read it.</span>"></p>
-            </div>
-            <figure data-zoom class="reveal" style="margin-top:12px"><img src="assets/projects/zk_graph.webp" alt="Obsidian graph of notes made from saved Reddit posts, with the huggingface concept note highlighted and linked to the posts that mention it" loading="lazy" width="1000" height="718"><figcaption>The graph from about 1,000 saves: one concept note (huggingface) and every post linked to it.</figcaption></figure>
+            <figure data-zoom class="reveal"><img src="assets/projects/zk_graph.webp" alt="Obsidian graph of notes made from saved Reddit posts, with the huggingface concept note highlighted and linked to the posts that mention it" loading="lazy" width="1000" height="718"><figcaption>The graph from about 1,000 saves: one concept note (huggingface) and every post linked to it.</figcaption></figure>
             <figure data-zoom class="reveal" style="margin-top:12px"><img src="assets/projects/zk_note.webp" alt="One generated note: title, source link, tags and keyword weights, then the post and its top comments" loading="lazy" width="853" height="720"><figcaption>One generated note, with its tags and keyword weights.</figcaption></figure>
           </div>
         </article>
@@ -309,7 +301,6 @@ steps: 12%| 71/612 [02:43&lt;20:48, 2.31s/it, <span class="ok">avr_loss=0.124</s
   <footer class="wrap"><span>&copy; <span id="yr">2026</span> Satyam Saxena</span><span>Built with plain HTML, CSS and Three.js</span></footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous" defer></script>
-  <script src="assets/js/zk-graph.js?v=3" defer></script>
   <script src="assets/js/site.js?v=11" defer></script>
   <script src="assets/js/bg.js?v=10" defer></script>
 </body>
