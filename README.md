@@ -13,3 +13,7 @@ A neo-futuristic portfolio with a dark and a light theme. The animated backgroun
 - `assets/story/` - screenshots used on the railway page (cropped and blurred where needed).
 
 Source code for the railway system is proprietary and not published; see the documentation-only project at https://github.com/SatyamSaxena1/railway-overhead-line-detection.
+
+- `privacy-monitor/index.html` — warm amber/coral project story for the Privacy Monitor jailbreak beta.
+- `assets/css/privacy-monitor.css` — scoped project/card/timeline palette, contrasting the main violet/blue theme.
+- `repo/` — Sileo/Zebra beta repository, generated from AppBehaviorMonitor distribution sources.
