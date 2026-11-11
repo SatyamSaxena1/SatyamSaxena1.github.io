@@ -1,0 +1,24 @@
+{
+  "class": "DepictionTabView",
+  "minVersion": "0.1",
+  "tabs": [
+    {
+      "class": "DepictionStackView",
+      "tabname": "Details",
+      "views": [
+        {
+          "class": "DepictionHeaderView",
+          "title": "Privacy Monitor \u00b7 Beta"
+        },
+        {
+          "class": "DepictionSubheaderView",
+          "title": "See what apps do on your iPhone."
+        },
+        {
+          "class": "DepictionMarkdownView",
+          "markdown": "Native app, activity collector, and monitoring engine. Install **Privacy Monitor** to get all three.\n\n**Compatibility:** Dopamine rootless; tested engine on iPhone 13 Pro Max / iOS 15.5. Native app launch and clean-device installation are still awaiting beta verification. Other devices are unverified.\n\n**After installing:** restart apps to load the engine; use the package manager\u2019s Restart SpringBoard action if needed. In Choicy, exclude apps that become unstable.\n\nHistory stays on the phone and is retained for seven days. Supported hooks are observations, not proof of misuse. The optional AI connector is read-only and requires a separate client connection.\n\n[Source and issues](https://github.com/SatyamSaxena1/AppBehaviorMonitor)"
+        }
+      ]
+    }
+  ]
+}

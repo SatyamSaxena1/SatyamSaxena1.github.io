@@ -1,0 +1,17 @@
+Origin: Satyam Saxena
+Label: Privacy Monitor Beta
+Suite: stable
+Version: 1.0
+Codename: privacy-monitor
+Architectures: iphoneos-arm64
+Description: Privacy Monitor for Dopamine rootless iOS 15. Public beta.
+Date: Wed, 11 Nov 2026 20:46:09 GMT
+MD5Sum:
+ 3fa6b4b57613dad2792c7cdc45e56904 2569 Packages
+ 7677690bcbe3c07f24fe9bece7f967f3 885 Packages.gz
+SHA256:
+ 5662f0bf04641edcb4042addb620a127c0b5637852eef00345288b4ec173f417 2569 Packages
+ 9fe1633f26919e9508d9c4bdb87b9d834b6108363d3ad33531cdfce3f2f15f29 885 Packages.gz
+SHA512:
+ b60dba32801ef146e28bcae6c8522247ddf86a0c7e9acff8ae5622faf777f6d54be1f7eb7bb7e23fe761cab6d66f23216aa30d653732db34c776cbc184761e81 2569 Packages
+ a9b86d5333cc492aac467b8313a634edce46b9fa75c5181a4b6bae4b2e7a2bc38c0f7df8141f25105bee77f26571d0aeec47eb1ca9e941e224f1ded35dcc824b 885 Packages.gz
