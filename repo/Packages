@@ -15,7 +15,7 @@ SHA256: e446cfb61c0ca37d8460981d5845c9ee684ae6cf2b9ab949567878f81e54766c
 SHA512: 35f0ab0ce093dc4571fbbd35c3c14129e20dfc44e7e45663222141e35453b4a62610832420775a29fd630f87bc18af489cfcbf75c41db53b38f227d0d0926312
 Depiction: https://satyamsaxena1.github.io/repo/
 SileoDepiction: https://satyamsaxena1.github.io/repo/depiction.json
-Icon: https://satyamsaxena1.github.io/repo/icon.png
+Icon: https://satyamsaxena1.github.io/repo/privacy-monitor-icon.png
 
 Package: com.appmon.tweak
 Name: Privacy Monitor Engine
@@ -34,7 +34,7 @@ SHA256: fd3283b8d2ee3b08ab858fee29877b70e8a18d51a9499784d7f924e6632413a3
 SHA512: 6a9908483d51ae427eaad492a0dfb2edb294afa7f0c3492b67240e50862800d3fa567d5df5a5705faf04f0c90c06502d3f57bd867bcd26e31ad94862ddf95e08
 Depiction: https://satyamsaxena1.github.io/repo/
 SileoDepiction: https://satyamsaxena1.github.io/repo/depiction.json
-Icon: https://satyamsaxena1.github.io/repo/icon.png
+Icon: https://satyamsaxena1.github.io/repo/privacy-monitor-icon.png
 
 Package: com.appmon.collector
 Name: Privacy Monitor Collector
@@ -53,5 +53,5 @@ SHA256: a42f37ab94c6bd51212a2cf5f86afc26a9a925357cfd7ada4f7b960f824201b8
 SHA512: 367f4ba32d8294be50e87f1c72f1c8a8a8e3a6ce95f7c7e619505edd5d3b9beff97d5b6e849baab96c7830bf194a91341c405c05fd661fc0f2722374beca2312
 Depiction: https://satyamsaxena1.github.io/repo/
 SileoDepiction: https://satyamsaxena1.github.io/repo/depiction.json
-Icon: https://satyamsaxena1.github.io/repo/icon.png
+Icon: https://satyamsaxena1.github.io/repo/privacy-monitor-icon.png
 

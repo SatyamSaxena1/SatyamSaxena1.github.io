@@ -1,19 +1,19 @@
 Origin: Satyam Saxena
 Label: Privacy Monitor Beta
-Icon: https://satyamsaxena1.github.io/repo/CydiaIcon.png
+Icon: https://satyamsaxena1.github.io/repo/privacy-monitor-icon.png
 Suite: stable
 Version: 1.0
 Codename: privacy-monitor
 Architectures: iphoneos-arm64
 Components: main
 Description: Privacy Monitor for Dopamine rootless iOS 15. Public beta.
-Date: Wed, 11 Nov 2026 20:46:09 GMT
+Date: Wed, 11 Nov 2026 21:21:57 GMT
 MD5Sum:
- 3fa6b4b57613dad2792c7cdc45e56904 2569 Packages
- 7677690bcbe3c07f24fe9bece7f967f3 885 Packages.gz
+ 906bfb34ca12bbc107a698ec11183681 2617 Packages
+ e78659c8e9578929175d8299d5d3538f 895 Packages.gz
 SHA256:
- 5662f0bf04641edcb4042addb620a127c0b5637852eef00345288b4ec173f417 2569 Packages
- 9fe1633f26919e9508d9c4bdb87b9d834b6108363d3ad33531cdfce3f2f15f29 885 Packages.gz
+ 1bbaf49e98de3e7cfafa55f5ff59e5f97c00447839f14cb29da17a37cce72e55 2617 Packages
+ 07506bb0a791f73761efcb0db4ba6f0f9bae3430de7ec09325668f029bf808d3 895 Packages.gz
 SHA512:
- b60dba32801ef146e28bcae6c8522247ddf86a0c7e9acff8ae5622faf777f6d54be1f7eb7bb7e23fe761cab6d66f23216aa30d653732db34c776cbc184761e81 2569 Packages
- a9b86d5333cc492aac467b8313a634edce46b9fa75c5181a4b6bae4b2e7a2bc38c0f7df8141f25105bee77f26571d0aeec47eb1ca9e941e224f1ded35dcc824b 885 Packages.gz
+ 95816c601c72b1e6dc7f2ac23e244c4fcb072f5eaf2ef7edd0f6b4ea93184fbbea2b99538fdcbbb504e7b7522c149c298433f591190a600c50b023539e63def0 2617 Packages
+ 567c8390be8c8464cf74a5fa6d615876e7a219141c0d3ce93879db2258ac836ab4cfbe34ed3ccae2f74945728aaa275f876ff953b7bb7614d36043229a7c5158 895 Packages.gz
