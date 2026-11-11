@@ -1,20 +1,20 @@
 {
-  "version": "1.0.1~beta2",
+  "version": "1.1.0~beta1",
   "packages": [
     {
-      "file": "debs/com.appmon.native_1.0.1~beta2_iphoneos-arm64.deb",
-      "sha256": "2a50c865c1f37dc78b2772ba378cf1645aab63ae9625830e3588f93687200c26",
-      "size": 25320
+      "file": "debs/com.appmon.native_1.1.0~beta1_iphoneos-arm64.deb",
+      "sha256": "3035bbe714c45875d9386209fbbf85a467116ff370c3e983cad125acf512227a",
+      "size": 1451308
     },
     {
-      "file": "debs/com.appmon.tweak_1.0.1~beta2_iphoneos-arm64.deb",
-      "sha256": "c4685bd16db910783c7a4ee51b8411bb3fd65e090d7b3ecccac77c976bd14792",
-      "size": 8260
+      "file": "debs/com.appmon.tweak_1.1.0~beta1_iphoneos-arm64.deb",
+      "sha256": "d44146d884b1a59a8797aad854a588d8f208dbab8b80a60dca85e2d624a03579",
+      "size": 8264
     },
     {
-      "file": "debs/com.appmon.collector_1.0.1~beta2_iphoneos-arm64.deb",
-      "sha256": "6b0b5bf9270bb369f0099f87643aa44e60edb4ca66e821a7bccae808ff33e53c",
-      "size": 16556
+      "file": "debs/com.appmon.collector_1.1.0~beta1_iphoneos-arm64.deb",
+      "sha256": "9b5bc329e2432a2860ebaeae6e2c685cc5c04228631f56616a2a8fb75a3d1ea7",
+      "size": 18412
     }
   ]
 }
