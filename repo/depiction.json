@@ -16,7 +16,7 @@
         },
         {
           "class": "DepictionMarkdownView",
-          "markdown": "AI Insights app, activity collector, and monitoring engine. Install **Privacy Monitor** to get all three.\n\n**Compatibility:** Dopamine rootless; tested engine on iPhone 13 Pro Max / iOS 15.5. Native app launch and clean-device installation are still awaiting beta verification. Other devices are unverified.\n\n**After installing:** restart apps to load the engine; use the package manager\u2019s Restart SpringBoard action if needed. In Choicy, exclude apps that become unstable.\n\nHistory stays on the phone and is retained for seven days. Supported hooks are observations, not proof of misuse. The optional AI connector reads metadata and saves requested reviews with real event evidence; it cannot alter recorded events or monitoring settings.\n\n[Source and issues](https://github.com/SatyamSaxena1/AppBehaviorMonitor)"
+          "markdown": "Visual activity app, local rules, collector, and monitoring engine. Install **Privacy Monitor** to get all three.\n\n**Compatibility:** Dopamine rootless; tested engine on iPhone 13 Pro Max / iOS 15.5. Native app launch and clean-device installation are still awaiting beta verification. Other devices are unverified.\n\n**After installing:** restart apps to load the engine; use the package manager\u2019s Restart SpringBoard action if needed. In Choicy, exclude apps that become unstable.\n\nHistory stays on the phone and is retained for seven days. Supported hooks are observations, not proof of misuse. Local rules calculate summaries from recorded calls. Version 1.2 removes the AI/MCP connector. No AI account is needed.\n\n[Source and issues](https://github.com/SatyamSaxena1/AppBehaviorMonitor)"
         }
       ]
     }
