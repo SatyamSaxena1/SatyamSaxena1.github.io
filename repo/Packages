@@ -1,44 +1,44 @@
 Package: com.appmon.native
 Name: Privacy Monitor
-Version: 1.2.0~beta1
+Version: 1.2.0~beta2
 Architecture: iphoneos-arm64
 Maintainer: SatyamSaxena1
 Author: SatyamSaxena1
 Section: Utilities
-Depends: com.appmon.tweak (>= 1.2.0~beta1), com.appmon.collector (>= 1.2.0~beta1)
+Depends: com.appmon.tweak (>= 1.2.0~beta2), com.appmon.collector (>= 1.2.0~beta2)
 Homepage: https://satyamsaxena1.github.io/repo/
 Description: Privacy Monitor for Dopamine rootless. Public beta.
-Filename: debs/com.appmon.native_1.2.0~beta1_iphoneos-arm64.deb
+Filename: debs/com.appmon.native_1.2.0~beta2_iphoneos-arm64.deb
 Size: 1450372
-MD5sum: ae21441dfa8771ee7ff7cf5df9925b2c
-SHA256: 8b310bff97693849bb54ef790a9852d2117e18b42c2ecb0ff7f092a08cb5ee31
-SHA512: f710293666184dcd4dd078fd0baaafa3f259923555ee7717637e94a67a4350c526c5023542bbfaa7d33ad4f0734f301c81bc46415a7c6a2103a0d35619b5b63a
+MD5sum: 6bb9bd090772138e34e540a21e40515e
+SHA256: 671681281f2bb772cfaf2dec899915aae176a3d28c7cc2c1c3cabcac2bd9c877
+SHA512: 2a79b82ea5eba40bb915efcf0916c9bf6cd6cd72df66a295d6199c55b1312ada6fccaaaade3219efcfa55e6b94c075f38d0693f7fea19261d05ec5e3a1620bf1
 Depiction: https://satyamsaxena1.github.io/repo/
 SileoDepiction: https://satyamsaxena1.github.io/repo/depiction.json
 Icon: https://satyamsaxena1.github.io/repo/privacy-monitor-icon.png
 
 Package: com.appmon.tweak
 Name: Privacy Monitor Engine
-Version: 1.2.0~beta1
+Version: 1.2.0~beta2
 Architecture: iphoneos-arm64
 Maintainer: SatyamSaxena1
 Author: SatyamSaxena1
 Section: Utilities
-Depends: mobilesubstrate, com.appmon.collector (>= 1.2.0~beta1)
+Depends: mobilesubstrate, com.appmon.collector (>= 1.2.0~beta2)
 Homepage: https://satyamsaxena1.github.io/repo/
 Description: Privacy Monitor Engine for Dopamine rootless. Public beta.
-Filename: debs/com.appmon.tweak_1.2.0~beta1_iphoneos-arm64.deb
-Size: 8264
-MD5sum: 0b054e161b1343582223559114f9afc8
-SHA256: f518aa96dc764fa45700dc87f2770ba8c206afcedd280fbb4fd8339ff60bcb5e
-SHA512: c9bd2ce244ad5105511cb49221c5e3cc57bb4637d917ed2e4ac411c8ebdd062c9adcc848094cc8a90d0f2b75a9d7a4b5338992e6f4c0c1b6f4650c7f5c2d9e17
+Filename: debs/com.appmon.tweak_1.2.0~beta2_iphoneos-arm64.deb
+Size: 8272
+MD5sum: 2ea8962feb5cde3cc8d354716b3d989b
+SHA256: 56285fa57c9b726eaa60282bc2f9fce20661eac01caf7620342d42a54da0f571
+SHA512: fee787f73e8d5fa7657c1bc6099938f4ec7633c1e6c63471b9f656c5db64304f6caa5420f0ef42ea8100814f616eb8a8787f1b079ce724d7eecf6d4961bc029c
 Depiction: https://satyamsaxena1.github.io/repo/
 SileoDepiction: https://satyamsaxena1.github.io/repo/depiction.json
 Icon: https://satyamsaxena1.github.io/repo/privacy-monitor-icon.png
 
 Package: com.appmon.collector
 Name: Privacy Monitor Collector
-Version: 1.2.0~beta1
+Version: 1.2.0~beta2
 Architecture: iphoneos-arm64
 Maintainer: SatyamSaxena1
 Author: SatyamSaxena1
@@ -46,11 +46,11 @@ Section: Utilities
 Depends: python3 (>= 3.9) | xyz.cypwn.python314 (>= 3.14)
 Homepage: https://satyamsaxena1.github.io/repo/
 Description: Privacy Monitor Collector for Dopamine rootless. Public beta.
-Filename: debs/com.appmon.collector_1.2.0~beta1_iphoneos-arm64.deb
-Size: 15812
-MD5sum: b314b954f71ada7c4846f3b1890ee31a
-SHA256: 052e3ce4ef1a36efd322293a044210d51596a0303f4d04ec77927bade6831bd7
-SHA512: 237bcf7e8f705487823c4ad741d4c1a979a06ecc835ffb1279141925de3efb77c04537f3358a77b07c975a984243758dbdcf45a80328ebebc11ab010ff0d91e6
+Filename: debs/com.appmon.collector_1.2.0~beta2_iphoneos-arm64.deb
+Size: 15808
+MD5sum: a2340be7375eaac3c8f283059b512986
+SHA256: 2c6da46a9abd5ffd5a275e0f75f4dd1301f50a04445aec6d28d169f32e28c3c8
+SHA512: ed3a1c849ca916f539776055a2951fe3156b3604c1ddd9bc5b5f4c5984368a956d2f60b2deeed193dd563747dd8b6838ebe0cf12eb81df4f73271e8dc9eded28
 Depiction: https://satyamsaxena1.github.io/repo/
 SileoDepiction: https://satyamsaxena1.github.io/repo/depiction.json
 Icon: https://satyamsaxena1.github.io/repo/privacy-monitor-icon.png
