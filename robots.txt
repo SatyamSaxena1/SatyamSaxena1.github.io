@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://blinkedit.me/sitemap.xml
+Sitemap: https://satyamsaxena1.github.io/sitemap.xml
