@@ -1,6 +1,6 @@
 # Satyam Saxena - portfolio
 
-https://satyamsaxena1.github.io/
+https://blinkedit.me/ (also served at https://satyamsaxena1.github.io/)
 
 A neo-futuristic portfolio with a dark and a light theme. The animated background is a single Three.js fragment shader (drifting glowing blobs); everything else is plain HTML, CSS and JavaScript, so it deploys straight to GitHub Pages with no build step.
 
