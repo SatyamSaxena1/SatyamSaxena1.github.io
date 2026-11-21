@@ -1,0 +1,34 @@
+/* Burrs: deliberately playful and out of step with the dark, calm theme. */
+.burr-layer{position:absolute;top:0;left:0;width:0;height:0;z-index:40}
+.burr{position:absolute;width:34px;height:34px;margin:-17px 0 0 -17px;padding:0;border:0;background:none;cursor:pointer;
+  transform-origin:50% 50%;animation:burr-pop .5s cubic-bezier(.2,1.6,.4,1) both;filter:drop-shadow(0 3px 5px rgba(0,0,0,.35))}
+.burr:hover,.burr:focus-visible{animation:burr-wiggle .5s ease-in-out;outline:none}
+.burr svg{width:100%;height:100%;overflow:visible}
+.burr line{stroke:#b9772d;stroke-width:2.6;stroke-linecap:round}
+.burr circle{fill:#e8a34d;stroke:#8a5217;stroke-width:1.5}
+.burr.has-reply circle{fill:#ff7ab6;stroke:#c2316f}
+.burr.has-reply line{stroke:#ff9d4d}
+.burr.is-plucked{opacity:.38;filter:grayscale(1)}
+.burr.is-plucked line{stroke-dasharray:2 4}
+@keyframes burr-pop{from{transform:scale(0) rotate(-40deg)}to{transform:scale(1) rotate(0)}}
+@keyframes burr-wiggle{25%{transform:rotate(-14deg) scale(1.1)}75%{transform:rotate(14deg) scale(1.1)}}
+
+.burr-card{position:absolute;z-index:60;width:min(320px,calc(100vw - 16px));padding:14px 16px 12px;border-radius:18px;
+  background:#fffaf0;color:#2a1b08;border:2px solid #e8a34d;box-shadow:0 18px 40px -12px rgba(0,0,0,.55);
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif}
+.burr-card p{margin:0 0 8px}
+.burr-hint{font-size:13px;color:#7a5a2e}
+.burr-body{white-space:pre-wrap;overflow-wrap:anywhere;font-weight:560}
+.burr-reply{white-space:pre-wrap;overflow-wrap:anywhere;margin-top:10px!important;padding:8px 10px;border-radius:12px;background:#ffe3f0;color:#6b1d44}
+.burr-card.is-plucked{background:#ececf1;border-color:#9a98ab;color:#3b3950;border-style:dashed}
+.burr-ghost-note{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#6c6a82}
+.burr-new textarea{width:100%;box-sizing:border-box;padding:9px 10px;border-radius:12px;border:2px solid #f0cf9c;background:#fff;color:#2a1b08;font:inherit;resize:vertical}
+.burr-new textarea:focus{outline:none;border-color:#ff7ab6}
+.burr-row{display:flex;gap:8px;margin-top:8px}
+.burr-card button{font:inherit;font-weight:650;border:0;border-radius:999px;padding:7px 16px;cursor:pointer;background:#ff7ab6;color:#fff}
+.burr-card button.ghost,.burr-x{background:transparent;color:#7a5a2e;text-decoration:underline;padding:4px 6px;font-weight:500;font-size:13px}
+.burr-card button:disabled{opacity:.5;cursor:default}
+.burr-msg{margin:8px 0 0!important;font-size:13px;color:#b3261e;min-height:1em}
+.burr-fab{position:fixed;right:14px;bottom:14px;z-index:50;border:0;border-radius:999px;padding:9px 16px;font:600 14px system-ui,sans-serif;
+  background:#ff7ab6;color:#fff;box-shadow:0 8px 20px -8px rgba(0,0,0,.6)}
+@media (prefers-reduced-motion:reduce){.burr,.burr:hover{animation:none}}
