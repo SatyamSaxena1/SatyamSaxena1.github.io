@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 440" width="560" height="440" role="img" aria-labelledby="t d">
+  <title id="t">How the platform decides</title>
+  <desc id="d">A document or connector feeds a model that only reads facts, then fixed versioned rules decide the verdict, then a named person signs it. Every step is written to a hash-chained audit log.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1l8 4-8 4z" fill="#19b3e6"/></marker>
+  </defs>
+  <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+    <rect x="30" y="14" width="500" height="64" rx="16" fill="#12233d"/>
+    <text x="54" y="44" font-size="19" font-weight="700" fill="#fff">Document or connector</text>
+    <text x="54" y="66" font-size="13.5" fill="#b7c9e2">a policy, a scan, a cloud snapshot, a change record</text>
+
+    <path d="M280 80v28" stroke="#19b3e6" stroke-width="2.5" marker-end="url(#a)"/>
+
+    <rect x="30" y="112" width="500" height="64" rx="16" fill="#1b4a73"/>
+    <text x="54" y="142" font-size="19" font-weight="700" fill="#fff">The model reads</text>
+    <text x="54" y="164" font-size="13.5" fill="#cfe3f7">facts with the quote and page; never a pass or fail</text>
+
+    <path d="M280 178v28" stroke="#19b3e6" stroke-width="2.5" marker-end="url(#a)"/>
+
+    <rect x="30" y="210" width="500" height="64" rx="16" fill="#1496b8"/>
+    <text x="54" y="240" font-size="19" font-weight="700" fill="#fff">Fixed rules decide</text>
+    <text x="54" y="262" font-size="13.5" fill="#e3f6fc">versioned, replayable, one document across nine frameworks</text>
+
+    <path d="M280 276v28" stroke="#19b3e6" stroke-width="2.5" marker-end="url(#a)"/>
+
+    <rect x="30" y="308" width="500" height="64" rx="16" fill="#12233d"/>
+    <text x="54" y="338" font-size="19" font-weight="700" fill="#fff">A named person signs</text>
+    <text x="54" y="360" font-size="13.5" fill="#b7c9e2">the auditor records the verdict; the uploader cannot</text>
+
+    <rect x="30" y="388" width="500" height="38" rx="12" fill="none" stroke="#19b3e6" stroke-width="2" stroke-dasharray="6 5"/>
+    <text x="280" y="412" font-size="14" font-weight="700" fill="#19b3e6" text-anchor="middle">every step lands in a hash-chained audit log</text>
+  </g>
+</svg>

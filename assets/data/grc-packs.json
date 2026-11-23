@@ -1,0 +1,341 @@
+{
+ "source": "Computed from app/content in github.com/SatyamSaxena1/GRC at 5387c7a",
+ "totals": {
+  "frameworks": 9,
+  "requirements": 183,
+  "rule": 80,
+  "attested": 103,
+  "objectives": 25,
+  "mappings": 90
+ },
+ "frameworks": [
+  {
+   "code": "CIS-CONTROLS",
+   "name": "CIS v8",
+   "requirements": 7,
+   "rule": 7,
+   "attested": 0
+  },
+  {
+   "code": "DPDP",
+   "name": "DPDP",
+   "requirements": 9,
+   "rule": 9,
+   "attested": 0
+  },
+  {
+   "code": "GDPR",
+   "name": "GDPR",
+   "requirements": 5,
+   "rule": 5,
+   "attested": 0
+  },
+  {
+   "code": "HIPAA",
+   "name": "HIPAA",
+   "requirements": 5,
+   "rule": 5,
+   "attested": 0
+  },
+  {
+   "code": "ISO-27001",
+   "name": "ISO 27001",
+   "requirements": 93,
+   "rule": 12,
+   "attested": 81
+  },
+  {
+   "code": "NIST-AI-RMF",
+   "name": "NIST AI RMF",
+   "requirements": 11,
+   "rule": 11,
+   "attested": 0
+  },
+  {
+   "code": "NIST-CSF",
+   "name": "NIST CSF",
+   "requirements": 7,
+   "rule": 7,
+   "attested": 0
+  },
+  {
+   "code": "PCI-DSS",
+   "name": "PCI DSS",
+   "requirements": 13,
+   "rule": 13,
+   "attested": 0
+  },
+  {
+   "code": "SOC-2",
+   "name": "SOC 2",
+   "requirements": 33,
+   "rule": 11,
+   "attested": 22
+  }
+ ],
+ "documents": [
+  {
+   "uco": "UCO-IAM-001",
+   "name": "Access control policy",
+   "objective": "Access control policy is defined, approved and communicated",
+   "frameworks": 7,
+   "maps": [
+    {
+     "fw": "CIS-CONTROLS",
+     "name": "CIS v8",
+     "clause": "5.1",
+     "title": "Account management policy",
+     "coverage": "FULL"
+    },
+    {
+     "fw": "GDPR",
+     "name": "GDPR",
+     "clause": "Art.5(1)(f) & 32",
+     "title": "Access is restricted to authorised persons",
+     "coverage": "FULL"
+    },
+    {
+     "fw": "HIPAA",
+     "name": "HIPAA",
+     "clause": "164.308(a)(4)",
+     "title": "Information access management",
+     "coverage": "FULL"
+    },
+    {
+     "fw": "ISO-27001",
+     "name": "ISO 27001",
+     "clause": "A.5.15",
+     "title": "Access control",
+     "coverage": "FULL"
+    },
+    {
+     "fw": "NIST-CSF",
+     "name": "NIST CSF",
+     "clause": "PR.AA-01",
+     "title": "Identities and credentials are managed",
+     "coverage": "FULL"
+    },
+    {
+     "fw": "PCI-DSS",
+     "name": "PCI DSS",
+     "clause": "12.1.1",
+     "title": "An overall information security policy is established and maintained",
+     "coverage": "PARTIAL"
+    },
+    {
+     "fw": "SOC-2",
+     "name": "SOC 2",
+     "clause": "CC6.1",
+     "title": "Logical access security policy",
+     "coverage": "FULL"
+    }
+   ]
+  },
+  {
+   "uco": "UCO-IAM-012",
+   "name": "Multi-factor authentication policy",
+   "objective": "Multi-factor authentication protects privileged and remote access",
+   "frameworks": 7,
+   "maps": [
+    {
+     "fw": "CIS-CONTROLS",
+     "name": "CIS v8",
+     "clause": "6.3",
+     "title": "MFA for externally-exposed applications",
+     "coverage": "FULL"
+    },
+    {
+     "fw": "DPDP",
+     "name": "DPDP",
+     "clause": "Rule 6 - M365 baseline",
+     "title": "Microsoft 365 access and audit safeguards are evidenced",
+     "coverage": "FULL"
+    },
+    {
+     "fw": "DPDP",
+     "name": "DPDP",
+     "clause": "Rule 6 - Google Workspace baseline",
+     "title": "Google Workspace access and audit safeguards are evidenced",
+     "coverage": "FULL"
+    },
+    {
+     "fw": "GDPR",
+     "name": "GDPR",
+     "clause": "Art.32(1)",
+     "title": "Authentication appropriate to risk",
+     "coverage": "FULL"
+    },
+    {
+     "fw": "ISO-27001",
+     "name": "ISO 27001",
+     "clause": "A.8.5",
+     "title": "Secure authentication",
+     "coverage": "FULL"
+    },
+    {
+     "fw": "ISO-27001",
+     "name": "ISO 27001",
+     "clause": "A.8.2",
+     "title": "Privileged access rights",
+     "coverage": "PARTIAL"
+    },
+    {
+     "fw": "NIST-CSF",
+     "name": "NIST CSF",
+     "clause": "PR.AA-03",
+     "title": "Users are authenticated commensurate with risk",
+     "coverage": "FULL"
+    },
+    {
+     "fw": "PCI-DSS",
+     "name": "PCI DSS",
+     "clause": "8.4.2",
+     "title": "MFA for all access into the CDE",
+     "coverage": "FULL"
+    },
+    {
+     "fw": "PCI-DSS",
+     "name": "PCI DSS",
+     "clause": "8.4.1",
+     "title": "MFA for administrative access",
+     "coverage": "PARTIAL"
+    },
+    {
+     "fw": "PCI-DSS",
+     "name": "PCI DSS",
+     "clause": "8.4.3",
+     "title": "MFA for remote network access",
+     "coverage": "FULL"
+    },
+    {
+     "fw": "SOC-2",
+     "name": "SOC 2",
+     "clause": "CC6.6",
+     "title": "Multi-factor authentication",
+     "coverage": "FULL"
+    }
+   ]
+  },
+  {
+   "uco": "UCO-LOG-001",
+   "name": "Logging and monitoring policy",
+   "objective": "Security-relevant events are logged and retained for a defined period",
+   "frameworks": 7,
+   "maps": [
+    {
+     "fw": "CIS-CONTROLS",
+     "name": "CIS v8",
+     "clause": "8.3",
+     "title": "Adequate audit log retention",
+     "coverage": "FULL"
+    },
+    {
+     "fw": "DPDP",
+     "name": "DPDP",
+     "clause": "Rule 6(1)(e)",
+     "title": "Security logs are retained for at least one year",
+     "coverage": "FULL"
+    },
+    {
+     "fw": "HIPAA",
+     "name": "HIPAA",
+     "clause": "164.312(b)",
+     "title": "Audit controls",
+     "coverage": "FULL"
+    },
+    {
+     "fw": "ISO-27001",
+     "name": "ISO 27001",
+     "clause": "A.8.15",
+     "title": "Logging",
+     "coverage": "PARTIAL"
+    },
+    {
+     "fw": "ISO-27001",
+     "name": "ISO 27001",
+     "clause": "A.8.16",
+     "title": "Monitoring activities",
+     "coverage": "SUPPORTING"
+    },
+    {
+     "fw": "NIST-CSF",
+     "name": "NIST CSF",
+     "clause": "PR.PS-04",
+     "title": "Log records are generated and made available for continuous monitoring",
+     "coverage": "FULL"
+    },
+    {
+     "fw": "PCI-DSS",
+     "name": "PCI DSS",
+     "clause": "10.2.1",
+     "title": "Audit logs are enabled and active",
+     "coverage": "PARTIAL"
+    },
+    {
+     "fw": "SOC-2",
+     "name": "SOC 2",
+     "clause": "CC7.2",
+     "title": "Monitoring of system components",
+     "coverage": "PARTIAL"
+    },
+    {
+     "fw": "SOC-2",
+     "name": "SOC 2",
+     "clause": "CC7.3",
+     "title": "Security events are evaluated",
+     "coverage": "SUPPORTING"
+    }
+   ]
+  }
+ ],
+ "quiz": [
+  {
+   "fw": "ISO 27001",
+   "id": "A.8.24",
+   "title": "Use of cryptography",
+   "kind": "rule"
+  },
+  {
+   "fw": "SOC 2",
+   "id": "CC7.4",
+   "title": "Incident response",
+   "kind": "rule"
+  },
+  {
+   "fw": "ISO 27001",
+   "id": "A.6.1",
+   "title": "Screening",
+   "kind": "attested"
+  },
+  {
+   "fw": "SOC 2",
+   "id": "CC1.1",
+   "title": "Commitment to integrity and ethical values",
+   "kind": "attested"
+  },
+  {
+   "fw": "ISO 27001",
+   "id": "A.8.13",
+   "title": "Information backup",
+   "kind": "rule"
+  },
+  {
+   "fw": "SOC 2",
+   "id": "CC6.6",
+   "title": "Multi-factor authentication",
+   "kind": "rule"
+  },
+  {
+   "fw": "ISO 27001",
+   "id": "A.7.2",
+   "title": "Physical entry",
+   "kind": "attested"
+  },
+  {
+   "fw": "SOC 2",
+   "id": "CC9.2",
+   "title": "Vendor and business partner risk",
+   "kind": "attested"
+  }
+ ]
+}
