@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Play the audit: GRC Evidence Platform | Satyam Saxena</title>
-  <meta name="description" content="A playable tour of a compliance platform I built: five short levels on why it exists, what it is and how it works, then the real screens. The model reads, the rules decide, a human signs.">
+  <title>GRC: compliance evidence you can defend | Satyam Saxena</title>
+  <meta name="description" content="A compliance platform I built for startups that have to prove they are secure. A model only reads, versioned rules decide, a person signs, and every step is in a tamper-evident log. Explained from zero, with the real screens.">
   <meta name="theme-color" content="#05050b">
   <meta name="color-scheme" content="dark light">
   <meta name="format-detection" content="telephone=no">
   <meta name="apple-mobile-web-app-title" content="Satyam Saxena">
   <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
-  <meta property="og:title" content="Play the audit">
-  <meta property="og:description" content="Five short levels on a compliance platform I built: why, what and how, with the real screens at the end. The model reads, the rules decide, a human signs.">
+  <meta property="og:title" content="GRC: compliance evidence you can defend">
+  <meta property="og:description" content="Startups have to prove they are secure to win big customers. I built the platform that does it with rules, not guesses, and keeps a log nobody can quietly edit.">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://blinkedit.me/grc/">
   <meta property="og:site_name" content="Satyam Saxena">
@@ -21,17 +21,18 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238a6bff'/%3E%3Cstop offset='1' stop-color='%233d7bff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Ctext x='32' y='42' font-size='26' font-family='Arial' font-weight='800' fill='white' text-anchor='middle'%3ESS%3C/text%3E%3C/svg%3E">
   <script>try{var t=localStorage.getItem('theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))</script>
   <link rel="stylesheet" href="../assets/css/theme.css?v=24">
-  <link rel="stylesheet" href="../assets/css/grc-game.css?v=1">
+  <link rel="stylesheet" href="../assets/css/grc-page.css?v=1">
 </head>
-<body class="gg">
+<body class="gp">
   <canvas id="bg" aria-hidden="true"></canvas>
 
   <header class="nav">
     <a class="logo" href="../"><i>SS</i><span>Satyam Saxena</span></a>
     <nav aria-label="Primary">
       <a href="../#projects">Projects</a>
-      <a href="#l1" class="keep">Play</a>
-      <a href="#l5" class="keep">Real screens</a>
+      <a href="#what">What is GRC?</a>
+      <a href="#edge">Why it's better</a>
+      <a href="#see" class="keep">See it</a>
       <a href="https://github.com/SatyamSaxena1/GRC" class="keep">GitHub</a>
     </nav>
     <button class="theme-btn" type="button" aria-label="Toggle light and dark theme">
@@ -40,204 +41,205 @@
     </button>
   </header>
 
-  <div class="hud wrap" id="hud" role="region" aria-label="Your progress">
-    <ol class="hud-steps" aria-label="Levels">
-      <li><a href="#l1" data-step="1" aria-label="Level 1"><b>1</b><span>Reuse</span></a></li>
-      <li><a href="#l2" data-step="2" aria-label="Level 2"><b>2</b><span>Decide</span></a></li>
-      <li><a href="#l3" data-step="3" aria-label="Level 3"><b>3</b><span>Trail</span></a></li>
-      <li><a href="#l4" data-step="4" aria-label="Level 4"><b>4</b><span>Limits</span></a></li>
-      <li><a href="#l5" data-step="5" aria-label="Level 5"><b>5</b><span>Real</span></a></li>
-    </ol>
-    <div class="hud-score"><b id="xp">0</b><span>XP</span><em id="rank">Observer</em></div>
-    <button class="hud-badges" id="badgeBtn" type="button" aria-expanded="false" aria-controls="shelf"><span aria-hidden="true">&#9733;</span> <b id="badgeCount">0</b>/8 badges</button>
-    <div class="hud-shelf" id="shelf" hidden></div>
-  </div>
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
   <main>
-    <section class="gg-hero wrap" id="top">
+    <section class="gp-hero wrap" id="top">
       <div>
-        <p class="eyebrow">A compliance platform &middot; you can play with it</p>
-        <h1>Play the <span class="grad">audit.</span></h1>
-        <p class="lead">Five short levels show what I built, why I built it and how it works. Each one runs in your browser and follows the platform's real rules.</p>
+        <p class="eyebrow">Compliance software for startups</p>
+        <h1>Prove you're secure, <span class="grad">and show your working.</span></h1>
+        <p class="gp-lead">Big customers ask small companies the same question: <em>can we trust you with our data?</em> The honest answer is a stack of audits, policies and evidence. I built a platform that collects that proof, checks it with fixed rules instead of guesses, and keeps a record nobody can quietly edit.</p>
         <div class="cta">
-          <a class="btn primary" href="#l1">Start level 1 <b class="ar">&darr;</b></a>
-          <a class="btn" href="#l5">Skip to the real screens <b class="ar">&rarr;</b></a>
+          <a class="btn primary" href="https://grc.blinkedit.me/login">Open the live demo <b class="ar">&nearr;</b></a>
+          <a class="btn" href="#see">See the real screens <b class="ar">&darr;</b></a>
         </div>
-        <p class="gg-fine">The levels are small re-creations of the real engine, using the repository's real rules, clauses and numbers. They are not the product itself; level 5 is.</p>
+        <p class="gp-fine">The demo is a sample company, read-only, so you can click anything. Choose &ldquo;Try the demo, no account&rdquo; in the top bar. It runs on free hosting, so the first visit can take about a minute to wake up.</p>
       </div>
-      <ol class="gg-legend" aria-label="How each level works">
-        <li class="why"><b>Why</b><span>the problem that made us build it</span></li>
-        <li class="what"><b>What</b><span>the thing we built to answer it</span></li>
-        <li class="how"><b>How</b><span>a challenge you play to see it work</span></li>
-      </ol>
+      <aside class="gp-min reveal" aria-label="The idea in one minute">
+        <h2>The idea in one minute</h2>
+        <ol>
+          <li><b>1</b><span>You upload a policy.<em>For example, your password and access policy.</em></span></li>
+          <li><b>2</b><span>A model reads it, rules decide, a person signs.<em>The model never says pass or fail.</em></span></li>
+          <li><b>3</b><span>One proof counts for many audits.<em>Nine frameworks share the same evidence.</em></span></li>
+        </ol>
+      </aside>
     </section>
 
-    <section class="gg-numbers wrap" aria-label="The project in numbers" id="numbers"></section>
-
-    <!-- LEVEL 1 -->
-    <section class="lv wrap" id="l1" aria-labelledby="l1t">
-      <header class="lv-head">
-        <span class="lv-num" aria-hidden="true">01</span>
-        <div><p class="lv-kicker">Level 1 &middot; Evidence reuse</p><h2 id="l1t">One document, <span class="grad">many frameworks</span></h2></div>
-        <span class="lv-reward">+20 XP</span>
-      </header>
-      <div class="wwh">
-        <article class="why"><h3>Why</h3><p>Compliance teams answer the same questions in different words for ISO 27001, SOC 2, PCI DSS and more. Most tools make them upload the same policy once per framework.</p></article>
-        <article class="what"><h3>What we built</h3><p>Every requirement in every framework maps to a shared control objective. A document is read once and judged against every framework that maps to the objective it satisfies.</p></article>
-        <article class="how"><h3>How it works</h3><p id="l1how">Shared objectives and mappings, all written as data in the repository. Pick a document, upload it once, and watch which frameworks it counts toward.</p></article>
+    <section class="sec wrap" id="what">
+      <div class="gp-head reveal">
+        <h2>New to this? Three plain answers.</h2>
+        <p>You do not need to know any compliance words to follow the rest of this page.</p>
       </div>
-      <div class="arena" id="a1">
-        <div class="arena-bar"><b>Challenge &middot; Upload it once</b><span class="tagline">illustration</span></div>
-        <div class="a1-docs" role="radiogroup" aria-label="Choose a document" id="a1docs"></div>
-        <div class="a1-go"><button class="btn primary" id="a1up" type="button">Upload it once <b class="ar">&uarr;</b></button><p id="a1obj" class="a1-obj"></p></div>
-        <div class="fw-grid" id="a1grid" aria-live="polite"></div>
-        <p class="g-legend">Full, partial or supporting: how much of the clause this objective covers.</p>
-        <p class="result" id="a1res" aria-live="polite"></p>
+      <div class="gp-3">
+        <article class="gp-card reveal"><span class="k">What is an audit?</span><h3>A stranger checks your claims</h3><p>A company says &ldquo;we protect your data.&rdquo; An auditor asks for proof: the policy, the settings, who approved what. Passing earns a report such as SOC 2 or ISO 27001 that you can show customers.</p></article>
+        <article class="gp-card warm reveal" style="--d:.08s"><span class="k">What is GRC?</span><h3>Governance, risk, compliance</h3><p>The everyday work behind an audit: write the rules you follow, track what could go wrong, and keep proof that you followed them. Most startups do it in spreadsheets and chat threads.</p></article>
+        <article class="gp-card cool reveal" style="--d:.16s"><span class="k">Why does it matter?</span><h3>It decides who buys from you</h3><p>Enterprise buyers send long security questionnaires and often will not sign without a report. Handling personal data in India also brings the DPDP Act into play. No proof, no deal.</p></article>
       </div>
-      <aside class="debrief" id="d1" hidden><h3>What just happened</h3><p id="d1t"></p></aside>
     </section>
 
-    <!-- LEVEL 2 -->
-    <section class="lv wrap" id="l2" aria-labelledby="l2t">
-      <header class="lv-head">
-        <span class="lv-num" aria-hidden="true">02</span>
-        <div><p class="lv-kicker">Level 2 &middot; The decision</p><h2 id="l2t">The model reads. The rules decide. <span class="grad">You sign.</span></h2></div>
-        <span class="lv-reward">+65 XP</span>
-      </header>
-      <div class="wwh">
-        <article class="why"><h3>Why</h3><p>A model that says pass or fail can't be defended to an auditor: it may answer differently tomorrow, and nobody can say why. Auditors want a decision they can replay.</p></article>
-        <article class="what"><h3>What we built</h3><p>Three parties with hard boundaries. The model reads and reports facts, with the quote. Versioned rules decide. A named person signs, and can't be the person who uploaded the evidence.</p></article>
-        <article class="how"><h3>How it works</h3><p>Edit the policy, then walk the three stages. It is a small re-creation of the real engine, using two real rules from the SOC 2 pack.</p></article>
+    <section class="sec wrap" id="numbers">
+      <div class="gp-head reveal">
+        <h2>What is inside, in numbers</h2>
+        <p>Counted from the platform's own content packs in the repository, not typed by hand.</p>
       </div>
-      <div class="arena" id="a2">
-        <div class="arena-bar"><b>Challenge &middot; Judge a policy</b><span class="tagline">illustration</span></div>
-        <div class="a2-top">
-          <div class="doc" aria-label="The policy being judged">
-            <p class="doc-title">Password and Access Policy <small>Acme Payments (sample)</small></p>
-            <p id="docPw"></p><p id="docMfa"></p>
-            <div class="doc-ctl">
-              <label for="pw">Minimum password length <output id="pwOut">8</output></label>
-              <input id="pw" type="range" min="6" max="16" value="8">
-              <fieldset><legend>Multi-factor authentication is required for</legend>
-                <label><input type="checkbox" id="mfaR" checked> remote access</label>
-                <label><input type="checkbox" id="mfaA"> administrative access</label>
-              </fieldset>
+      <div class="gp-nums reveal">
+        <div class="gp-num"><b data-k="frameworks">9</b><span>audit frameworks supported</span></div>
+        <div class="gp-num"><b data-k="requirements">183</b><span>individual requirements</span></div>
+        <div class="gp-num"><b data-k="mappings">90</b><span>links that let one proof serve many frameworks</span></div>
+        <div class="gp-num"><b data-k="rule">80</b><span>requirements judged by a rule</span></div>
+        <div class="gp-num"><b data-k="attested">103</b><span>requirements only a person can attest</span></div>
+      </div>
+    </section>
+
+    <section class="sec wrap" id="edge">
+      <div class="gp-head reveal">
+        <h2>Where this is better, and why</h2>
+        <p>Five choices that make the platform easier to trust than a tool that just shows a green score. Each one has a small demo beside it.</p>
+      </div>
+
+      <article class="gp-edge reveal">
+        <div class="gp-edge-copy">
+          <span class="n">Edge 1</span>
+          <h3>The model reads. The rules decide. A person signs.</h3>
+          <p>AI is good at reading a policy and bad at being the judge: ask it again tomorrow and it may answer differently, and nobody can say why. Here the model only pulls out facts with the quote they came from. A versioned rule gives the verdict, and a named auditor signs it.</p>
+          <p>Swap the model for another and replay: the decision stays the same, down to its fingerprint.</p>
+          <div class="vs"><b>The difference:</b> you can hand an auditor a decision they can re-run and defend, instead of a score they have to take on trust.</div>
+        </div>
+        <div class="gp-edge-vis">
+          <div class="gp-vis">
+            <div class="gp-flow">
+              <div class="gp-step"><i>1</i><span>Model reads the policy<em>&ldquo;Passwords must be at least 8 characters.&rdquo; (page 1)</em></span></div>
+              <div class="gp-step"><i>2</i><span>Rule decides<em>Needs at least 12 characters</em></span></div>
+              <div class="gp-step"><i>3</i><span>Auditor signs<em>Never the person who uploaded it</em></span></div>
             </div>
+            <div class="gp-verdict"><b>Not met:</b> password_min_length=8<br>fails password_min_length &gt;= 12<br><span class="ok">Replayed with another model: decision f37b8b30e0, identical</span></div>
           </div>
-          <div class="log" aria-label="Audit log so far"><p class="log-title">Audit log</p><ol id="a2log"><li class="empty">Nothing has happened yet.</li></ol></div>
         </div>
-        <div class="pipe">
-          <article class="g-stage" id="s1"><header><i>1</i><div><h4>The model reads</h4><p>Reports facts and quotes. Never pass or fail.</p></div></header>
-            <label class="sel">Reader <select id="model"><option value="model-A">model-A</option><option value="model-B">model-B</option></select></label>
-            <button class="btn" id="bRead" type="button">Let it read the policy</button>
-            <div class="out" id="oRead" aria-live="polite"></div></article>
-          <article class="g-stage" id="s2"><header><i>2</i><div><h4>The rules decide</h4><p>Versioned, deterministic, replayable.</p></div></header>
-            <label class="sel">Rules <select id="rules"><option value="1">v1 &middot; password at least 12</option><option value="2">v2 &middot; password at least 14</option></select></label>
-            <div class="row"><button class="btn" id="bRules" type="button" disabled>Apply the rules</button><button class="btn" id="bReplay" type="button" disabled>Replay it</button></div>
-            <div class="out" id="oRules" aria-live="polite"></div></article>
-          <article class="g-stage" id="s3"><header><i>3</i><div><h4>A person signs</h4><p>Named, accountable, and never the uploader.</p></div></header>
-            <div class="seg" role="radiogroup" aria-label="Who are you?"><button type="button" role="radio" aria-checked="true" data-who="uploader" class="on">I uploaded the evidence</button><button type="button" role="radio" aria-checked="false" data-who="auditor">I'm the auditor</button></div>
-            <label class="sel">Verdict <select id="verdict"><option value="COMPLIANT">COMPLIANT</option><option value="PARTIALLY_COMPLIANT">PARTIALLY COMPLIANT</option><option value="NON_COMPLIANT">NON COMPLIANT</option></select></label>
-            <label class="sel" id="whyRow" hidden>Reason for overriding the rules <input id="why" type="text" maxlength="80" placeholder="say why, briefly"></label>
-            <div class="row"><button class="btn" id="bSign" type="button" disabled>Record verdict and lock</button><button class="btn" id="bReopen" type="button" hidden>Reopen the control</button></div>
-            <div class="out" id="oSign" aria-live="polite"></div></article>
+      </article>
+
+      <article class="gp-edge reveal">
+        <div class="gp-edge-copy">
+          <span class="n">Edge 2</span>
+          <h3>Prove it once, use it nine times</h3>
+          <p>Most frameworks ask for the same things in different words. Instead of re-uploading and re-explaining for each audit, every requirement is mapped to a shared objective. One access-control policy can count towards several frameworks at once.</p>
+          <p>Pick a document and see which frameworks it helps with.</p>
+          <div class="vs"><b>The difference:</b> adding your second or third framework is mostly mapping you already have, not starting over.</div>
         </div>
-      </div>
-      <aside class="debrief" id="d2" hidden><h3>What just happened</h3><p>That is the whole loop. Notice what the model never did: say pass or fail. Swap it for another model and the decision hash stays the same. Change the rules and the record says the verdict was made under older ones. Every step is now in the audit log you can see above, and level 3 attacks it.</p></aside>
-    </section>
-
-    <!-- LEVEL 3 -->
-    <section class="lv wrap" id="l3" aria-labelledby="l3t">
-      <header class="lv-head">
-        <span class="lv-num" aria-hidden="true">03</span>
-        <div><p class="lv-kicker">Level 3 &middot; The audit trail</p><h2 id="l3t">Try to <span class="grad">rewrite history</span></h2></div>
-        <span class="lv-reward">+40 XP</span>
-      </header>
-      <div class="wwh">
-        <article class="why"><h3>Why</h3><p>A log that can be quietly edited isn't evidence. If someone can change what the platform says happened, nothing it says can be relied on.</p></article>
-        <article class="what"><h3>What we built</h3><p>Each event commits to the hash of the one before it, one chain per organisation. The auditor keeps a signed checkpoint of the latest hash outside the platform, and on Postgres the database itself refuses edits and deletes.</p></article>
-        <article class="how"><h3>How it works</h3><p>The events below include what you did in level 2. Two missions: change one without being noticed, then cover your tracks. The hashes are real SHA-256, computed in your browser.</p></article>
-      </div>
-      <div class="arena" id="a3">
-        <div class="arena-bar"><b>Challenge &middot; Rewrite history</b><span class="tagline">illustration</span></div>
-        <ul class="missions"><li id="m1"><i></i><span><b>Mission 1.</b> Edit an event and see whether the chain notices.</span></li><li id="m2"><i></i><span><b>Mission 2.</b> Cover your tracks: make the chain valid again, then see the auditor's checkpoint.</span></li></ul>
-        <div class="chain" id="chain" aria-label="The audit chain"></div>
-        <div class="chain-actions">
-          <button class="btn" id="bFix" type="button" disabled>Fix that event's hash</button>
-          <button class="btn" id="bRewrite" type="button" disabled>Rewrite every later event</button>
-          <button class="btn" id="bReset3" type="button">Reset the log</button>
+        <div class="gp-edge-vis">
+          <div class="gp-vis">
+            <div class="gp-docs" id="docs" role="group" aria-label="Choose a document"></div>
+            <div class="gp-fws" id="fws"></div>
+            <p class="gp-cov" id="cov" aria-live="polite"></p>
+          </div>
         </div>
-        <div class="checks" aria-live="polite"><p id="chk1"></p><p id="chk2"></p></div>
-        <div class="checkpoint"><b>Auditor's checkpoint</b><span>kept off the platform, signed in the real system</span><code id="cp"></code></div>
-      </div>
-      <aside class="debrief" id="d3" hidden><h3>What just happened</h3><p>Editing breaks the chain at that event. Recomputing every later hash makes the chain consistent again, but the latest hash no longer matches the checkpoint the auditor holds. Rewriting history is detectable by design, and that is the property an audit needs.</p></aside>
+      </article>
+
+      <article class="gp-edge reveal">
+        <div class="gp-edge-copy">
+          <span class="n">Edge 3</span>
+          <h3>A log that cannot be quietly rewritten</h3>
+          <p>Every upload, verdict and signature is an event, and each event carries a fingerprint of the one before it. Change one and every later fingerprint stops matching. The auditor also keeps the latest fingerprint outside the platform, and the database itself refuses edits and deletes.</p>
+          <p>Each customer's data is also walled off by the database, not just by the app's menus.</p>
+          <div class="vs"><b>The difference:</b> &ldquo;trust us, nobody edited it&rdquo; becomes something an auditor can check.</div>
+        </div>
+        <div class="gp-edge-vis">
+          <div class="gp-vis">
+            <div class="gp-chain" id="chain" aria-label="An example chain of audit events"></div>
+            <p class="gp-chain-note" id="chainNote" aria-live="polite"></p>
+            <div class="gp-docs" style="margin:12px 0 0"><button type="button" id="tamper">Tamper with event 2</button><button type="button" id="reset">Reset</button></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="gp-edge reveal">
+        <div class="gp-edge-copy">
+          <span class="n">Edge 4</span>
+          <h3>Honest about what software cannot judge</h3>
+          <p>Some requirements, like &ldquo;the board reviews security yearly,&rdquo; cannot be settled by a program. Many tools blur these into one confident percentage. Here they are counted separately: met by a rule, or attested by a named person, never mixed.</p>
+          <div class="vs"><b>The difference:</b> your score never claims more than the evidence supports.</div>
+        </div>
+        <div class="gp-edge-vis">
+          <div class="gp-vis">
+            <div class="gp-split" role="img" aria-label="80 requirements judged by rules and 103 attested by people"><i class="r" id="splitR" style="flex:80">80</i><i class="a" id="splitA" style="flex:103">103</i></div>
+            <div class="gp-key"><span><b style="color:var(--cyan)">Blue:</b> judged by a rule, so it can be replayed.</span><span><b style="color:var(--warm)">Amber:</b> attested by a named person, so it stays a human claim.</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="gp-edge reveal">
+        <div class="gp-edge-copy">
+          <span class="n">Edge 5</span>
+          <h3>Try it before you talk to anyone</h3>
+          <p>There is an open, read-only sample company. No sign-up, no call, nothing you click changes anything. It also covers the things Indian startups meet early: a DPDP readiness screen, a breach and data-request log, and an AI-use review.</p>
+          <div class="vs"><b>The difference:</b> you evaluate the product, not a sales deck.</div>
+        </div>
+        <div class="gp-edge-vis">
+          <div class="gp-vis">
+            <div class="gp-flow">
+              <div class="gp-step"><i>1</i><span>Open the demo<em>grc.blinkedit.me</em></span></div>
+              <div class="gp-step"><i>2</i><span>Choose &ldquo;Try the demo, no account&rdquo;<em>Top bar</em></span></div>
+              <div class="gp-step"><i>3</i><span>Click anything<em>Read-only, so you cannot break it</em></span></div>
+            </div>
+            <div class="cta" style="margin-top:16px"><a class="btn primary" href="https://grc.blinkedit.me/login">Open the live demo <b class="ar">&nearr;</b></a></div>
+          </div>
+        </div>
+      </article>
     </section>
 
-    <!-- LEVEL 4 -->
-    <section class="lv wrap" id="l4" aria-labelledby="l4t">
-      <header class="lv-head">
-        <span class="lv-num" aria-hidden="true">04</span>
-        <div><p class="lv-kicker">Level 4 &middot; Knowing the limits</p><h2 id="l4t">Judge it, <span class="grad">or attest it?</span></h2></div>
-        <span class="lv-reward">+32 XP</span>
-      </header>
-      <div class="wwh">
-        <article class="why"><h3>Why</h3><p>Not every control can be read from a document. Staff screening, physical entry and a code of conduct live in the real world. Faking a verdict for them would be worse than having none.</p></article>
-        <article class="what"><h3>What we built</h3><p>Where evidence can be machine-read, a rule judges it. Where it can't, a named person attests it with a date, and an auditor judges the statement. The two are counted separately and never mixed up.</p></article>
-        <article class="how"><h3>How it works</h3><p>Sort eight real clauses from ISO 27001 and SOC 2. Then see the real split across all the frameworks.</p></article>
+    <section class="sec wrap" id="compare">
+      <div class="gp-head reveal">
+        <h2>Side by side</h2>
+        <p>How this compares with the typical approach in the compliance-tool category.</p>
       </div>
-      <div class="arena" id="a4">
-        <div class="arena-bar"><b>Challenge &middot; Sort the clauses</b><span class="tagline">real clauses</span></div>
-        <p class="a4-score" id="a4score" aria-live="polite">0 of 8 answered</p>
-        <div class="quiz" id="quiz"></div>
-        <div class="split" id="split" hidden></div>
-      </div>
-      <aside class="debrief" id="d4" hidden><h3>What just happened</h3><p id="d4t"></p></aside>
+      <table class="gp-table reveal">
+        <thead><tr><th scope="col">What you care about</th><th scope="col">Typical approach</th><th scope="col" class="us">GRC</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Who gives the verdict</th><td class="them">A checkbox, or an AI's answer</td><td class="us">Versioned rules. The model only reads.</td></tr>
+          <tr><th scope="row">Can you re-run a decision?</th><td class="them">Usually not</td><td class="us">Yes: same facts and rules give the same decision fingerprint.</td></tr>
+          <tr><th scope="row">The audit trail</th><td class="them">Records an admin could edit</td><td class="us">Hash-chained. Edits and deletes are refused by the database.</td></tr>
+          <tr><th scope="row">What software cannot judge</th><td class="them">Folded into one score</td><td class="us">Shown separately as attested by a person.</td></tr>
+          <tr><th scope="row">Several frameworks</th><td class="them">Evidence handled per framework</td><td class="us">Mapped once to shared objectives, then reused.</td></tr>
+          <tr><th scope="row">Separating customers</th><td class="them">Filters in application code</td><td class="us">Row-level security in Postgres itself.</td></tr>
+          <tr><th scope="row">Trying it</th><td class="them">A sales call first</td><td class="us">Open read-only demo, no account.</td></tr>
+        </tbody>
+      </table>
+      <p class="gp-caveat">The left column describes common patterns, not any named product, and I have not benchmarked competitors. The right column is what this repository does today.</p>
     </section>
 
-    <!-- LEVEL 5 -->
-    <section class="lv wrap" id="l5" aria-labelledby="l5t">
-      <header class="lv-head">
-        <span class="lv-num" aria-hidden="true">05</span>
-        <div><p class="lv-kicker">Level 5 &middot; See it working</p><h2 id="l5t">The <span class="grad">real screens</span></h2></div>
-        <span class="lv-reward">+15 XP</span>
-      </header>
-      <div class="wwh">
-        <article class="why"><h3>Why</h3><p>Simulations teach the logic, but you should see the actual product.</p></article>
-        <article class="what"><h3>What we built</h3><p>A workspace for the audited company, the auditor and the audit firm: frameworks, controls, gaps, policies, risks, vendors and training, each role seeing only what it may open.</p></article>
-        <article class="how"><h3>How it works</h3><p>Tap the pins on each screen. These are real screenshots from the read-only demo; the data is made up. Visit all four to finish.</p></article>
+    <section class="sec wrap" id="see">
+      <div class="gp-head reveal">
+        <h2>See it working</h2>
+        <p>Real screenshots of the demo. Tap the numbered pins to see what each part does.</p>
       </div>
-      <div class="arena" id="a5">
-        <div class="arena-bar"><b>Tour &middot; Real screenshots</b><span class="tagline">read-only demo</span></div>
-        <div class="tabs" role="tablist" aria-label="Screens" id="tabs"></div>
-        <div class="shot" id="shot"><img id="shotImg" alt="" width="1600" height="833"><div class="pins" id="pins"></div></div>
-        <p class="pin-note" id="pinNote" aria-live="polite">Tap a pin to see what it shows.</p>
-        <div class="cta"><a class="btn primary" href="https://grc.blinkedit.me/login">Open the live demo <b class="ar">&nearr;</b></a><a class="btn" href="GRC-Technical-Data-Sheet.pdf">Data sheet (PDF) <b class="ar">&darr;</b></a><a class="btn" href="https://github.com/SatyamSaxena1/GRC">Source on GitHub <b class="ar">&nearr;</b></a></div>
-        <p class="gg-fine">Open the demo, then choose &ldquo;Try the demo, no account&rdquo; in the top bar. It runs on free hosting, so the first visit can take about a minute to wake up.</p>
+      <div class="gp-arena reveal">
+        <div class="gp-bar"><b>Tour &middot; Real screenshots</b><span>Read-only demo</span></div>
+        <div class="gp-tabs" role="tablist" aria-label="Screens" id="tabs"></div>
+        <div class="gp-shot"><img id="shotImg" alt="" width="1600" height="639"><div class="gp-pins" id="pins"></div></div>
+        <p class="gp-note" id="pinNote" aria-live="polite">Tap a pin to see what it shows.</p>
       </div>
     </section>
 
-    <!-- FINALE -->
-    <section class="lv wrap final" id="final" aria-labelledby="ft">
-      <header class="lv-head">
-        <span class="lv-num" aria-hidden="true">&#9733;</span>
-        <div><p class="lv-kicker">Final score</p><h2 id="ft">Your <span class="grad">result</span></h2></div>
-      </header>
-      <div class="score-card">
-        <div class="score-big"><b id="fxp">0</b><span>XP</span><em id="frank">Observer</em></div>
-        <p id="fmsg">Play the levels above to earn XP and badges.</p>
-        <div class="shelf-grid" id="fshelf"></div>
+    <section class="sec wrap" id="honest">
+      <div class="gp-head reveal">
+        <h2>What this is, and is not</h2>
+        <p>Said plainly, because trust is the whole point.</p>
       </div>
-      <div class="honest">
-        <h3>The honest part</h3>
-        <p>Three things I got wrong while building this. Open each one.</p>
-        <div class="secrets" id="secrets"></div>
-        <p class="limits">Where it still falls short: a rule judges only some of the listed requirements, the rest are attested; SOC 2 covers the Security criteria only; there are no Indian banking-regulator packs yet; it hasn't had its own SOC 2 audit; and the demo runs on free hosting.</p>
+      <div class="gp-honest">
+        <article class="gp-card reveal"><h3>Not a certificate</h3><p>The platform helps you collect and defend evidence. Only an independent auditor can issue a SOC 2 or ISO 27001 report.</p></article>
+        <article class="gp-card warm reveal" style="--d:.08s"><h3>One builder</h3><p>I built this on my own. It is a working product with a live demo, not a company with a support team.</p></article>
+        <article class="gp-card cool reveal" style="--d:.16s"><h3>Free hosting</h3><p>The demo sleeps when idle, so the first visit can take about a minute to wake up. After that it is quick.</p></article>
       </div>
-      <div class="cta"><button class="btn" id="again" type="button">Play again</button><a class="btn primary" href="https://grc.blinkedit.me/login">Open the live demo <b class="ar">&nearr;</b></a></div>
     </section>
 
-    <noscript><section class="wrap"><p class="gg-fine">This page is a set of small interactive levels and needs JavaScript. In short: GRC is a compliance platform where a model only reads a document, versioned rules decide, and a named person signs. It judges one document against nine frameworks and records every step in a tamper-evident log. See the <a href="GRC-Technical-Data-Sheet.pdf">technical data sheet</a>, the <a href="https://github.com/SatyamSaxena1/GRC">source</a>, or the <a href="https://grc.blinkedit.me/login">read-only demo</a>.</p></section></noscript>
+    <section class="wrap gp-final reveal" id="try">
+      <h2>See the evidence, not the pitch.</h2>
+      <p>Open the demo, read the data sheet, or look at the code. All three are public.</p>
+      <div class="cta">
+        <a class="btn primary" href="https://grc.blinkedit.me/login">Open the live demo <b class="ar">&nearr;</b></a>
+        <a class="btn" href="GRC-Technical-Data-Sheet.pdf">Data sheet (PDF) <b class="ar">&darr;</b></a>
+        <a class="btn" href="https://github.com/SatyamSaxena1/GRC">Source on GitHub <b class="ar">&nearr;</b></a>
+      </div>
+    </section>
+
+    <noscript><section class="wrap"><p class="gp-fine">The small demos on this page need JavaScript; everything else reads fine without it. See the <a href="GRC-Technical-Data-Sheet.pdf">technical data sheet</a> or the <a href="https://grc.blinkedit.me/login">read-only demo</a>.</p></section></noscript>
   </main>
 
   <footer class="wrap"><span>&copy; <span id="yr">2026</span> Satyam Saxena</span><a href="../#projects">Back to projects &uarr;</a></footer>
@@ -245,6 +247,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous" defer></script>
   <script src="../assets/js/site.js?v=11" defer></script>
   <script src="../assets/js/bg.js?v=10" defer></script>
-  <script src="../assets/js/grc-game.js?v=1" defer></script>
+  <script src="../assets/js/grc-page.js?v=1" defer></script>
 </body>
 </html>
