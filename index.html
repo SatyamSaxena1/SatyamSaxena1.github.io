@@ -38,6 +38,7 @@
   <link rel="stylesheet" href="assets/css/theme.css?v=24">
   <link rel="stylesheet" href="assets/css/timeline.css?v=2">
   <link rel="stylesheet" href="assets/css/privacy-monitor.css?v=2">
+  <link rel="stylesheet" href="assets/css/grc.css?v=1">
 <style>
 </style>
 </head>
@@ -114,6 +115,14 @@
           <p><strong>Privacy Monitor</strong> turns supported app activity into readable iPhone timelines. A native app, local collector, and monitoring tweak—with visual local summaries and raw diagnostics tucked into Developer Mode.</p>
           <div class="tags"><span>UIKit</span><span>On-device</span><span>Local rules</span><span>Dopamine</span></div>
           <div class="row-links"><a class="p" href="privacy-monitor/">Meet Privacy Monitor →</a><a href="repo/">Get the beta ↗</a><a href="privacy-monitor/#activity">See the activity →</a></div>
+        </article>
+
+        <article class="card c-w reveal gr-feature">
+          <div class="gr-top"><span class="tag">New &middot; Compliance platform</span><span class="gr-mark" aria-hidden="true">&#10003;</span></div>
+          <h3>The model reads.<br>The rules decide.</h3>
+          <p><strong>GRC</strong> keeps one set of evidence for nine frameworks. A model only reads the document; a versioned rule gives the verdict, a named person signs it, and every step goes into a hash-chained log. There is a short game on the page so you can try it.</p>
+          <div class="tags"><span>FastAPI</span><span>Postgres RLS</span><span>Audit chain</span><span>9 frameworks</span></div>
+          <div class="row-links"><a class="p" href="grc/">Play the audit &rarr;</a><a href="https://grc.blinkedit.me">Try the live demo &nearr;</a><a href="grc/GRC-Technical-Data-Sheet.pdf">Data sheet (PDF)</a></div>
         </article>
 
         <article class="card c-w reveal">
@@ -308,6 +317,26 @@ steps: 12%| 71/612 [02:43&lt;20:48, 2.31s/it, <span class="ok">avr_loss=0.124</s
             <div class="links"><a href="railway/">The full story</a><a href="railway/gallery/">100-image gallery</a></div>
           </div>
           <div class="tl-fig"><figure data-zoom class="reveal"><img src="assets/gallery/images/f01_ahmedabad.jpg" alt="A labelled frame from Ahmedabad" loading="lazy"><figcaption>A labelled frame from Ahmedabad.</figcaption></figure></div>
+        </article>
+
+        <article class="tl-item reveal gr-timeline">
+          <i class="tl-dot"></i>
+          <div class="tl-body">
+            <span class="when">Aug &ndash; Nov 2026 &middot; New project</span>
+            <h3>GRC: an auditor that can show its working</h3>
+            <p>Compliance tools often let a model say pass or fail, and nobody can defend that to an auditor. I built the opposite: the model only extracts facts with quotes, versioned rules decide, and a named person signs. Every step goes into a hash-chained log that Postgres itself refuses to edit.</p>
+            <p>The same evidence is reused across nine frameworks. I also wrote down what it cannot do: 103 of 183 requirements are attestation-only, and the platform says so instead of pretending.</p>
+            <div class="links"><a href="grc/">Play the audit</a><a href="https://grc.blinkedit.me">Live demo</a><a href="https://github.com/SatyamSaxena1/GRC">Source code</a></div>
+          </div>
+          <div class="tl-fig">
+            <figure class="bug reveal"><div class="bar"><i></i><i></i><i></i>rules engine &middot; password policy, 8 characters</div>
+<pre><span class="dim"># policy says: at least 8 characters</span>
+CC6.2  <span class="err">not met</span>  password_min_length=8
+       fails password_min_length &gt;= 12
+<span class="dim"># same facts, replayed with another model</span>
+decision f37b8b30e0  <span class="ok">identical</span></pre>
+              <figcaption>From the engine's own wording. Swap the model and the decision does not change.</figcaption></figure>
+          </div>
         </article>
 
         <article class="tl-item reveal pm-timeline">

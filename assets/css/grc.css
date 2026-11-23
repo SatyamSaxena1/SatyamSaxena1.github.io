@@ -1,0 +1,17 @@
+/* GRC: a deep teal feature card and timeline accent, against the portfolio's violet and Privacy Monitor's warm cream. */
+.gr-feature{background:linear-gradient(160deg,#0b3a44 0%,#0e5560 100%)!important;border-color:#1f808c!important;color:#e6fbf6}
+.gr-feature:before{display:none}
+.gr-feature .gr-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.gr-feature .tag{background:#0a2b33!important;color:#7ff0d4!important;align-self:flex-start}
+.gr-feature h3{font-size:clamp(30px,3.8vw,48px);letter-spacing:-.04em;color:#f1fffb}
+.gr-feature p{color:#b9e3dc}
+.gr-feature p strong{color:#f1fffb}
+.gr-feature .gr-mark{width:56px;height:56px;display:grid;place-items:center;background:#7ff0d4;color:#06343d;border-radius:17px;font-size:28px;font-weight:800}
+.gr-feature .tags span{color:#a9d6cf;border-color:#2c8d98}
+.gr-feature .row-links a{background:#0a2b33;border-color:#2c8d98;color:#e6fbf6}
+.gr-feature .row-links a.p{background:#7ff0d4;border-color:#7ff0d4;color:#06343d}
+.gr-feature .row-links a:hover{border-color:#7ff0d4}
+
+.gr-timeline .tl-body{border-color:#2c8d98!important}
+.gr-timeline .when{background:#cdf6ec!important;color:#0b4a52!important}
+.gr-timeline.in .tl-dot{background:#7ff0d4!important;border-color:#7ff0d4!important;box-shadow:0 0 0 7px #7ff0d420,0 0 24px #7ff0d440!important}
