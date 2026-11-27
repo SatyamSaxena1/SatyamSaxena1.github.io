@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Railway Vision - the story | Satyam Saxena</title>
-  <meta name="description" content="How I built a pantograph and overhead-line detector: the data, the labelling, the detours, the models and the honest limits.">
+  <meta name="description" content="How I built a pantograph and overhead-line detector: the data, the labelling, the detours and the models.">
   <meta name="theme-color" content="#05050b">
   <meta name="color-scheme" content="dark light">
   <meta name="format-detection" content="telephone=no">
   <meta name="apple-mobile-web-app-title" content="Satyam Saxena">
   <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
   <meta property="og:title" content="Railway Vision - the story">
-  <meta property="og:description" content="Pantograph and overhead-line detection from cabin-camera video: data, labelling, models and what is still imperfect.">
+  <meta property="og:description" content="Pantograph and overhead-line detection from cabin-camera video: data, labelling and models.">
   <link rel="canonical" href="https://blinkedit.me/railway/">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://blinkedit.me/railway/">
@@ -342,16 +342,7 @@
     </section>
 
     <section class="sec wrap" data-kind="work">
-      <div class="sec-head reveal"><span class="kind kind-work">Data work</span><h2>What's still <span class="grad">imperfect</span></h2><p>I'd rather you hear it from me.</p></div>
-      <ul class="issues">
-        <li class="reveal"><b>Contact points are the weak spot.</b> Both models score only about 0.39 AP@50:95 on them, against 0.90 or more for the pantograph. The boxes are around 1% of the frame width, so a few pixels of offset costs most of the overlap, and they are hard to place consistently by hand.</li>
-        <li class="reveal"><b>The two scores are not comparable.</b> YOLO and RF-DETR were scored on different image sets, and RF-DETR's validation and test splits share video segments, so its numbers are likely optimistic. There is no clean held-out test set.</li>
-        <li class="reveal"><b>Neighbouring frames are near-duplicates,</b> so the number of distinct scenes is far smaller than the 23,551 frames. The no-shared-segment guarantee covers video-derived frames only, not the augmented sources.</li>
-        <li class="reveal"><b>A narrow domain.</b> Five routes, a webcam plus one ZED camera, and a limited range of weather and times of day. Expect a gap on other railways or camera mountings, and the ZED frames look quite different from the webcam ones.</li>
-        <li class="reveal"><b>Masts and arms are middling</b> (about 0.69 to 0.79), and the pantograph is the only class above 0.9.</li>
-        <li class="reveal"><b>No agreement measure.</b> Review was a second pass in CVAT, not an independent labelling, so there is no inter-annotator agreement score.</li>
-      </ul>
-      <p class="note reveal" style="margin-top:16px">The full dataset (23,551 frames, 8.13 GB) is private and not available for download. The <a href="https://www.kaggle.com/datasets/satyamsaxena12/railway-overhead-line-showcase" style="text-decoration:underline">Kaggle write-up</a> has sample frames, the full numbers, and the data-prep steps.</p>
+      <p class="note reveal">The full dataset (23,551 frames, 8.13 GB) is private and not available for download. The <a href="https://www.kaggle.com/datasets/satyamsaxena12/railway-overhead-line-showcase" style="text-decoration:underline">Kaggle write-up</a> has sample frames, the full numbers, and the data-prep steps.</p>
     </section>
   </main>
 
